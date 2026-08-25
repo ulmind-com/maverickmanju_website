@@ -31,7 +31,7 @@ const DESTINATIONS = [
     body: "Stage magic, walk-around magic, mentalism and emcee formats.",
   },
   {
-    to: "/why-maverick",
+    to: "/usp",
     Icon: Sparkles,
     label: "Why Maverick",
     body: "One artist, one point of coordination, a complete show.",
