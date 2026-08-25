@@ -1,7 +1,7 @@
-import heroStage from "@/assets/hero-stage.jpg";
-import walkAround from "@/assets/walk-around.jpg";
-import mentalism from "@/assets/mentalism.jpg";
-import emcee from "@/assets/emcee.jpg";
+const heroStage = "/images/hero-stage.jpg";
+const walkAround = "/images/walk-around.jpg";
+const mentalism = "/images/mentalism.jpg";
+const emcee = "/images/emcee.jpg";
 import type {
   EventType,
   GalleryItem,
