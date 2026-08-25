@@ -50,6 +50,7 @@ export function Footer() {
         <FooterColumn
           title="Explore"
           links={[
+            { to: "/why-maverick", label: "Why Maverick" },
             { to: "/events", label: "Events" },
             { to: "/gallery", label: "Gallery" },
             { to: "/testimonials", label: "Testimonials" },
@@ -57,6 +58,7 @@ export function Footer() {
             { to: "/book", label: "Event Enquiry" },
           ]}
         />
+
 
         <div>
           <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-primary uppercase">
