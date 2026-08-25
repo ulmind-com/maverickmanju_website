@@ -1,30 +1,34 @@
 # Running the site locally
 
-Two processes: the FastAPI backend (`backend/`) and the TanStack Start
-frontend (repo root).
+Two repos, two processes:
+
+| | Repo | Runs on |
+| --- | --- | --- |
+| Frontend | this one | http://localhost:8080 |
+| Backend | [ulmind-com/maverickmanju_backend](https://github.com/ulmind-com/maverickmanju_backend) | http://localhost:8000 |
 
 ## 1. Backend
 
 ```bash
-cd backend
-cp .env.example .env   # fill in Mongo, Cloudinary and JWT values
-uv sync
-uv run uvicorn app.main:app --reload --port 8000
+git clone https://github.com/ulmind-com/maverickmanju_backend.git
 ```
 
-API docs at <http://localhost:8000/docs>. See [backend/README.md](backend/README.md)
-for the full endpoint list and environment reference.
+```bash
+cd maverickmanju_backend && cp .env.example .env && uv sync && uv run uvicorn app.main:app --reload --port 8000
+```
+
+Fill in `.env` (Mongo, Cloudinary, JWT, admin) first. API docs at
+<http://localhost:8000/docs>; the backend README has the full endpoint list,
+the environment reference and the Render deploy steps.
 
 ## 2. Frontend
 
 ```bash
-bun install
-bun run dev
+bun install && bun run dev
 ```
 
 Site at <http://localhost:8080>, admin panel at <http://localhost:8080/admin>.
-
-`.env` in the repo root points the frontend at the API:
+`.env` in this repo points the frontend at the API:
 
 ```
 VITE_API_URL=http://localhost:8000
@@ -32,9 +36,9 @@ VITE_API_URL=http://localhost:8000
 
 ## Admin panel
 
-Sign in at `/admin/login` with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` from
-`backend/.env`. Those two values only seed the account on the very first boot —
-change the password afterwards from **Settings → Admin password**.
+Sign in at `/admin/login` with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` from the
+backend's `.env`. Those two values only seed the account on the very first
+boot — change the password afterwards from **Settings → Admin password**.
 
 | Page | Controls |
 | --- | --- |
@@ -47,7 +51,7 @@ change the password afterwards from **Settings → Admin password**.
 ## What is dynamic
 
 - **Gallery** — every item, from the database.
-- **Testimonials** — every item, grouped by category.
+- **Testimonials** — every item, grouped under its category.
 - **Services** — the copy for the four core performances stays in
   `src/data/seed.ts`; only their images are admin-managed.
 - **Event packages** — every field, from the database.
@@ -56,10 +60,7 @@ change the password afterwards from **Settings → Admin password**.
 
 ## Deploying
 
-- **Frontend (Vercel):** set `VITE_API_URL` to the deployed API URL.
-- **Backend:** deploy `backend/` to any Python host (Render, Railway, Fly.io, a
-  VPS). Set every variable from `backend/.env.example` in that host's
-  environment and add the site's production origin to `CORS_ORIGINS`.
-
-Never commit `backend/.env` — it is git-ignored and holds the database,
-Cloudinary and JWT secrets.
+- **Frontend (Vercel):** set `VITE_API_URL` to the deployed API URL, e.g.
+  `https://maverickmanju-api.onrender.com`.
+- **Backend (Render):** see the deploy section in the backend repo's README.
+  Remember to add this site's production origin to the API's `CORS_ORIGINS`.
