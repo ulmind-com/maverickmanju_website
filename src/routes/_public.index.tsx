@@ -1,31 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import {
-  Building2,
-  Cake,
-  Heart,
-  Home as HomeIcon,
-  Hotel,
-  Mic2,
-  Sparkles,
-  Star,
-  Wand2,
-} from "lucide-react";
-import type { ComponentType } from "react";
-import { GalleryGrid } from "@/components/gallery/GalleryGrid";
-import { ServiceCard } from "@/components/site/ServiceCard";
-import { TestimonialCard } from "@/components/site/TestimonialCard";
-import { BookingCta } from "@/components/site/ServiceDetailPage";
-import {
-  ButtonLink,
-  Particles,
-  Reveal,
-  SectionHeader,
-} from "@/components/site/primitives";
-import { IMAGES, eventTypes, services } from "@/data/seed";
-import { useServiceData } from "@/hooks/useServiceData";
-import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
-import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
-import type { GalleryItem, ServiceType, Testimonial } from "@/types";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Camera, Quote, Sparkles, Wand2 } from "lucide-react";
+import { ButtonLink, Particles, Reveal } from "@/components/site/primitives";
+import { IMAGES } from "@/data/seed";
 
 export const Route = createFileRoute("/_public/")({
   head: () => ({
@@ -47,128 +23,83 @@ export const Route = createFileRoute("/_public/")({
   component: HomePage,
 });
 
-const ICONS: Record<string, ComponentType<{ size?: number; className?: string }>> = {
-  Building2,
-  Cake,
-  Hotel,
-  Home: HomeIcon,
-  Heart,
-  Sparkles,
-};
+const DESTINATIONS = [
+  {
+    to: "/services",
+    Icon: Wand2,
+    label: "Services",
+    body: "Stage magic, walk-around magic, mentalism and emcee formats.",
+  },
+  {
+    to: "/why-maverick",
+    Icon: Sparkles,
+    label: "Why Maverick",
+    body: "One artist, one point of coordination, a complete show.",
+  },
+  {
+    to: "/gallery",
+    Icon: Camera,
+    label: "Gallery",
+    body: "Photos and video from recent stages and celebrations.",
+  },
+  {
+    to: "/testimonials",
+    Icon: Quote,
+    label: "Testimonials",
+    body: "What hosts, brides and event managers say afterwards.",
+  },
+] as const;
 
 function HomePage() {
-  const { data: gallery } = useServiceData<GalleryItem[]>(
-    GALLERY_KEY,
-    getPublishedGalleryItems,
-    [],
-  );
-  const { data: testimonials } = useServiceData<Testimonial[]>(
-    TESTIMONIALS_KEY,
-    getPublishedTestimonials,
-    [],
-  );
-
   return (
     <>
       <Hero />
-      <MaverickDifference />
-
-      <section className="py-20 sm:py-24">
-        <div className="container-mm">
-          <SectionHeader
-            eyebrow="Signature Services"
-            title="Entertainment built around your audience."
-            description="From intimate brunches to large corporate stages, the format changes — the objective doesn't: make people participate, laugh and remember."
-          />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {services.slice(0, 4).map((s, i) => (
-              <Reveal key={s.slug} delay={i * 0.06}>
-                <ServiceCard service={s} />
-              </Reveal>
-            ))}
-          </div>
-          <div className="mt-10">
-            <ButtonLink to="/services" variant="outline">
-              All services
-            </ButtonLink>
-          </div>
-        </div>
-      </section>
-
-      {services.slice(0, 4).map((service, i) => (
-        <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
-      ))}
 
       <section className="border-y border-border bg-surface py-20 sm:py-24">
         <div className="container-mm">
-          <SectionHeader
-            eyebrow="Events"
-            title="Magic for every occasion."
-            description="One performer, formats tuned to the room, the age group and the run-of-show."
-          />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {eventTypes.map((e, i) => {
-              const Icon = ICONS[e.icon] ?? Sparkles;
-              return (
-                <Reveal key={e.id} delay={i * 0.05}>
-                  <div className="card-mm h-full bg-gradient-to-br from-card to-background p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red">
-                    <Icon size={26} className="text-primary" />
-                    <h3 className="mt-4 font-display text-xl">{e.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{e.description}</p>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
-          <div className="mt-10">
-            <ButtonLink to="/events" variant="outline">
-              Explore events
-            </ButtonLink>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {DESTINATIONS.map(({ to, Icon, label, body }, i) => (
+              <Reveal key={to} delay={i * 0.06}>
+                <Link
+                  to={to}
+                  className="card-mm block h-full border-t-2 border-t-primary p-7 transition-all hover:-translate-y-1 hover:border-primary/60 hover:glow-red"
+                >
+                  <Icon size={28} className="text-primary" />
+                  <h2 className="mt-4 font-display text-xl">{label}</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+                  <span className="mt-5 inline-block text-[11px] font-bold tracking-[0.18em] text-primary uppercase">
+                    Open →
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="py-20 sm:py-24">
-        <div className="container-mm">
-          <SectionHeader
-            eyebrow="Moments of Magic"
-            title="Don't just take my word for it."
-            description="Photos and video from recent stages, brunches and celebrations."
-          />
-          <GalleryGrid items={gallery.slice(0, 5)} />
-          <div className="mt-10">
-            <ButtonLink to="/gallery" variant="outline">
-              Open the gallery
-            </ButtonLink>
-          </div>
-        </div>
-      </section>
-
-      {testimonials.length > 0 && (
-        <section className="border-t border-border bg-surface py-20 sm:py-24">
-          <div className="container-mm">
-            <SectionHeader
-              eyebrow="Client Testimonials"
-              title="Real reactions. Real memories."
-            />
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {testimonials.slice(0, 3).map((t, i) => (
-                <Reveal key={t.id} delay={i * 0.06}>
-                  <TestimonialCard testimonial={t} featured={t.featured} />
-                </Reveal>
-              ))}
-            </div>
-            <div className="mt-10">
-              <ButtonLink to="/testimonials" variant="outline">
-                Read all testimonials
+        <div className="container-mm max-w-3xl text-center">
+          <Reveal>
+            <p className="text-[11px] font-bold tracking-[0.3em] text-primary uppercase">
+              Meet Maverick Manju
+            </p>
+            <h2 className="mt-4 text-[clamp(2rem,5vw,3.2rem)] leading-tight font-bold">
+              Don't just perform for people — create moments{" "}
+              <span className="text-primary">with them.</span>
+            </h2>
+            <p className="mt-5 text-muted-foreground">
+              Magician, Emcee and Mentalist working across corporate events, weddings, birthdays,
+              hotels and clubhouses.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-3">
+              <ButtonLink to="/book">Book Maverick Manju</ButtonLink>
+              <ButtonLink to="/about" variant="outline">
+                Read the full story
               </ButtonLink>
             </div>
-          </div>
-        </section>
-      )}
-
-      <AboutPreview />
-      <BookingCta />
+          </Reveal>
+        </div>
+      </section>
     </>
   );
 }
@@ -231,134 +162,6 @@ function Hero() {
               </li>
             ))}
           </ul>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function MaverickDifference() {
-  const cards = [
-    {
-      Icon: Wand2,
-      title: "Stage Performance",
-      body: "High-energy magic and mentalism designed for the whole audience.",
-    },
-    {
-      Icon: Star,
-      title: "Client Experience",
-      body: "Real reactions, real memories and moments worth sharing.",
-    },
-    {
-      Icon: Mic2,
-      title: "Emcee Activities",
-      body: "Games, interaction and energy that get people involved.",
-    },
-    {
-      Icon: Sparkles,
-      title: "Walk-Around Magic",
-      body: "Close-up magic that comes directly to your guests.",
-    },
-  ];
-
-  return (
-    <section className="border-y border-border bg-gradient-to-b from-[#090909] to-[#111] py-20 sm:py-24">
-      <div className="container-mm">
-        <SectionHeader
-          eyebrow="The Maverick Difference"
-          title="Why hire two entertainers when one professional does both?"
-          description="Magic creates wonder. Emcee activities create participation. Together they create a complete entertainment experience — with one point of coordination for the client."
-        />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map(({ Icon, title, body }, i) => (
-            <Reveal key={title} delay={i * 0.06}>
-              <div className="card-mm h-full border-t-2 border-t-primary p-7 hover:-translate-y-1 hover:glow-red">
-                <Icon size={28} className="text-primary" />
-                <h3 className="mt-4 font-display text-lg">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{body}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ServicePreview({
-  service,
-  index,
-  reverse,
-}: {
-  service: ServiceType;
-  index: number;
-  reverse: boolean;
-}) {
-  return (
-    <section className={index % 2 === 1 ? "bg-surface py-20 sm:py-24" : "py-20 sm:py-24"}>
-      <div className="container-mm grid items-center gap-12 lg:grid-cols-2">
-        <Reveal className={reverse ? "lg:order-2" : ""}>
-          <img
-            src={service.imageUrl}
-            alt={service.title}
-            loading="lazy"
-            className="h-[380px] w-full border border-border object-cover shadow-[0_20px_70px_rgba(0,0,0,.5)] sm:h-[520px]"
-          />
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="text-[11px] font-bold tracking-[0.3em] text-primary uppercase">
-            0{index + 1} • {service.title}
-          </p>
-          <h2 className="mt-3 text-[clamp(1.9rem,4vw,3rem)] leading-tight font-bold">
-            {service.shortDescription}
-          </h2>
-          <p className="mt-4 text-muted-foreground">{service.fullDescription}</p>
-          <ul className="my-7 grid grid-cols-1 gap-x-8 sm:grid-cols-2">
-            {service.highlights.map((h) => (
-              <li
-                key={h}
-                className="border-b border-border py-2.5 text-sm text-muted-foreground before:mr-2 before:text-primary before:content-['✦']"
-              >
-                {h}
-              </li>
-            ))}
-          </ul>
-          <ButtonLink to={service.page ?? "/book"}>{service.ctaLabel}</ButtonLink>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function AboutPreview() {
-  return (
-    <section className="border-t border-border py-20 sm:py-24">
-      <div className="container-mm grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-        <Reveal>
-          <img
-            src={IMAGES.mentalism}
-            alt="Portrait of Maverick Manju"
-            loading="lazy"
-            className="h-[460px] w-full border border-border object-cover"
-          />
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="text-[11px] font-bold tracking-[0.3em] text-primary uppercase">
-            Meet Maverick Manju
-          </p>
-          <h2 className="mt-3 text-[clamp(2rem,5vw,3.4rem)] leading-none font-bold">
-            More than a magician.
-          </h2>
-          <p className="mt-5 text-muted-foreground">
-            I am Maverick Manju — Magician, Emcee and Mentalist. My approach to entertainment is
-            simple: don't just perform for people, create moments with them.
-          </p>
-          <blockquote className="my-7 border-l-2 border-primary pl-5 font-script text-2xl italic">
-            Magic creates wonder. Mentalism creates curiosity. Emceeing creates participation.
-          </blockquote>
-          <ButtonLink to="/about" variant="outline">
-            Read the full story
-          </ButtonLink>
         </Reveal>
       </div>
     </section>

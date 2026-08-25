@@ -5,15 +5,21 @@ import { useEffect, useState } from "react";
 const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/why-maverick", label: "Why Maverick" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/testimonials", label: "Testimonials" },
+  { to: "/events", label: "Events" },
+  { to: "/about", label: "About" },
+] as const;
+
+const MOBILE_EXTRA_LINKS = [
   { to: "/stage-magic", label: "Stage Magic" },
   { to: "/walk-around-magic", label: "Walk-Around" },
   { to: "/mentalism", label: "Mentalism" },
   { to: "/emcee", label: "Emcee" },
-  { to: "/events", label: "Events" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/testimonials", label: "Testimonials" },
-  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ] as const;
+
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -75,7 +81,7 @@ export function Navbar() {
       {open && (
         <div className="fixed inset-0 top-[72px] z-40 overflow-y-auto border-t border-border bg-background/98 spotlight backdrop-blur-xl xl:hidden">
           <ul className="container-mm flex flex-col py-4">
-            {[...NAV_LINKS, { to: "/contact", label: "Contact" } as const].map((link) => (
+            {[...NAV_LINKS, ...MOBILE_EXTRA_LINKS].map((link) => (
               <li key={link.to} className="border-b border-border">
                 <Link
                   to={link.to}
