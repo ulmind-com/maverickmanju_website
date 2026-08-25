@@ -41,19 +41,23 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
       <nav className="container-mm flex h-[72px] items-center justify-between gap-4">
-        <Link to="/" className="font-display text-xl font-bold tracking-[0.18em] sm:text-2xl">
-          MAVERICK<span className="text-primary">.</span>
-          <span className="text-primary">MANJU</span>
-        </Link>
+        <div className="flex min-w-0 items-center gap-4">
+          <Link to="/" className="font-display text-xl font-bold tracking-[0.18em] sm:text-2xl">
+            MAVERICK <span className="text-primary">MANJU</span>
+          </Link>
+          <span className="hidden truncate text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase lg:inline">
+            <span className="text-primary">|</span> Magician <span className="text-primary">|</span>{" "}
+            Emcee <span className="text-primary">|</span> Creator Coach
+          </span>
+        </div>
 
-        <ul className="hidden items-center gap-5 text-[11px] font-semibold tracking-[0.14em] uppercase xl:flex">
+        <ul className="hidden items-center gap-7 text-[12px] font-semibold tracking-[0.16em] uppercase lg:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.to}>
               <Link
                 to={link.to}
-                className="text-muted-foreground transition-colors hover:text-primary"
-                activeProps={{ className: "text-foreground" }}
-                activeOptions={{ exact: link.to === "/" }}
+                className="text-foreground/85 transition-colors hover:text-primary"
+                activeProps={{ className: "text-primary" }}
               >
                 {link.label}
               </Link>
@@ -61,13 +65,8 @@ export function Navbar() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
-          <Link
-            to="/book"
-            className="hidden border border-primary bg-primary px-4 py-2.5 text-[11px] font-bold tracking-[0.12em] uppercase transition-all hover:-translate-y-0.5 hover:bg-foreground hover:text-background sm:inline-flex"
-          >
-            Book Maverick Manju
-          </Link>
+        <div className="flex items-center gap-3 lg:hidden">
+
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
