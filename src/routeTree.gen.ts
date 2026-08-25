@@ -22,6 +22,7 @@ import { Route as PublicServicesRouteImport } from './routes/_public.services'
 import { Route as PublicStageMagicRouteImport } from './routes/_public.stage-magic'
 import { Route as PublicTestimonialsRouteImport } from './routes/_public.testimonials'
 import { Route as PublicWalkAroundMagicRouteImport } from './routes/_public.walk-around-magic'
+import { Route as PublicWhyMaverickRouteImport } from './routes/_public.why-maverick'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
@@ -94,6 +95,11 @@ const PublicWalkAroundMagicRoute = PublicWalkAroundMagicRouteImport.update({
   path: '/walk-around-magic',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicWhyMaverickRoute = PublicWhyMaverickRouteImport.update({
+  id: '/why-maverick',
+  path: '/why-maverick',
+  getParentRoute: () => PublicRoute,
+} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
@@ -143,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/stage-magic': typeof PublicStageMagicRoute
   '/testimonials': typeof PublicTestimonialsRoute
   '/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/why-maverick': typeof PublicWhyMaverickRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/stage-magic': typeof PublicStageMagicRoute
   '/testimonials': typeof PublicTestimonialsRoute
   '/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/why-maverick': typeof PublicWhyMaverickRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -186,6 +194,7 @@ export interface FileRoutesById {
   '/_public/stage-magic': typeof PublicStageMagicRoute
   '/_public/testimonials': typeof PublicTestimonialsRoute
   '/_public/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/_public/why-maverick': typeof PublicWhyMaverickRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -210,6 +219,7 @@ export interface FileRouteTypes {
     | '/stage-magic'
     | '/testimonials'
     | '/walk-around-magic'
+    | '/why-maverick'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/stage-magic'
     | '/testimonials'
     | '/walk-around-magic'
+    | '/why-maverick'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/_public/stage-magic'
     | '/_public/testimonials'
     | '/_public/walk-around-magic'
+    | '/_public/why-maverick'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -366,6 +378,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicWalkAroundMagicRouteImport
       parentRoute: typeof PublicRoute
     }
+    '/_public/why-maverick': {
+      id: '/_public/why-maverick'
+      path: '/why-maverick'
+      fullPath: '/why-maverick'
+      preLoaderRoute: typeof PublicWhyMaverickRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/admin'
@@ -430,6 +449,7 @@ interface PublicRouteChildren {
   PublicStageMagicRoute: typeof PublicStageMagicRoute
   PublicTestimonialsRoute: typeof PublicTestimonialsRoute
   PublicWalkAroundMagicRoute: typeof PublicWalkAroundMagicRoute
+  PublicWhyMaverickRoute: typeof PublicWhyMaverickRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
@@ -445,6 +465,7 @@ const PublicRouteChildren: PublicRouteChildren = {
   PublicStageMagicRoute: PublicStageMagicRoute,
   PublicTestimonialsRoute: PublicTestimonialsRoute,
   PublicWalkAroundMagicRoute: PublicWalkAroundMagicRoute,
+  PublicWhyMaverickRoute: PublicWhyMaverickRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
 
