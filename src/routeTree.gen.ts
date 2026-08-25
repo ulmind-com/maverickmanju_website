@@ -9,50 +9,184 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PublicIndexRouteImport } from './routes/_public.index'
+import { Route as PublicEmceeRouteImport } from './routes/_public.emcee'
+import { Route as PublicMentalismRouteImport } from './routes/_public.mentalism'
+import { Route as PublicServicesRouteImport } from './routes/_public.services'
+import { Route as PublicStageMagicRouteImport } from './routes/_public.stage-magic'
+import { Route as PublicWalkAroundMagicRouteImport } from './routes/_public.walk-around-magic'
 
-const IndexRoute = IndexRouteImport.update({
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicEmceeRoute = PublicEmceeRouteImport.update({
+  id: '/emcee',
+  path: '/emcee',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicMentalismRoute = PublicMentalismRouteImport.update({
+  id: '/mentalism',
+  path: '/mentalism',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicServicesRoute = PublicServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicStageMagicRoute = PublicStageMagicRouteImport.update({
+  id: '/stage-magic',
+  path: '/stage-magic',
+  getParentRoute: () => PublicRoute,
+} as any)
+const PublicWalkAroundMagicRoute = PublicWalkAroundMagicRouteImport.update({
+  id: '/walk-around-magic',
+  path: '/walk-around-magic',
+  getParentRoute: () => PublicRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof PublicIndexRoute
+  '/emcee': typeof PublicEmceeRoute
+  '/mentalism': typeof PublicMentalismRoute
+  '/services': typeof PublicServicesRoute
+  '/stage-magic': typeof PublicStageMagicRoute
+  '/walk-around-magic': typeof PublicWalkAroundMagicRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/emcee': typeof PublicEmceeRoute
+  '/mentalism': typeof PublicMentalismRoute
+  '/services': typeof PublicServicesRoute
+  '/stage-magic': typeof PublicStageMagicRoute
+  '/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/': typeof PublicIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/_public/emcee': typeof PublicEmceeRoute
+  '/_public/mentalism': typeof PublicMentalismRoute
+  '/_public/services': typeof PublicServicesRoute
+  '/_public/stage-magic': typeof PublicStageMagicRoute
+  '/_public/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/_public/': typeof PublicIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/emcee'
+    | '/mentalism'
+    | '/services'
+    | '/stage-magic'
+    | '/walk-around-magic'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/emcee'
+    | '/mentalism'
+    | '/services'
+    | '/stage-magic'
+    | '/walk-around-magic'
+    | '/'
+  id:
+    | '__root__'
+    | '/_public'
+    | '/_public/emcee'
+    | '/_public/mentalism'
+    | '/_public/services'
+    | '/_public/stage-magic'
+    | '/_public/walk-around-magic'
+    | '/_public/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/emcee': {
+      id: '/_public/emcee'
+      path: '/emcee'
+      fullPath: '/emcee'
+      preLoaderRoute: typeof PublicEmceeRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/mentalism': {
+      id: '/_public/mentalism'
+      path: '/mentalism'
+      fullPath: '/mentalism'
+      preLoaderRoute: typeof PublicMentalismRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/services': {
+      id: '/_public/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof PublicServicesRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/stage-magic': {
+      id: '/_public/stage-magic'
+      path: '/stage-magic'
+      fullPath: '/stage-magic'
+      preLoaderRoute: typeof PublicStageMagicRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/walk-around-magic': {
+      id: '/_public/walk-around-magic'
+      path: '/walk-around-magic'
+      fullPath: '/walk-around-magic'
+      preLoaderRoute: typeof PublicWalkAroundMagicRouteImport
+      parentRoute: typeof PublicRoute
     }
   }
 }
 
+interface PublicRouteChildren {
+  PublicEmceeRoute: typeof PublicEmceeRoute
+  PublicMentalismRoute: typeof PublicMentalismRoute
+  PublicServicesRoute: typeof PublicServicesRoute
+  PublicStageMagicRoute: typeof PublicStageMagicRoute
+  PublicWalkAroundMagicRoute: typeof PublicWalkAroundMagicRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+}
+
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicEmceeRoute: PublicEmceeRoute,
+  PublicMentalismRoute: PublicMentalismRoute,
+  PublicServicesRoute: PublicServicesRoute,
+  PublicStageMagicRoute: PublicStageMagicRoute,
+  PublicWalkAroundMagicRoute: PublicWalkAroundMagicRoute,
+  PublicIndexRoute: PublicIndexRoute,
+}
+
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
