@@ -112,11 +112,13 @@ function Hero() {
         alt="Maverick Manju on stage in a red jacket, smiling at the audience"
         width={1920}
         height={1088}
-        className="absolute inset-0 h-full w-full object-cover opacity-85"
+        className="absolute inset-0 h-full w-full object-cover object-[70%_center] opacity-95 md:object-[62%_center]"
         style={{ animation: "mm-slow-zoom 26s ease-in-out infinite alternate" }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/40 to-background/10" />
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
+      <div className="absolute inset-y-0 left-0 w-[62%] bg-[radial-gradient(ellipse_at_28%_50%,rgba(0,0,0,0.62),transparent_70%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/85 to-transparent" />
+
       <Particles />
 
       <div className="container-mm relative z-10 pt-28 pb-16">
