@@ -121,7 +121,10 @@ function Hero() {
 
       <Particles />
 
-      <div className="container-mm relative z-10 pt-28 pb-16">
+      <div
+        className="container-mm relative z-10 pt-28 pb-16"
+        style={{ textShadow: "0 2px 18px rgba(0,0,0,0.75)" }}
+      >
         <Reveal>
           <p className="text-[12px] font-bold tracking-[0.34em] text-primary-glow uppercase">
             Magician | Emcee | Mentalist | Creator Coach
