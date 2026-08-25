@@ -33,7 +33,7 @@ const DESTINATIONS = [
   {
     to: "/usp",
     Icon: Sparkles,
-    label: "Why Maverick",
+    label: "USP",
     body: "One artist, one point of coordination, a complete show.",
   },
   {
