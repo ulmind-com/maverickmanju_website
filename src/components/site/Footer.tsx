@@ -50,7 +50,7 @@ export function Footer() {
         <FooterColumn
           title="Explore"
           links={[
-            { to: "/why-maverick", label: "Why Maverick" },
+            { to: "/usp", label: "USP" },
             { to: "/events", label: "Events" },
             { to: "/gallery", label: "Gallery" },
             { to: "/testimonials", label: "Testimonials" },

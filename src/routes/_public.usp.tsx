@@ -5,7 +5,7 @@ import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
 import { IMAGES } from "@/data/seed";
 
-export const Route = createFileRoute("/_public/why-maverick")({
+export const Route = createFileRoute("/_public/usp")({
   head: () => ({
     meta: [
       { title: "Why Maverick Manju | One Artist, Complete Entertainment" },
