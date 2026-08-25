@@ -5,15 +5,21 @@ import { useEffect, useState } from "react";
 const NAV_LINKS = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
+  { to: "/why-maverick", label: "Why Maverick" },
+  { to: "/gallery", label: "Gallery" },
+  { to: "/testimonials", label: "Testimonials" },
+  { to: "/events", label: "Events" },
+  { to: "/about", label: "About" },
+] as const;
+
+const MOBILE_EXTRA_LINKS = [
   { to: "/stage-magic", label: "Stage Magic" },
   { to: "/walk-around-magic", label: "Walk-Around" },
   { to: "/mentalism", label: "Mentalism" },
   { to: "/emcee", label: "Emcee" },
-  { to: "/events", label: "Events" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/testimonials", label: "Testimonials" },
-  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
 ] as const;
+
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
