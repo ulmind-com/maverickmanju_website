@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Camera, Quote, Sparkles, Wand2 } from "lucide-react";
 import { ButtonLink, Particles, Reveal } from "@/components/site/primitives";
 import { IMAGES } from "@/data/seed";
+import heroManju from "@/assets/hero-manju.png.asset.json";
 
 export const Route = createFileRoute("/_public/")({
   head: () => ({
