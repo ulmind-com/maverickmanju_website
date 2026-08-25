@@ -108,7 +108,7 @@ function Hero() {
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden">
       <img
-        src={heroManju.url}
+        src="/images/hero-manju.png"
         alt="Maverick Manju on stage in a red jacket, smiling at the audience"
         width={1920}
         height={1088}
