@@ -56,6 +56,12 @@ function ServicesPage() {
         </div>
       </section>
 
+      {services.slice(0, 4).map((service, i) => (
+        <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
+      ))}
+
+
+
       <section className="border-t border-border bg-surface py-20 sm:py-24">
         <div className="container-mm">
           <SectionHeader
