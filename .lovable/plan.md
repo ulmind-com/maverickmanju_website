@@ -1,23 +1,29 @@
-# Hero left-side darkness fix
+# Hero left-side black area fix
 
-## Goal
-Reduce the heavy dark overlay on the left half of the homepage hero so Maverick Manju and the stage are clearly visible, while keeping the headline, subheadline, and CTA buttons readable.
+## What's happening
+Two things stack up on the left of the homepage hero:
+- The source photo's own left edge is a dark, near-black audience area.
+- On top of it, the hero overlay is strongest exactly there (`from-background/95`), plus a black bottom fade.
 
-## What changes
+Together the left third reads as a flat black block instead of a photo.
 
-1. Lighten the left-to-right gradient overlay
-   - In `src/routes/_public.index.tsx`, change the gradient from `from-background/95 via-background/40 to-background/10` to a lighter left side.
-   - Use roughly `from-background/75 via-background/30 to-transparent` so the left ~40% is only softly darkened and the right side stays mostly clear.
+## What changes (all in `src/routes/_public.index.tsx`, Hero component)
 
-2. Keep text contrast where it matters
-   - The headline sits in the left third of the hero; the lighter gradient still needs enough darkness behind white text.
-   - Add a narrow, stronger text-shadow or a small localized dark vignette behind the text container only if readability drops after lightening.
+1. Move the visible part of the photo
+   - Add `object-[65%_center]` (roughly) to the hero `<img>` so the framing pulls the lit stage and Manju further left, and the dead black edge is cropped out on wide screens.
+   - On small screens use a focal point that keeps Manju in frame (`object-[70%_center]` via a responsive class).
 
-3. Preserve existing behavior
-   - Keep the hero image (`/images/hero-manju.png`), opacity (`85%`), slow-zoom animation, and bottom fade.
-   - Keep the `Particles` effect and the pill badges unchanged.
+2. Lighten the left overlay
+   - Replace `from-background/95 via-background/40 to-background/10` with a much softer left wash, around `from-background/70 via-background/25 to-transparent`.
+   - Reduce the bottom fade height/strength so the lower-left corner isn't solid black.
+
+3. Keep the headline readable without a black block
+   - Instead of darkening the whole left side, add a soft radial/elliptical shade behind the text column only, plus a subtle text drop-shadow on the h1 and paragraphs.
+
+4. Unchanged
+   - Same image (`/images/hero-manju.png`), 85% opacity, slow-zoom animation, particles, badges, buttons and copy.
 
 ## Verification
-- Load `/` on desktop and mobile.
-- Confirm the left side of the photo is no longer overly black/dark.
-- Confirm the headline, subheadline, and both CTA buttons still have strong contrast and are easy to read.
+- Check `/` at desktop width and at the current mobile viewport.
+- Confirm no flat black band on the left — photo content visible edge to edge.
+- Confirm headline, subheadline and both CTA buttons stay clearly readable.
