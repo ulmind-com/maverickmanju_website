@@ -3,22 +3,24 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
-  { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
-  { to: "/why-maverick", label: "Why Maverick" },
+  { to: "/usp", label: "USP" },
   { to: "/gallery", label: "Gallery" },
   { to: "/testimonials", label: "Testimonials" },
-  { to: "/events", label: "Events" },
-  { to: "/about", label: "About" },
+  { to: "/book", label: "Book" },
 ] as const;
 
 const MOBILE_EXTRA_LINKS = [
+  { to: "/", label: "Home" },
   { to: "/stage-magic", label: "Stage Magic" },
   { to: "/walk-around-magic", label: "Walk-Around" },
   { to: "/mentalism", label: "Mentalism" },
   { to: "/emcee", label: "Emcee" },
+  { to: "/events", label: "Events" },
+  { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ] as const;
+
 
 
 export function Navbar() {
