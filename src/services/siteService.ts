@@ -1,18 +1,20 @@
+import { api } from "@/lib/api";
 import { defaultSettings } from "@/data/seed";
+import { STORAGE_KEYS, emit } from "./storage";
 import type { SiteSettings } from "@/types";
-import { STORAGE_KEYS, read, write } from "./storage";
 
-/** BACKEND SWAP: single-row `site_settings` table. */
 const KEY = STORAGE_KEYS.settings;
 
 export async function getSettings(): Promise<SiteSettings> {
-  return { ...defaultSettings, ...(await read<SiteSettings>(KEY, defaultSettings)) };
+  const remote = await api.get<Partial<SiteSettings>>("/api/settings");
+  // Defaults fill any key the stored document predates.
+  return { ...defaultSettings, ...remote };
 }
 
-export async function updateSettings(patch: Partial<SiteSettings>): Promise<SiteSettings> {
-  const next = { ...(await getSettings()), ...patch };
-  await write(KEY, next);
-  return next;
+export async function updateSettings(next: SiteSettings): Promise<SiteSettings> {
+  const saved = await api.adminPut<SiteSettings>("/api/admin/settings", next);
+  emit(KEY);
+  return { ...defaultSettings, ...saved };
 }
 
 export const SETTINGS_KEY = KEY;

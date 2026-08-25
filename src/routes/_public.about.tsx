@@ -61,9 +61,9 @@ function AboutPage() {
             />
             <div className="space-y-4 text-muted-foreground">
               <p>
-                I am Maverick Manju — Magician, Emcee and Mentalist. My approach to entertainment
-                is simple: an audience that only watches will forget. An audience that
-                participates will remember.
+                I am Maverick Manju — Magician, Emcee and Mentalist. My approach to entertainment is
+                simple: an audience that only watches will forget. An audience that participates
+                will remember.
               </p>
               <p>
                 Whether I'm on a stage in front of hundreds, performing close-up magic at a luxury
@@ -89,9 +89,7 @@ function AboutPage() {
             {pillars.map((p, i) => (
               <Reveal key={p.title} delay={i * 0.06}>
                 <div className="h-full bg-[#0d0d0f] p-8">
-                  <p className="font-display text-xs tracking-[0.22em] text-primary">
-                    0{i + 1}
-                  </p>
+                  <p className="font-display text-xs tracking-[0.22em] text-primary">0{i + 1}</p>
                   <h3 className="mt-3 font-display text-2xl">{p.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{p.body}</p>
                 </div>

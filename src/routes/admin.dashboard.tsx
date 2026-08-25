@@ -5,6 +5,7 @@ import {
   Film,
   Image as ImageIcon,
   Inbox,
+  LayoutList,
   MessageSquareQuote,
   Sparkles,
 } from "lucide-react";
@@ -13,8 +14,9 @@ import { AdminPageHeader, BookingStatusBadge, StatsCard } from "@/components/adm
 import { useServiceData } from "@/hooks/useServiceData";
 import { BOOKINGS_KEY, getBookings } from "@/services/bookingService";
 import { GALLERY_KEY, getGalleryItems } from "@/services/galleryService";
+import { PACKAGES_KEY, getPackages } from "@/services/packageService";
 import { TESTIMONIALS_KEY, getTestimonials } from "@/services/testimonialService";
-import type { BookingEnquiry, GalleryItem, Testimonial } from "@/types";
+import type { BookingEnquiry, EventPackage, GalleryItem, Testimonial } from "@/types";
 
 export const Route = createFileRoute("/admin/dashboard")({
   head: () => ({
@@ -39,6 +41,7 @@ function Dashboard() {
     getTestimonials,
     [],
   );
+  const { data: packages } = useServiceData<EventPackage[]>(PACKAGES_KEY, getPackages, []);
 
   const published = gallery.filter((g) => g.status === "published");
   const statusCounts = (["new", "contacted", "confirmed", "completed", "cancelled"] as const).map(
@@ -53,13 +56,15 @@ function Dashboard() {
 
   return (
     <>
-      <AdminPageHeader
-        title="Dashboard"
-        description="Live counts from the frontend demo storage layer."
-      />
+      <AdminPageHeader title="Dashboard" description="Live counts straight from the database." />
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatsCard label="Total enquiries" value={bookings.length} icon={<Inbox size={18} />} accent />
+        <StatsCard
+          label="Total enquiries"
+          value={bookings.length}
+          icon={<Inbox size={18} />}
+          accent
+        />
         <StatsCard
           label="New enquiries"
           value={bookings.filter((b) => b.status === "new").length}
@@ -86,14 +91,14 @@ function Dashboard() {
           icon={<Film size={18} />}
         />
         <StatsCard
-          label="Images"
-          value={gallery.filter((g) => g.type === "image").length}
-          icon={<ImageIcon size={18} />}
-        />
-        <StatsCard
           label="Upcoming dates"
           value={upcoming.length}
           icon={<CalendarClock size={18} />}
+        />
+        <StatsCard
+          label="Event packages"
+          value={packages.filter((p) => p.status === "published").length}
+          icon={<LayoutList size={18} />}
         />
       </div>
 
@@ -152,7 +157,7 @@ function Dashboard() {
                   <img
                     key={g.id}
                     src={g.thumbnailUrl || g.mediaUrl}
-                    alt={g.title}
+                    alt={g.title || ""}
                     loading="lazy"
                     className="h-20 w-full border border-border object-cover"
                   />
@@ -186,10 +191,12 @@ function Dashboard() {
               {testimonials.slice(0, 4).map((t) => (
                 <li key={t.id} className="py-3">
                   <p className="text-sm">
-                    {t.clientName}{" "}
+                    {t.clientName || (t.videoUrl ? "Video testimonial" : "Untitled")}{" "}
                     <span className="text-[var(--star)]">{"★".repeat(t.rating)}</span>
                   </p>
-                  <p className="line-clamp-1 text-xs text-muted-foreground">{t.text}</p>
+                  <p className="line-clamp-1 text-xs text-muted-foreground">
+                    {t.text || (t.videoUrl ? "Video" : "")}
+                  </p>
                 </li>
               ))}
             </ul>

@@ -1,5 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Facebook, Instagram, Mail, MapPin, MessageCircle, Phone, Star, Youtube } from "lucide-react";
+import {
+  Facebook,
+  Instagram,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Star,
+  Youtube,
+} from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 import { ButtonLink, SectionHeader } from "@/components/site/primitives";
 import { IMAGES } from "@/data/seed";

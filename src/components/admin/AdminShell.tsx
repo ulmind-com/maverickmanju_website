@@ -7,6 +7,7 @@ import {
   Menu,
   MessageSquareQuote,
   Settings,
+  Sparkles,
   Wand2,
   X,
 } from "lucide-react";
@@ -17,13 +18,15 @@ const NAV = [
   { to: "/admin/dashboard", label: "Dashboard", Icon: LayoutDashboard },
   { to: "/admin/gallery", label: "Gallery", Icon: Images },
   { to: "/admin/testimonials", label: "Testimonials", Icon: MessageSquareQuote },
+  { to: "/admin/services", label: "Services & Packages", Icon: Sparkles },
   { to: "/admin/bookings", label: "Bookings", Icon: CalendarCheck },
   { to: "/admin/settings", label: "Settings", Icon: Settings },
 ] as const;
 
 /**
- * Protected admin layout. Demo-only guard: it checks the local session and
- * redirects to /admin/login when absent. This is NOT server-side protection.
+ * Protected admin layout. The session token is validated against the backend on
+ * mount; every admin API route is also guarded server-side, so a forged local
+ * session cannot read or write anything.
  */
 export function AdminShell({ children }: { children: ReactNode }) {
   const { user, ready, signOut } = useAdminAuth();
@@ -102,10 +105,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <LogOut size={16} /> Sign out
             </button>
           </div>
-          <p className="mt-6 border border-dashed border-border p-3 text-[10px] leading-relaxed text-muted-foreground/70">
-            Frontend Demo Storage — content lives in this browser only. No server, no real
-            authentication.
-          </p>
         </nav>
       </aside>
 

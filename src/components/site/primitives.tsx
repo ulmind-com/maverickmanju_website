@@ -17,20 +17,16 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "mb-12 max-w-3xl",
-        align === "center" && "mx-auto text-center",
-        className,
-      )}
-    >
+    <div className={cn("mb-12 max-w-3xl", align === "center" && "mx-auto text-center", className)}>
       {eyebrow && (
         <p className="text-[11px] font-bold tracking-[0.3em] text-primary-glow uppercase">
           {eyebrow}
         </p>
       )}
       <h2 className="mt-3 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] font-bold">{title}</h2>
-      {description && <p className="mt-4 text-base text-muted-foreground sm:text-lg">{description}</p>}
+      {description && (
+        <p className="mt-4 text-base text-muted-foreground sm:text-lg">{description}</p>
+      )}
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { Check } from "lucide-react";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
-import { services } from "@/data/seed";
 import { useServiceData } from "@/hooks/useServiceData";
+import { useService } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
 import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
-import type { GalleryCategory, GalleryItem, Testimonial } from "@/types";
+import type { GalleryItem, Testimonial } from "@/types";
 import { PageHero } from "./PageHero";
 import { ButtonLink, Reveal, SectionHeader } from "./primitives";
 
@@ -18,11 +18,10 @@ export interface ServicePageContent {
   included: string[];
   suitableFor: string[];
   interaction: string;
-  galleryCategory: GalleryCategory;
 }
 
 export function ServiceDetailPage({ content }: { content: ServicePageContent }) {
-  const service = services.find((s) => s.slug === content.slug)!;
+  const service = useService(content.slug)!;
   const { data: gallery } = useServiceData<GalleryItem[]>(
     GALLERY_KEY,
     getPublishedGalleryItems,
@@ -34,11 +33,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
     [],
   );
 
-  const related = gallery.filter((g) => g.category === content.galleryCategory).slice(0, 3);
-  const shown = (related.length ? related : gallery.slice(0, 3)).map((g) => ({
-    ...g,
-    layout: "medium" as const,
-  }));
+  const shown = gallery.slice(0, 3).map((g) => ({ ...g, layout: "medium" as const }));
 
   return (
     <>
@@ -93,9 +88,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
             {content.why.map((w, i) => (
               <Reveal key={w.title} delay={i * 0.05}>
                 <div className="h-full bg-[#0d0d0f] p-8">
-                  <p className="font-display text-xs tracking-[0.2em] text-primary">
-                    0{i + 1}
-                  </p>
+                  <p className="font-display text-xs tracking-[0.2em] text-primary">0{i + 1}</p>
                   <h3 className="mt-3 font-display text-xl">{w.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{w.body}</p>
                 </div>

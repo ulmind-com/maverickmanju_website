@@ -4,8 +4,10 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { ServicePreview } from "@/components/site/sections";
 import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
-
-import { IMAGES, services } from "@/data/seed";
+import { useServiceData } from "@/hooks/useServiceData";
+import { useServices } from "@/hooks/useServices";
+import { PACKAGES_KEY, getPublishedPackages } from "@/services/packageService";
+import type { EventPackage } from "@/types";
 
 export const Route = createFileRoute("/_public/services")({
   head: () => ({
@@ -19,7 +21,8 @@ export const Route = createFileRoute("/_public/services")({
       { property: "og:title", content: "Services | Maverick Manju" },
       {
         property: "og:description",
-        content: "Ten entertainment formats, one professional. Choose the experience for your event.",
+        content:
+          "Ten entertainment formats, one professional. Choose the experience for your event.",
       },
       { property: "og:type", content: "website" },
     ],
@@ -28,6 +31,14 @@ export const Route = createFileRoute("/_public/services")({
 });
 
 function ServicesPage() {
+  // Copy is fixed; the section images come from the admin panel.
+  const services = useServices();
+  const { data: packages, loading } = useServiceData<EventPackage[]>(
+    PACKAGES_KEY,
+    getPublishedPackages,
+    [],
+  );
+
   return (
     <>
       <PageHero
@@ -40,7 +51,7 @@ function ServicesPage() {
           </>
         }
         subtitle="Every event has a different room, audience and run-of-show. Pick the format — or combine them."
-        image={IMAGES.emcee}
+        {...(services[3] ? { image: services[3].imageUrl } : {})}
       >
         <ButtonLink to="/book">Book Maverick Manju</ButtonLink>
       </PageHero>
@@ -49,7 +60,7 @@ function ServicesPage() {
         <div className="container-mm">
           <SectionHeader eyebrow="Core performances" title="The signature four" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {services.slice(0, 4).map((s, i) => (
+            {services.map((s, i) => (
               <Reveal key={s.slug} delay={i * 0.05}>
                 <ServiceCard service={s} />
               </Reveal>
@@ -58,11 +69,9 @@ function ServicesPage() {
         </div>
       </section>
 
-      {services.slice(0, 4).map((service, i) => (
+      {services.map((service, i) => (
         <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
       ))}
-
-
 
       <section className="border-t border-border bg-surface py-20 sm:py-24">
         <div className="container-mm">
@@ -71,40 +80,60 @@ function ServicesPage() {
             title="Formats by occasion"
             description="Content, timing and interaction adjusted for the audience and the venue."
           />
-          <div className="space-y-5">
-            {services.slice(4).map((s, i) => (
-              <Reveal key={s.slug} delay={i * 0.04}>
-                <article className="card-mm grid gap-6 p-6 md:grid-cols-[280px_1fr] hover:border-primary/50 hover:glow-red">
-                  <img
-                    src={s.imageUrl}
-                    alt={s.title}
-                    loading="lazy"
-                    className="h-52 w-full border border-border object-cover md:h-full"
-                  />
-                  <div>
-                    <h3 className="font-display text-2xl">{s.title}</h3>
-                    <p className="mt-1 text-sm text-primary-glow">{s.shortDescription}</p>
-                    <p className="mt-3 text-sm text-muted-foreground">{s.fullDescription}</p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {s.highlights.map((h) => (
-                        <span
-                          key={h}
-                          className="border border-border px-3 py-1.5 text-[10px] tracking-[0.12em] text-muted-foreground uppercase"
-                        >
-                          {h}
-                        </span>
-                      ))}
+          {loading ? (
+            <div className="space-y-5">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="h-56 animate-pulse border border-border bg-card" />
+              ))}
+            </div>
+          ) : packages.length === 0 ? (
+            <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+              No event packages published yet.
+            </p>
+          ) : (
+            <div className="space-y-5">
+              {packages.map((p, i) => (
+                <Reveal key={p.id} delay={i * 0.04}>
+                  <article className="card-mm grid gap-6 p-6 md:grid-cols-[280px_1fr] hover:border-primary/50 hover:glow-red">
+                    {p.imageUrl && (
+                      <img
+                        src={p.imageUrl}
+                        alt={p.title}
+                        loading="lazy"
+                        className="h-52 w-full border border-border object-cover md:h-full"
+                      />
+                    )}
+                    <div>
+                      <h3 className="font-display text-2xl">{p.title}</h3>
+                      {p.shortDescription && (
+                        <p className="mt-1 text-sm text-primary-glow">{p.shortDescription}</p>
+                      )}
+                      {p.fullDescription && (
+                        <p className="mt-3 text-sm text-muted-foreground">{p.fullDescription}</p>
+                      )}
+                      {p.highlights.length > 0 && (
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {p.highlights.map((h) => (
+                            <span
+                              key={h}
+                              className="border border-border px-3 py-1.5 text-[10px] tracking-[0.12em] text-muted-foreground uppercase"
+                            >
+                              {h}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <div className="mt-6">
+                        <ButtonLink to={p.ctaLink || "/book"} variant="outline">
+                          {p.ctaLabel || "Enquire Now"}
+                        </ButtonLink>
+                      </div>
                     </div>
-                    <div className="mt-6">
-                      <ButtonLink to={s.page ?? "/book"} variant="outline">
-                        {s.ctaLabel}
-                      </ButtonLink>
-                    </div>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
-          </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

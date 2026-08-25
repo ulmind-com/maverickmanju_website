@@ -1,53 +1,31 @@
-import { seedGallery } from "@/data/seed";
-import type { GalleryItem } from "@/types";
-import { STORAGE_KEYS, read, uid, write } from "./storage";
+import { api } from "@/lib/api";
+import { STORAGE_KEYS, emit } from "./storage";
+import type { GalleryInput, GalleryItem } from "@/types";
 
-/**
- * Gallery data access. The UI only ever calls these functions.
- * BACKEND SWAP: replace the read/write calls with Supabase queries; signatures stay identical.
- */
 const KEY = STORAGE_KEYS.gallery;
 
-const sorted = (items: GalleryItem[]) =>
-  [...items].sort((a, b) => a.sortOrder - b.sortOrder || a.createdAt.localeCompare(b.createdAt));
+export const getPublishedGalleryItems = () => api.get<GalleryItem[]>("/api/gallery");
 
-export async function getGalleryItems(): Promise<GalleryItem[]> {
-  return sorted(await read<GalleryItem[]>(KEY, seedGallery));
-}
+export const getGalleryItems = () => api.adminGet<GalleryItem[]>("/api/admin/gallery");
 
-export async function getPublishedGalleryItems(): Promise<GalleryItem[]> {
-  return (await getGalleryItems()).filter((i) => i.status === "published");
-}
-
-export async function getGalleryItem(id: string): Promise<GalleryItem | undefined> {
-  return (await getGalleryItems()).find((i) => i.id === id);
-}
-
-export async function createGalleryItem(
-  input: Omit<GalleryItem, "id" | "createdAt">,
-): Promise<GalleryItem> {
-  const items = await getGalleryItems();
-  const item: GalleryItem = { ...input, id: uid(), createdAt: new Date().toISOString() };
-  await write(KEY, [...items, item]);
+export async function createGalleryItem(input: GalleryInput): Promise<GalleryItem> {
+  const item = await api.adminPost<GalleryItem>("/api/admin/gallery", input);
+  emit(KEY);
   return item;
 }
 
 export async function updateGalleryItem(
   id: string,
-  patch: Partial<GalleryItem>,
-): Promise<GalleryItem | undefined> {
-  const items = await getGalleryItems();
-  const next = items.map((i) => (i.id === id ? { ...i, ...patch, id: i.id } : i));
-  await write(KEY, next);
-  return next.find((i) => i.id === id);
+  patch: Partial<GalleryInput>,
+): Promise<GalleryItem> {
+  const item = await api.adminPatch<GalleryItem>(`/api/admin/gallery/${id}`, patch);
+  emit(KEY);
+  return item;
 }
 
 export async function deleteGalleryItem(id: string): Promise<void> {
-  const items = await getGalleryItems();
-  await write(
-    KEY,
-    items.filter((i) => i.id !== id),
-  );
+  await api.adminDelete(`/api/admin/gallery/${id}`);
+  emit(KEY);
 }
 
 export const GALLERY_KEY = KEY;

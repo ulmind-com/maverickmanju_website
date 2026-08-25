@@ -33,7 +33,11 @@ const ICONS: Record<string, ComponentType<{ size?: number; className?: string }>
 };
 
 const flow = [
-  { label: "Magic", title: "Creates Wonder", body: "Give guests a reason to stop, watch and smile." },
+  {
+    label: "Magic",
+    title: "Creates Wonder",
+    body: "Give guests a reason to stop, watch and smile.",
+  },
   {
     label: "Emcee",
     title: "Creates Participation",

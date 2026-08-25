@@ -19,7 +19,8 @@ export function GalleryCard({
   onOpen: () => void;
   useLayout?: boolean;
 }) {
-  const poster = item.type === "video" ? (item.thumbnailUrl ?? item.mediaUrl) : item.mediaUrl;
+  const poster = item.type === "video" ? item.thumbnailUrl || item.mediaUrl : item.mediaUrl;
+  const hasCaption = Boolean(item.title || item.description);
 
   return (
     <button
@@ -29,7 +30,7 @@ export function GalleryCard({
         "group relative overflow-hidden border border-border bg-surface text-left focus:ring-2 focus:ring-primary focus:outline-none",
         useLayout && layoutClass[item.layout],
       )}
-      aria-label={`Open ${item.title}`}
+      aria-label={item.title ? `Open ${item.title}` : `Open ${item.type}`}
     >
       {item.type === "video" && !item.thumbnailUrl ? (
         <video
@@ -42,13 +43,20 @@ export function GalleryCard({
       ) : (
         <img
           src={poster}
-          alt={item.title}
+          alt={item.title || ""}
           loading="lazy"
           className="h-full min-h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
       )}
 
-      <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-80 transition-opacity group-hover:opacity-95" />
+      <span
+        className={cn(
+          "pointer-events-none absolute inset-0 transition-opacity",
+          hasCaption
+            ? "bg-gradient-to-t from-black via-black/25 to-transparent opacity-80 group-hover:opacity-95"
+            : "bg-black/20 opacity-0 group-hover:opacity-100",
+        )}
+      />
       <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:inset-ring group-hover:inset-ring-primary" />
 
       {item.type === "video" && (
@@ -57,17 +65,19 @@ export function GalleryCard({
         </span>
       )}
 
-      <span className="absolute inset-x-0 bottom-0 block p-5">
-        <span className="block text-[10px] font-bold tracking-[0.22em] text-primary-glow uppercase">
-          {item.category}
+      {/* Title and description are optional — an untitled item shows only the media. */}
+      {hasCaption && (
+        <span className="absolute inset-x-0 bottom-0 block p-5">
+          {item.title && (
+            <span className="block font-display text-lg leading-tight">{item.title}</span>
+          )}
+          {item.description && (
+            <span className="mt-1 line-clamp-2 block text-xs text-muted-foreground">
+              {item.description}
+            </span>
+          )}
         </span>
-        <span className="mt-1 block font-display text-lg leading-tight">{item.title}</span>
-        {item.description && (
-          <span className="mt-1 line-clamp-2 block text-xs text-muted-foreground">
-            {item.description}
-          </span>
-        )}
-      </span>
+      )}
     </button>
   );
 }

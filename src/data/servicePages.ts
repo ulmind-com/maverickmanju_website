@@ -38,15 +38,13 @@ export const stageMagicContent: ServicePageContent = {
   ],
   interaction:
     "Between four and ten guests come on stage across the show, and the rest of the room participates from their seats — nobody is embarrassed, everybody is involved.",
-  galleryCategory: "Stage Magic",
 };
 
 export const walkAroundContent: ServicePageContent = {
   slug: "walk-around-magic",
   eyebrow: "02 • Walk-Around Magic",
   headline: "Magic doesn't always need a stage.",
-  intro:
-    "Close-up magic performed table-to-table and group-to-group, right in the guests' hands.",
+  intro: "Close-up magic performed table-to-table and group-to-group, right in the guests' hands.",
   why: [
     {
       title: "It fills the waiting time",
@@ -79,7 +77,6 @@ export const walkAroundContent: ServicePageContent = {
   ],
   interaction:
     "Guests shuffle, sign and hold the props. The magic happens in their hands — which is why they remember it.",
-  galleryCategory: "Walk-Around Magic",
 };
 
 export const mentalismContent: ServicePageContent = {
@@ -120,7 +117,6 @@ export const mentalismContent: ServicePageContent = {
   ],
   interaction:
     "Volunteers make free choices — nothing forced, nothing planted — which is exactly why the reveal lands.",
-  galleryCategory: "Mentalism",
 };
 
 export const emceeContent: ServicePageContent = {
@@ -161,5 +157,4 @@ export const emceeContent: ServicePageContent = {
   ],
   interaction:
     "The whole room plays. Expect teams, volunteers, laughter and a lot of hands in the air.",
-  galleryCategory: "Emcee",
 };

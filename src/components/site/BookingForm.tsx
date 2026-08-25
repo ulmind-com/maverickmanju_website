@@ -1,4 +1,4 @@
-import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { DURATION_OPTIONS, SERVICE_OPTIONS, SOUND_OPTIONS, VENUE_OPTIONS } from "@/data/seed";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -32,6 +32,7 @@ export function BookingForm() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [saved, setSaved] = useState<BookingEnquiry | null>(null);
 
   const set = (key: keyof typeof form, value: string | string[]) =>
@@ -65,11 +66,12 @@ export function BookingForm() {
     event.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
+    setSubmitError("");
     try {
       const booking = await createBooking({
         name: form.name.trim(),
         mobile: form.mobile.trim(),
-        ...(form.email.trim() ? { email: form.email.trim() } : {}),
+        email: form.email.trim(),
         date: form.date,
         services: form.services,
         duration: form.duration,
@@ -77,10 +79,16 @@ export function BookingForm() {
         venue: form.venue,
         sound: form.sound,
         location: form.location.trim(),
-        ...(form.message.trim() ? { message: form.message.trim() } : {}),
+        message: form.message.trim(),
       });
       setSaved(booking);
       setForm(initialForm);
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error
+          ? err.message
+          : "Could not send your enquiry. Please try again or reach out on WhatsApp.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -95,7 +103,7 @@ export function BookingForm() {
         <CheckCircle2 className="mx-auto text-primary" size={44} />
         <h3 className="mt-4 font-display text-2xl">Enquiry Received</h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Your enquiry has been saved and is now visible in the Maverick Manju enquiry dashboard.
+          Your enquiry has reached Maverick Manju. You will hear back shortly.
         </p>
         <p className="mt-6 text-[11px] tracking-[0.22em] text-muted-foreground uppercase">
           Reference number
@@ -253,13 +261,19 @@ export function BookingForm() {
         </Field>
       </div>
 
+      {submitError && (
+        <p className="mt-6 flex items-start gap-2 border border-destructive/50 bg-destructive/10 p-3.5 text-sm text-destructive">
+          <AlertCircle size={16} className="mt-0.5 shrink-0" />
+          {submitError}
+        </p>
+      )}
+
       <ActionButton type="submit" disabled={submitting} className="mt-7 w-full">
         {submitting && <Loader2 size={16} className="animate-spin" />}
         {submitting ? "Sending" : "Send Enquiry"}
       </ActionButton>
       <p className="mt-3 text-center text-[11px] text-muted-foreground">
-        Enquiries are stored in this browser (frontend demo storage) and appear in the admin
-        dashboard.
+        You will get a reference number as soon as the enquiry is received.
       </p>
     </form>
   );

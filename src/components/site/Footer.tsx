@@ -59,7 +59,6 @@ export function Footer() {
           ]}
         />
 
-
         <div>
           <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-primary uppercase">
             Contact
@@ -101,13 +100,7 @@ export function Footer() {
   );
 }
 
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: { to: string; label: string }[];
-}) {
+function FooterColumn({ title, links }: { title: string; links: { to: string; label: string }[] }) {
   return (
     <div>
       <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-primary uppercase">{title}</h3>
