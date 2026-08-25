@@ -66,13 +66,12 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3 lg:hidden">
-
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="grid h-10 w-10 place-items-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary xl:hidden"
+            className="grid h-10 w-10 place-items-center border border-border text-foreground transition-colors hover:border-primary hover:text-primary"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -80,7 +79,7 @@ export function Navbar() {
       </nav>
 
       {open && (
-        <div className="fixed inset-0 top-[72px] z-40 overflow-y-auto border-t border-border bg-background/98 spotlight backdrop-blur-xl xl:hidden">
+        <div className="fixed inset-0 top-[72px] z-40 overflow-y-auto border-t border-border bg-background/98 spotlight backdrop-blur-xl lg:hidden">
           <ul className="container-mm flex flex-col py-4">
             {[...NAV_LINKS, ...MOBILE_EXTRA_LINKS].map((link) => (
               <li key={link.to} className="border-b border-border">
@@ -95,6 +94,7 @@ export function Navbar() {
               </li>
             ))}
           </ul>
+
           <div className="container-mm pb-10">
             <Link
               to="/book"
