@@ -121,16 +121,18 @@ export function BookingForm() {
   return (
     <form onSubmit={onSubmit} noValidate className="card-mm p-6 sm:p-8">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Name *" error={errors.name}>
+        <Field label="Name *" error={errors.name} htmlFor="name">
           <input
+            id="name"
             className={fieldClass}
             value={form.name}
             onChange={(e) => set("name", e.target.value)}
             placeholder="Your name"
           />
         </Field>
-        <Field label="Mobile *" error={errors.mobile}>
+        <Field label="Mobile *" error={errors.mobile} htmlFor="mobile">
           <input
+            id="mobile"
             className={fieldClass}
             value={form.mobile}
             onChange={(e) => set("mobile", e.target.value)}
@@ -138,8 +140,9 @@ export function BookingForm() {
             inputMode="tel"
           />
         </Field>
-        <Field label="Email" error={errors.email}>
+        <Field label="Email" error={errors.email} htmlFor="email">
           <input
+            id="email"
             className={fieldClass}
             value={form.email}
             onChange={(e) => set("email", e.target.value)}
@@ -147,8 +150,9 @@ export function BookingForm() {
             inputMode="email"
           />
         </Field>
-        <Field label="Event Date *" error={errors.date}>
+        <Field label="Event Date *" error={errors.date} htmlFor="date">
           <input
+            id="date"
             type="date"
             className={fieldClass}
             value={form.date}
@@ -179,8 +183,9 @@ export function BookingForm() {
           </div>
         </Field>
 
-        <Field label="Duration *" error={errors.duration}>
+        <Field label="Duration *" error={errors.duration} htmlFor="duration">
           <select
+            id="duration"
             className={fieldClass}
             value={form.duration}
             onChange={(e) => set("duration", e.target.value)}
@@ -191,8 +196,9 @@ export function BookingForm() {
             ))}
           </select>
         </Field>
-        <Field label="Expected Guests *" error={errors.guests}>
+        <Field label="Expected Guests *" error={errors.guests} htmlFor="guests">
           <input
+            id="guests"
             type="number"
             min={1}
             className={fieldClass}
@@ -201,8 +207,9 @@ export function BookingForm() {
             placeholder="150"
           />
         </Field>
-        <Field label="Venue Type *" error={errors.venue}>
+        <Field label="Venue Type *" error={errors.venue} htmlFor="venue">
           <select
+            id="venue"
             className={fieldClass}
             value={form.venue}
             onChange={(e) => set("venue", e.target.value)}
@@ -213,8 +220,9 @@ export function BookingForm() {
             ))}
           </select>
         </Field>
-        <Field label="Speaker + Microphone Available? *" error={errors.sound}>
+        <Field label="Speaker + Microphone Available? *" error={errors.sound} htmlFor="sound">
           <select
+            id="sound"
             className={fieldClass}
             value={form.sound}
             onChange={(e) => set("sound", e.target.value)}
@@ -225,16 +233,18 @@ export function BookingForm() {
             ))}
           </select>
         </Field>
-        <Field label="Event Location *" error={errors.location} full>
+        <Field label="Event Location *" error={errors.location} full htmlFor="location">
           <input
+            id="location"
             className={fieldClass}
             value={form.location}
             onChange={(e) => set("location", e.target.value)}
             placeholder="Venue name, area, city"
           />
         </Field>
-        <Field label="Tell me about your event" full>
+        <Field label="Tell me about your event" full htmlFor="message">
           <textarea
+            id="message"
             className={`${fieldClass} min-h-28 resize-y`}
             value={form.message}
             onChange={(e) => set("message", e.target.value)}
@@ -259,16 +269,20 @@ function Field({
   label,
   error,
   full,
+  htmlFor,
   children,
 }: {
   label: string;
   error?: string | undefined;
   full?: boolean;
+  htmlFor?: string | undefined;
   children: React.ReactNode;
 }) {
   return (
     <div className={`flex flex-col gap-2 ${full ? "sm:col-span-2" : ""}`}>
-      <label className={labelClass}>{label}</label>
+      <label className={labelClass} htmlFor={htmlFor}>
+        {label}
+      </label>
       {children}
       {error && <span className="text-xs text-primary-glow">{error}</span>}
     </div>
