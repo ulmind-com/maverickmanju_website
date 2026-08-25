@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHero } from "@/components/site/PageHero";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
+import { ServicePreview } from "@/components/site/sections";
 import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
+
 import { IMAGES, services } from "@/data/seed";
 
 export const Route = createFileRoute("/_public/services")({
