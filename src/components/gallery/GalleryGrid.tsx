@@ -24,12 +24,7 @@ export function GalleryGrid({
     <>
       <div className="grid auto-rows-[220px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item, i) => (
-          <GalleryCard
-            key={item.id}
-            item={item}
-            useLayout={useLayout}
-            onOpen={() => setOpen(i)}
-          />
+          <GalleryCard key={item.id} item={item} useLayout={useLayout} onOpen={() => setOpen(i)} />
         ))}
       </div>
       {open !== null && (

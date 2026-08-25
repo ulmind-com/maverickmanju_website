@@ -1,16 +1,15 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Lock, ShieldAlert } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AdminButton, adminInput, adminLabel } from "@/components/admin/ui";
 import { Particles } from "@/components/site/primitives";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
-import { DEMO_CREDENTIALS } from "@/services/authService";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
     meta: [
       { title: "Admin Login | Maverick Manju" },
-      { name: "description", content: "Demo admin sign in for the Maverick Manju dashboard." },
+      { name: "description", content: "Admin sign in for the Maverick Manju dashboard." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -20,21 +19,26 @@ export const Route = createFileRoute("/admin/login")({
 function AdminLogin() {
   const { signIn, user, ready } = useAdminAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState(DEMO_CREDENTIALS.email);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (ready && user) navigate({ to: "/admin/dashboard" });
   }, [ready, user, navigate]);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setSubmitting(true);
+    setError("");
     try {
-      signIn(email, password);
+      await signIn(email, password);
       navigate({ to: "/admin/dashboard" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -56,10 +60,12 @@ function AdminLogin() {
             <label className="flex flex-col gap-1.5">
               <span className={adminLabel}>Email</span>
               <input
+                type="email"
                 className={adminInput}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="username"
+                placeholder="admin@maverickmanju.in"
               />
             </label>
             <label className="flex flex-col gap-1.5">
@@ -77,24 +83,10 @@ function AdminLogin() {
 
           {error && <p className="mt-4 text-sm text-primary-glow">{error}</p>}
 
-          <AdminButton type="submit" className="mt-6 w-full">
-            <Lock size={14} /> Sign in
+          <AdminButton type="submit" className="mt-6 w-full" disabled={submitting}>
+            {submitting ? <Loader2 size={14} className="animate-spin" /> : <Lock size={14} />}
+            {submitting ? "Signing in…" : "Sign in"}
           </AdminButton>
-
-          <div className="mt-6 border border-dashed border-border p-4 text-xs text-muted-foreground">
-            <p className="mb-2 flex items-center gap-2 font-bold text-foreground/80">
-              <ShieldAlert size={14} className="text-primary" /> Demo authentication
-            </p>
-            <p>
-              Email: <span className="text-foreground">{DEMO_CREDENTIALS.email}</span>
-              <br />
-              Password: <span className="text-foreground">{DEMO_CREDENTIALS.password}</span>
-            </p>
-            <p className="mt-2">
-              This is a frontend-only demo session stored in your browser. It is not secure
-              authentication and must be replaced by a real auth provider before going live.
-            </p>
-          </div>
         </form>
       </div>
     </div>

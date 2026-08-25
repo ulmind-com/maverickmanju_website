@@ -21,8 +21,6 @@ const MOBILE_EXTRA_LINKS = [
   { to: "/contact", label: "Contact" },
 ] as const;
 
-
-
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });

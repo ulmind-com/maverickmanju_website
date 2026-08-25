@@ -1,13 +1,12 @@
-import { X } from "lucide-react";
-import { useEffect, type ReactNode } from "react";
-import { fileToDataUrl } from "@/services/storage";
+import { Loader2, UploadCloud, X } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { uploadMedia, type UploadResult } from "@/lib/api";
 import type { BookingStatus } from "@/types";
 import { cn } from "@/lib/utils";
 
 export const adminInput =
   "w-full border border-input bg-[#09090b] px-3 py-2.5 text-sm text-foreground outline-none transition-colors focus:border-primary";
-export const adminLabel =
-  "text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground";
+export const adminLabel = "text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground";
 
 export function AdminField({
   label,
@@ -120,44 +119,90 @@ export function BookingStatusBadge({ status }: { status: BookingStatus }) {
 }
 
 /**
- * FileUploader — demo only.
- * Reads the selected file in the browser and returns a data URL.
- * BACKEND SWAP: upload to Cloudinary/S3/Supabase Storage and return the public URL.
+ * Uploads one file to Cloudinary through the backend and hands the caller the
+ * resulting public URL plus its `publicId` (needed to delete the asset later).
  */
 export function FileUploader({
   label,
   accept,
   value,
+  folder = "",
   onChange,
+  onClear,
   hint,
 }: {
   label: string;
   accept: string;
   value?: string | undefined;
-  onChange: (dataUrl: string) => void;
+  folder?: string;
+  onChange: (result: UploadResult) => void;
+  onClear?: (() => void) | undefined;
   hint?: string | undefined;
 }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const isVideo = accept.includes("video");
+
+  async function handle(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setBusy(true);
+    setError("");
+    try {
+      onChange(await uploadMedia(file, folder));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setBusy(false);
+      // Allow re-selecting the same file after a failure.
+      event.target.value = "";
+    }
+  }
+
   return (
     <div className="flex flex-col gap-1.5">
       <span className={adminLabel}>{label}</span>
-      <input
-        type="file"
-        accept={accept}
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (file) onChange(await fileToDataUrl(file));
-        }}
-        className="w-full border border-input bg-[#09090b] px-3 py-2 text-xs text-muted-foreground file:mr-3 file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-primary-foreground file:uppercase"
-      />
-      <span className="text-[10px] text-muted-foreground/70">
-        {hint ?? "Stored in this browser (frontend demo storage)."}
-      </span>
-      {value && (
-        <img
-          src={value}
-          alt="Preview"
-          className="mt-1 h-24 w-full border border-border object-cover"
+      <div className="relative">
+        <input
+          type="file"
+          accept={accept}
+          disabled={busy}
+          onChange={handle}
+          className="w-full border border-input bg-[#09090b] px-3 py-2 text-xs text-muted-foreground file:mr-3 file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-primary-foreground file:uppercase disabled:opacity-50"
         />
+        {busy && (
+          <span className="absolute inset-y-0 right-3 flex items-center gap-2 text-[10px] tracking-[0.14em] text-primary uppercase">
+            <Loader2 size={13} className="animate-spin" /> Uploading
+          </span>
+        )}
+      </div>
+      <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/70">
+        <UploadCloud size={11} />
+        {hint ?? "Stored on Cloudinary and served over a CDN."}
+      </span>
+      {error && <span className="text-[11px] text-destructive">{error}</span>}
+      {value && (
+        <div className="relative mt-1">
+          {isVideo ? (
+            <video src={value} controls className="max-h-32 w-full border border-border" />
+          ) : (
+            <img
+              src={value}
+              alt="Preview"
+              className="h-24 w-full border border-border object-cover"
+            />
+          )}
+          {onClear && (
+            <button
+              type="button"
+              onClick={onClear}
+              aria-label="Remove file"
+              className="absolute top-1 right-1 grid h-7 w-7 place-items-center border border-border bg-black/80 text-muted-foreground transition-colors hover:border-destructive hover:text-destructive"
+            >
+              <X size={13} />
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

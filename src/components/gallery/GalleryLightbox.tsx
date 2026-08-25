@@ -42,15 +42,15 @@ export function GalleryLightbox({ items, index, onClose, onIndexChange }: Props)
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={item.title}
+      aria-label={item.title || "Gallery item"}
       className="fixed inset-0 z-[100] flex flex-col bg-black/96 backdrop-blur-md"
     >
       <div className="flex items-center justify-between border-b border-border px-4 py-3 sm:px-6">
         <div className="min-w-0">
           <p className="text-[10px] font-bold tracking-[0.22em] text-primary-glow uppercase">
-            {item.category}
+            {item.type === "video" ? "Video" : "Photo"}
           </p>
-          <p className="truncate font-display text-lg">{item.title}</p>
+          <p className="truncate font-display text-lg">{item.title || "Moments of Magic"}</p>
         </div>
         <div className="flex items-center gap-2">
           {item.type === "image" && (
@@ -100,7 +100,7 @@ export function GalleryLightbox({ items, index, onClose, onIndexChange }: Props)
           <img
             key={item.id}
             src={item.mediaUrl}
-            alt={item.title}
+            alt={item.title || ""}
             onClick={() => setZoomed((z) => !z)}
             className={
               zoomed

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Eye, Film, ImagePlus, Pencil, Star, Trash2 } from "lucide-react";
+import { Eye, Film, ImagePlus, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { AdminShell } from "@/components/admin/AdminShell";
 import {
@@ -19,7 +19,7 @@ import {
   getGalleryItems,
   updateGalleryItem,
 } from "@/services/galleryService";
-import { GALLERY_CATEGORIES, type GalleryItem, type MediaType } from "@/types";
+import { GALLERY_LAYOUTS, type GalleryInput, type GalleryItem, type MediaType } from "@/types";
 
 export const Route = createFileRoute("/admin/gallery")({
   head: () => ({
@@ -36,51 +36,88 @@ export const Route = createFileRoute("/admin/gallery")({
   ),
 });
 
-type Draft = Omit<GalleryItem, "id" | "createdAt">;
-
-const emptyDraft = (type: MediaType, sortOrder: number): Draft => ({
+const emptyDraft = (type: MediaType): GalleryInput => ({
   type,
   title: "",
   description: "",
   mediaUrl: "",
   thumbnailUrl: "",
-  category: "Stage Magic",
-  featured: false,
-  status: "published",
+  publicId: "",
+  thumbnailPublicId: "",
   layout: "medium",
-  sortOrder,
+  status: "published",
+  sortOrder: 0,
 });
 
 function AdminGallery() {
-  const { data: items } = useServiceData<GalleryItem[]>(GALLERY_KEY, getGalleryItems, []);
-  const [draft, setDraft] = useState<Draft | null>(null);
+  const {
+    data: items,
+    loading,
+    error,
+  } = useServiceData<GalleryItem[]>(GALLERY_KEY, getGalleryItems, []);
+  const [draft, setDraft] = useState<GalleryInput | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const openNew = (type: MediaType) => {
     setEditingId(null);
-    setDraft(emptyDraft(type, items.length + 1));
+    setSaveError("");
+    setDraft(emptyDraft(type));
   };
 
   const openEdit = (item: GalleryItem) => {
     setEditingId(item.id);
+    setSaveError("");
     const { id: _id, createdAt: _createdAt, ...rest } = item;
     setDraft(rest);
   };
 
   async function save() {
     if (!draft) return;
-    if (editingId) await updateGalleryItem(editingId, draft);
-    else await createGalleryItem(draft);
-    setDraft(null);
-    setEditingId(null);
+    setSaving(true);
+    setSaveError("");
+    try {
+      if (editingId) await updateGalleryItem(editingId, draft);
+      else await createGalleryItem(draft);
+      setDraft(null);
+      setEditingId(null);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Could not save this item.");
+    } finally {
+      setSaving(false);
+    }
   }
+
+  async function run(id: string, action: () => Promise<unknown>) {
+    setBusyId(id);
+    try {
+      await action();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  const remove = (item: GalleryItem) => {
+    const name = item.title || `this ${item.type}`;
+    if (!window.confirm(`Delete ${name}? The file is removed from Cloudinary too.`)) return;
+    void run(item.id, () => deleteGalleryItem(item.id));
+  };
+
+  const togglePublish = (item: GalleryItem) =>
+    void run(item.id, () =>
+      updateGalleryItem(item.id, {
+        status: item.status === "published" ? "draft" : "published",
+      }),
+    );
 
   return (
     <>
       <AdminPageHeader
-        title="Gallery Management"
-        description="Items marked published appear on the public gallery immediately."
+        title="Gallery"
+        description="One feed of images and videos. Published items appear under Moments of Magic — add as many as you like."
         actions={
           <>
             <AdminButton onClick={() => openNew("image")}>
@@ -93,12 +130,18 @@ function AdminGallery() {
         }
       />
 
+      {error && (
+        <p className="mb-5 border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+          {error}
+        </p>
+      )}
+
       {/* Desktop table */}
       <div className="hidden overflow-hidden border border-border lg:block">
         <table className="w-full text-left text-sm">
           <thead className="bg-[#0b0b0d] text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
             <tr>
-              {["Thumb", "Type", "Title", "Category", "Featured", "Status", "Order", "Created", "Actions"].map(
+              {["Thumb", "Type", "Title", "Layout", "Status", "Order", "Added", "Actions"].map(
                 (h) => (
                   <th key={h} className="px-3 py-3 font-bold">
                     {h}
@@ -119,27 +162,16 @@ function AdminGallery() {
                   />
                 </td>
                 <td className="px-3 py-2 text-xs uppercase">{item.type}</td>
-                <td className="max-w-[220px] truncate px-3 py-2">{item.title}</td>
-                <td className="px-3 py-2 text-xs text-muted-foreground">{item.category}</td>
-                <td className="px-3 py-2">
-                  <button
-                    type="button"
-                    onClick={() => updateGalleryItem(item.id, { featured: !item.featured })}
-                    aria-label="Toggle featured"
-                    className={item.featured ? "text-[var(--star)]" : "text-muted-foreground/40"}
-                  >
-                    <Star size={16} fill={item.featured ? "currentColor" : "none"} />
-                  </button>
+                <td className="max-w-[260px] truncate px-3 py-2">
+                  {item.title || <span className="text-muted-foreground">— untitled —</span>}
                 </td>
+                <td className="px-3 py-2 text-xs text-muted-foreground">{item.layout}</td>
                 <td className="px-3 py-2">
                   <button
                     type="button"
-                    onClick={() =>
-                      updateGalleryItem(item.id, {
-                        status: item.status === "published" ? "draft" : "published",
-                      })
-                    }
-                    className={`border px-2 py-1 text-[10px] tracking-[0.14em] uppercase ${
+                    disabled={busyId === item.id}
+                    onClick={() => togglePublish(item)}
+                    className={`border px-2 py-1 text-[10px] tracking-[0.14em] uppercase disabled:opacity-50 ${
                       item.status === "published"
                         ? "border-emerald-400/60 text-emerald-300"
                         : "border-border text-muted-foreground"
@@ -160,7 +192,7 @@ function AdminGallery() {
                     <IconBtn label="Edit" onClick={() => openEdit(item)}>
                       <Pencil size={14} />
                     </IconBtn>
-                    <IconBtn label="Delete" danger onClick={() => deleteGalleryItem(item.id)}>
+                    <IconBtn label="Delete" danger onClick={() => remove(item)}>
                       <Trash2 size={14} />
                     </IconBtn>
                   </div>
@@ -183,13 +215,12 @@ function AdminGallery() {
                 className="h-16 w-24 shrink-0 border border-border object-cover"
               />
               <div className="min-w-0">
-                <p className="truncate font-display">{item.title}</p>
+                <p className="truncate font-display">{item.title || "— untitled —"}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.type.toUpperCase()} • {item.category} • #{item.sortOrder}
+                  {item.type.toUpperCase()} • {item.layout} • #{item.sortOrder}
                 </p>
                 <p className="mt-1 text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
                   {item.status}
-                  {item.featured && " • featured"}
                 </p>
               </div>
             </div>
@@ -200,7 +231,7 @@ function AdminGallery() {
               <AdminButton variant="outline" onClick={() => openEdit(item)}>
                 Edit
               </AdminButton>
-              <AdminButton variant="danger" onClick={() => deleteGalleryItem(item.id)}>
+              <AdminButton variant="danger" onClick={() => remove(item)}>
                 Delete
               </AdminButton>
             </div>
@@ -208,7 +239,7 @@ function AdminGallery() {
         ))}
       </div>
 
-      {items.length === 0 && (
+      {!loading && items.length === 0 && (
         <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
           No gallery items yet — add your first image or video.
         </p>
@@ -230,17 +261,18 @@ function AdminGallery() {
           wide
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <AdminField label="Title" className="sm:col-span-2">
+            <AdminField label="Title (optional)" className="sm:col-span-2">
               <input
                 className={adminInput}
                 value={draft.title}
+                placeholder="Leave blank to show the media on its own"
                 onChange={(e) => setDraft({ ...draft, title: e.target.value })}
               />
             </AdminField>
-            <AdminField label="Description" className="sm:col-span-2">
+            <AdminField label="Description (optional)" className="sm:col-span-2">
               <textarea
                 className={`${adminInput} min-h-20`}
-                value={draft.description ?? ""}
+                value={draft.description}
                 onChange={(e) => setDraft({ ...draft, description: e.target.value })}
               />
             </AdminField>
@@ -254,46 +286,6 @@ function AdminGallery() {
                 <option value="video">Video</option>
               </select>
             </AdminField>
-            <AdminField label="Category">
-              <select
-                className={adminInput}
-                value={draft.category}
-                onChange={(e) =>
-                  setDraft({ ...draft, category: e.target.value as GalleryItem["category"] })
-                }
-              >
-                {GALLERY_CATEGORIES.map((c) => (
-                  <option key={c}>{c}</option>
-                ))}
-              </select>
-            </AdminField>
-
-            <div className="sm:col-span-2">
-              <FileUploader
-                label={draft.type === "video" ? "Upload video" : "Upload image"}
-                accept={draft.type === "video" ? "video/*" : "image/*"}
-                onChange={(url) => setDraft({ ...draft, mediaUrl: url })}
-              />
-            </div>
-            <AdminField label="…or paste a media URL" className="sm:col-span-2">
-              <input
-                className={adminInput}
-                value={draft.mediaUrl.startsWith("data:") ? "" : draft.mediaUrl}
-                placeholder="https://…"
-                onChange={(e) => setDraft({ ...draft, mediaUrl: e.target.value })}
-              />
-            </AdminField>
-            {draft.type === "video" && (
-              <div className="sm:col-span-2">
-                <FileUploader
-                  label="Video thumbnail / poster"
-                  accept="image/*"
-                  value={draft.thumbnailUrl}
-                  onChange={(url) => setDraft({ ...draft, thumbnailUrl: url })}
-                />
-              </div>
-            )}
-
             <AdminField label="Layout size">
               <select
                 className={adminInput}
@@ -302,14 +294,59 @@ function AdminGallery() {
                   setDraft({ ...draft, layout: e.target.value as GalleryItem["layout"] })
                 }
               >
-                {["small", "medium", "large", "tall", "wide"].map((l) => (
+                {GALLERY_LAYOUTS.map((l) => (
                   <option key={l} value={l}>
                     {l}
                   </option>
                 ))}
               </select>
             </AdminField>
-            <AdminField label="Sort order">
+
+            <div className="sm:col-span-2">
+              <FileUploader
+                label={draft.type === "video" ? "Upload video *" : "Upload image *"}
+                accept={draft.type === "video" ? "video/*" : "image/*"}
+                folder="gallery"
+                onChange={(result) =>
+                  setDraft({
+                    ...draft,
+                    type: result.type,
+                    mediaUrl: result.url,
+                    publicId: result.publicId,
+                    ...(result.type === "video" ? { thumbnailUrl: result.thumbnailUrl } : {}),
+                  })
+                }
+              />
+            </div>
+            <AdminField label="…or paste a media URL" className="sm:col-span-2">
+              <input
+                className={adminInput}
+                value={draft.mediaUrl}
+                placeholder="https://…"
+                onChange={(e) => setDraft({ ...draft, mediaUrl: e.target.value, publicId: "" })}
+              />
+            </AdminField>
+            {draft.type === "video" && (
+              <div className="sm:col-span-2">
+                <FileUploader
+                  label="Video thumbnail / poster (optional)"
+                  accept="image/*"
+                  folder="gallery/posters"
+                  value={draft.thumbnailUrl}
+                  onChange={(result) =>
+                    setDraft({
+                      ...draft,
+                      thumbnailUrl: result.url,
+                      thumbnailPublicId: result.publicId,
+                    })
+                  }
+                  onClear={() => setDraft({ ...draft, thumbnailUrl: "", thumbnailPublicId: "" })}
+                  hint="Left blank, Cloudinary uses the first frame of the video."
+                />
+              </div>
+            )}
+
+            <AdminField label="Sort order (lower shows first)">
               <input
                 type="number"
                 className={adminInput}
@@ -329,15 +366,6 @@ function AdminGallery() {
                 <option value="draft">Draft</option>
               </select>
             </AdminField>
-            <label className="mt-6 flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={draft.featured}
-                onChange={(e) => setDraft({ ...draft, featured: e.target.checked })}
-                className="accent-[var(--primary)]"
-              />
-              Featured item
-            </label>
 
             {draft.mediaUrl && (
               <div className="sm:col-span-2">
@@ -347,7 +375,7 @@ function AdminGallery() {
                 {draft.type === "video" ? (
                   <video
                     src={draft.mediaUrl}
-                    poster={draft.thumbnailUrl}
+                    {...(draft.thumbnailUrl ? { poster: draft.thumbnailUrl } : {})}
                     controls
                     className="max-h-64 w-full border border-border"
                   />
@@ -362,12 +390,14 @@ function AdminGallery() {
             )}
           </div>
 
+          {saveError && <p className="mt-4 text-sm text-destructive">{saveError}</p>}
+
           <div className="mt-6 flex justify-end gap-2">
             <AdminButton variant="outline" onClick={() => setDraft(null)}>
               Cancel
             </AdminButton>
-            <AdminButton onClick={save} disabled={!draft.title || !draft.mediaUrl}>
-              {editingId ? "Save changes" : "Add to gallery"}
+            <AdminButton onClick={save} disabled={saving || !draft.mediaUrl}>
+              {saving ? "Saving…" : editingId ? "Save changes" : "Add to gallery"}
             </AdminButton>
           </div>
         </AdminModal>
@@ -394,7 +424,9 @@ function IconBtn({
       title={label}
       onClick={onClick}
       className={`grid h-8 w-8 place-items-center border border-border transition-colors ${
-        danger ? "hover:border-destructive hover:text-destructive" : "hover:border-primary hover:text-primary"
+        danger
+          ? "hover:border-destructive hover:text-destructive"
+          : "hover:border-primary hover:text-primary"
       }`}
     >
       {children}

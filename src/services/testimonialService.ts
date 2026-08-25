@@ -1,46 +1,31 @@
-import { seedTestimonials } from "@/data/seed";
-import type { Testimonial } from "@/types";
-import { STORAGE_KEYS, read, uid, write } from "./storage";
+import { api } from "@/lib/api";
+import { STORAGE_KEYS, emit } from "./storage";
+import type { Testimonial, TestimonialInput } from "@/types";
 
-/** BACKEND SWAP: same signatures, Supabase table `testimonials`. */
 const KEY = STORAGE_KEYS.testimonials;
 
-const sorted = (items: Testimonial[]) =>
-  [...items].sort((a, b) => a.sortOrder - b.sortOrder || a.createdAt.localeCompare(b.createdAt));
+export const getPublishedTestimonials = () => api.get<Testimonial[]>("/api/testimonials");
 
-export async function getTestimonials(): Promise<Testimonial[]> {
-  return sorted(await read<Testimonial[]>(KEY, seedTestimonials));
-}
+export const getTestimonials = () => api.adminGet<Testimonial[]>("/api/admin/testimonials");
 
-export async function getPublishedTestimonials(): Promise<Testimonial[]> {
-  return (await getTestimonials()).filter((t) => t.status === "published");
-}
-
-export async function createTestimonial(
-  input: Omit<Testimonial, "id" | "createdAt">,
-): Promise<Testimonial> {
-  const items = await getTestimonials();
-  const item: Testimonial = { ...input, id: uid(), createdAt: new Date().toISOString() };
-  await write(KEY, [...items, item]);
+export async function createTestimonial(input: TestimonialInput): Promise<Testimonial> {
+  const item = await api.adminPost<Testimonial>("/api/admin/testimonials", input);
+  emit(KEY);
   return item;
 }
 
 export async function updateTestimonial(
   id: string,
-  patch: Partial<Testimonial>,
-): Promise<Testimonial | undefined> {
-  const items = await getTestimonials();
-  const next = items.map((t) => (t.id === id ? { ...t, ...patch, id: t.id } : t));
-  await write(KEY, next);
-  return next.find((t) => t.id === id);
+  patch: Partial<TestimonialInput>,
+): Promise<Testimonial> {
+  const item = await api.adminPatch<Testimonial>(`/api/admin/testimonials/${id}`, patch);
+  emit(KEY);
+  return item;
 }
 
 export async function deleteTestimonial(id: string): Promise<void> {
-  const items = await getTestimonials();
-  await write(
-    KEY,
-    items.filter((t) => t.id !== id),
-  );
+  await api.adminDelete(`/api/admin/testimonials/${id}`);
+  emit(KEY);
 }
 
 export const TESTIMONIALS_KEY = KEY;

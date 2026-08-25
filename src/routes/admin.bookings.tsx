@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Eye, Mail, MessageCircle, Phone, Trash2 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { CheckCircle2, Eye, Mail, MessageCircle, Phone, Save, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin/AdminShell";
 import {
   AdminButton,
@@ -37,11 +37,21 @@ export const Route = createFileRoute("/admin/bookings")({
 });
 
 function AdminBookings() {
-  const { data: bookings } = useServiceData<BookingEnquiry[]>(BOOKINGS_KEY, getBookings, []);
+  const {
+    data: bookings,
+    loading,
+    error,
+  } = useServiceData<BookingEnquiry[]>(BOOKINGS_KEY, getBookings, []);
   const settings = useSiteSettings();
   const [openId, setOpenId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | BookingStatus>("all");
+
+  function remove(b: BookingEnquiry) {
+    if (!window.confirm(`Delete enquiry ${b.referenceNumber} from ${b.name}?`)) return;
+    void deleteBooking(b.id);
+    if (openId === b.id) setOpenId(null);
+  }
 
   const visible = useMemo(
     () =>
@@ -63,6 +73,12 @@ function AdminBookings() {
         title="Booking Enquiries"
         description="Every enquiry submitted through the public booking form."
       />
+
+      {error && (
+        <p className="mb-5 border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+          {error}
+        </p>
+      )}
 
       <div className="mb-5 grid gap-3 sm:grid-cols-[1fr_220px]">
         <input
@@ -90,13 +106,22 @@ function AdminBookings() {
         <table className="w-full text-left text-sm">
           <thead className="bg-[#0b0b0d] text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
             <tr>
-              {["Ref", "Name", "Mobile", "Event date", "Services", "Guests", "Venue", "Status", "Created", ""].map(
-                (h) => (
-                  <th key={h} className="px-3 py-3 font-bold">
-                    {h}
-                  </th>
-                ),
-              )}
+              {[
+                "Ref",
+                "Name",
+                "Mobile",
+                "Event date",
+                "Services",
+                "Guests",
+                "Venue",
+                "Status",
+                "Created",
+                "",
+              ].map((h) => (
+                <th key={h} className="px-3 py-3 font-bold">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -138,7 +163,7 @@ function AdminBookings() {
                     <button
                       type="button"
                       aria-label="Delete"
-                      onClick={() => deleteBooking(b.id)}
+                      onClick={() => remove(b)}
                       className="grid h-8 w-8 place-items-center border border-border hover:border-destructive hover:text-destructive"
                     >
                       <Trash2 size={14} />
@@ -173,7 +198,7 @@ function AdminBookings() {
               <AdminButton variant="outline" onClick={() => updateBookingStatus(b.id, "confirmed")}>
                 Confirm
               </AdminButton>
-              <AdminButton variant="danger" onClick={() => deleteBooking(b.id)}>
+              <AdminButton variant="danger" onClick={() => remove(b)}>
                 Delete
               </AdminButton>
             </div>
@@ -181,9 +206,17 @@ function AdminBookings() {
         ))}
       </div>
 
-      {visible.length === 0 && (
+      {loading && (
         <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-          No enquiries yet. Submit the public booking form to see one here.
+          Loading enquiries…
+        </p>
+      )}
+
+      {!loading && visible.length === 0 && (
+        <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+          {bookings.length === 0
+            ? "No enquiries yet. Submit the public booking form to see one here."
+            : "No enquiries match your filters."}
         </p>
       )}
 
@@ -206,10 +239,7 @@ function AdminBookings() {
               <Detail label="Sound system" value={active.sound} />
               <Detail label="Location" value={active.location} />
               <Detail label="Message" value={active.message || "—"} />
-              <Detail
-                label="Created"
-                value={new Date(active.createdAt).toLocaleString()}
-              />
+              <Detail label="Created" value={new Date(active.createdAt).toLocaleString()} />
             </div>
 
             <div className="space-y-5">
@@ -217,9 +247,7 @@ function AdminBookings() {
                 <select
                   className={adminInput}
                   value={active.status}
-                  onChange={(e) =>
-                    updateBookingStatus(active.id, e.target.value as BookingStatus)
-                  }
+                  onChange={(e) => updateBookingStatus(active.id, e.target.value as BookingStatus)}
                 >
                   {BOOKING_STATUSES.map((s) => (
                     <option key={s} value={s}>
@@ -229,14 +257,7 @@ function AdminBookings() {
                 </select>
               </AdminField>
 
-              <AdminField label="Internal note">
-                <textarea
-                  className={`${adminInput} min-h-28`}
-                  value={active.internalNote ?? ""}
-                  onChange={(e) => updateBooking(active.id, { internalNote: e.target.value })}
-                  placeholder="Quote sent, follow-up date, travel notes…"
-                />
-              </AdminField>
+              <InternalNote booking={active} />
 
               <div>
                 <p className="mb-2 text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
@@ -281,6 +302,52 @@ function AdminBookings() {
         </AdminModal>
       )}
     </>
+  );
+}
+
+/** Notes are edited locally and saved on demand — not one request per keystroke. */
+function InternalNote({ booking }: { booking: BookingEnquiry }) {
+  const [note, setNote] = useState(booking.internalNote ?? "");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setNote(booking.internalNote ?? "");
+    setSaved(false);
+  }, [booking.id, booking.internalNote]);
+
+  async function save() {
+    setSaving(true);
+    try {
+      await updateBooking(booking.id, { internalNote: note });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div>
+      <AdminField label="Internal note">
+        <textarea
+          className={`${adminInput} min-h-28`}
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          placeholder="Quote sent, follow-up date, travel notes…"
+        />
+      </AdminField>
+      <div className="mt-2 flex items-center gap-3">
+        <AdminButton
+          variant="outline"
+          onClick={save}
+          disabled={saving || note === (booking.internalNote ?? "")}
+        >
+          <Save size={14} /> {saving ? "Saving…" : "Save note"}
+        </AdminButton>
+        {saved && <span className="text-xs text-emerald-300">Note saved.</span>}
+      </div>
+    </div>
   );
 }
 
