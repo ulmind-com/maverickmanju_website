@@ -48,10 +48,13 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
   );
 
   const category = GALLERY_CATEGORY_BY_SLUG[content.slug];
+  // A page with its own category shows everything filed under it. An unmapped
+  // one (mentalism) is borrowing the general feed, so it stays a short preview.
   // A mapped category that happens to be empty hides the section rather than
   // filling it with another service's work.
-  const relevant = category ? gallery.filter((g) => g.category === category) : gallery;
-  const shown = relevant.slice(0, 3).map((g) => ({ ...g, layout: "medium" as const }));
+  const shown = (
+    category ? gallery.filter((g) => g.category === category) : gallery.slice(0, 3)
+  ).map((g) => ({ ...g, layout: "medium" as const }));
 
   return (
     <>
