@@ -90,11 +90,28 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container-mm mt-12 flex flex-col gap-2 border-t border-border pt-6 text-xs text-muted-foreground/70 sm:flex-row sm:items-center sm:justify-between">
+      <div className="container-mm mt-12 flex flex-col gap-4 border-t border-border pt-6 text-xs text-muted-foreground/70 sm:flex-row sm:items-center sm:justify-between">
         <p>{settings.footerCopyright}</p>
-        <Link to="/admin/login" className="transition-colors hover:text-primary">
-          Admin
-        </Link>
+        <div className="flex items-center gap-4">
+          <a
+            href="https://www.ulmind.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-1.5 text-[13px] font-medium text-foreground/90"
+          >
+            <span className="opacity-80 transition-opacity group-hover:opacity-100">
+              Designed and Developed by
+            </span>
+            <img
+              src="/images/ulmind.png"
+              alt="Ulmind"
+              className="h-10 w-auto object-contain transition-all group-hover:scale-105 sm:h-12"
+            />
+          </a>
+          <Link to="/admin/login" className="transition-colors hover:text-primary">
+            Admin
+          </Link>
+        </div>
       </div>
     </footer>
   );
