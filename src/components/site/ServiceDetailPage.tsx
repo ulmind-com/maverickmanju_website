@@ -5,9 +5,23 @@ import { useServiceData } from "@/hooks/useServiceData";
 import { useService } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
 import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
-import type { GalleryItem, Testimonial } from "@/types";
+import type { GalleryCategory, GalleryItem, Testimonial } from "@/types";
 import { PageHero } from "./PageHero";
 import { ButtonLink, Reveal, SectionHeader } from "./primitives";
+
+/**
+ * Which gallery heading each service page pulls its "recent events" from, so a
+ * visitor on /stage-magic sees stage work rather than the whole feed.
+ *
+ * Mentalism has no gallery category of its own — the gallery is filed under
+ * Stage Magic, Emcee and Walk Around — so it falls back to the newest items
+ * instead of rendering an empty section.
+ */
+const GALLERY_CATEGORY_BY_SLUG: Record<string, GalleryCategory> = {
+  "stage-magic": "Stage Magic",
+  "walk-around-magic": "Walk Around",
+  emcee: "Emcee",
+};
 
 export interface ServicePageContent {
   slug: string;
@@ -33,7 +47,11 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
     [],
   );
 
-  const shown = gallery.slice(0, 3).map((g) => ({ ...g, layout: "medium" as const }));
+  const category = GALLERY_CATEGORY_BY_SLUG[content.slug];
+  // A mapped category that happens to be empty hides the section rather than
+  // filling it with another service's work.
+  const relevant = category ? gallery.filter((g) => g.category === category) : gallery;
+  const shown = relevant.slice(0, 3).map((g) => ({ ...g, layout: "medium" as const }));
 
   return (
     <>
