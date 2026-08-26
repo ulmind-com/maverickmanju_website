@@ -2,7 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ImageIcon, KeyRound, Save } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AdminShell } from "@/components/admin/AdminShell";
-import { AdminButton, AdminField, AdminPageHeader, FileUploader, adminInput } from "@/components/admin/ui";
+import {
+  AdminButton,
+  AdminField,
+  AdminPageHeader,
+  FileUploader,
+  adminInput,
+} from "@/components/admin/ui";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { changePassword } from "@/services/authService";
 import { updateSettings } from "@/services/siteService";
@@ -111,8 +117,8 @@ function HeroImageSection() {
           ⚠️ Remove background before uploading
         </p>
         <p className="mt-1 text-xs text-amber-200/80">
-          Please remove the background from the image before uploading (e.g. use remove.bg).
-          A transparent background PNG works best in the hero section.
+          Please remove the background from the image before uploading (e.g. use remove.bg). A
+          transparent background PNG works best in the hero section.
         </p>
       </div>
 
@@ -133,7 +139,8 @@ function HeroImageSection() {
             <span className="text-[10px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
               Current hero preview
             </span>
-            <div className="relative flex items-center justify-center border border-border bg-[#09090b] p-4"
+            <div
+              className="relative flex items-center justify-center border border-border bg-[#09090b] p-4"
               style={{ minHeight: 180 }}
             >
               <img
