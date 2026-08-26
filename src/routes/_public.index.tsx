@@ -254,6 +254,8 @@ function Hero() {
             style={{
               filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.65))",
               animation: "mm-hero-float 7s ease-in-out infinite alternate",
+              transform: "scale(1.4)",
+              transformOrigin: "bottom center",
             }}
           />
         </Reveal>
