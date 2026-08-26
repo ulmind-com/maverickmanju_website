@@ -61,13 +61,19 @@ export async function prepareImageForUpload(file: File): Promise<File> {
     if (!ctx) return file;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+    // Preserve PNG format (and transparency) instead of force-converting to JPEG.
+    const isPng = file.type === "image/png";
+    const outType = isPng ? "image/png" : "image/jpeg";
+    const outQuality = isPng ? undefined : QUALITY;
+
     const blob = await new Promise<Blob | null>((resolve) =>
-      canvas.toBlob(resolve, "image/jpeg", QUALITY),
+      canvas.toBlob(resolve, outType, outQuality),
     );
     if (!blob || blob.size >= file.size) return file;
 
     const name = file.name.replace(/\.[^./\\]+$/, "") || "upload";
-    return new File([blob], `${name}.jpg`, { type: "image/jpeg", lastModified: Date.now() });
+    const ext = isPng ? "png" : "jpg";
+    return new File([blob], `${name}.${ext}`, { type: outType, lastModified: Date.now() });
   } catch {
     return file;
   }

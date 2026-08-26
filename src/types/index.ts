@@ -163,4 +163,6 @@ export interface SiteSettings {
   defaultBookingMessage: string;
   footerCopyright: string;
   googleReviewLink: string;
+  heroImageUrl: string;
+  heroImagePublicId: string;
 }

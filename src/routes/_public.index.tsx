@@ -5,6 +5,7 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
 import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 import {
   EventPackages,
   MaverickDifference,
@@ -168,6 +169,9 @@ function ServiceDetails() {
 }
 
 function Hero() {
+  const settings = useSiteSettings();
+  const heroImage = settings.heroImageUrl || "/images/hero-manju-magic.jpg";
+
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16">
       {/* Backdrop: a red spotlight wash, a faint grid and drifting particles. */}
@@ -241,12 +245,12 @@ function Hero() {
             }}
           />
           <img
-            src="/images/hero-falcon.webp"
-            alt="Maverick Manju in a green blazer holding a jewelled golden falcon sceptre"
+            src={heroImage}
+            alt="Maverick Manju performing magic"
             width={1280}
             height={1460}
             fetchPriority="high"
-            className="relative mx-auto w-full max-w-[300px] object-contain sm:max-w-[420px] lg:max-w-[560px]"
+            className="relative mx-auto w-full max-w-[420px] object-contain object-bottom sm:max-w-[540px] lg:max-w-none"
             style={{
               filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.65))",
               animation: "mm-hero-float 7s ease-in-out infinite alternate",

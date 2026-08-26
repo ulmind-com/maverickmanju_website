@@ -143,6 +143,8 @@ export const defaultSettings: SiteSettings = {
     "Hi Maverick Manju, I would like to enquire about magic entertainment for my event.",
   footerCopyright: "© 2026 Maverick Manju. All Rights Reserved.",
   googleReviewLink: "https://g.page/maverickmanju/review",
+  heroImageUrl: "/images/hero-manju-magic.jpg",
+  heroImagePublicId: "",
 };
 
 export const SERVICE_OPTIONS = [
