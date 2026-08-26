@@ -47,6 +47,7 @@ export function Navbar() {
             <span className="hidden truncate text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase lg:inline">
               <span className="text-primary">|</span> Magician{" "}
               <span className="text-primary">|</span> Emcee <span className="text-primary">|</span>{" "}
+              Mentalist <span className="text-primary">|</span>{" "}
               Creator Coach
             </span>
           </div>
