@@ -9,7 +9,6 @@ import {
   AdminPageHeader,
   FileUploader,
   adminInput,
-  adminLabel,
 } from "@/components/admin/ui";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
 import { useServiceData } from "@/hooks/useServiceData";
@@ -20,12 +19,7 @@ import {
   getTestimonials,
   updateTestimonial,
 } from "@/services/testimonialService";
-import {
-  TESTIMONIAL_CATEGORIES,
-  type Testimonial,
-  type TestimonialCategory,
-  type TestimonialInput,
-} from "@/types";
+import type { Testimonial, TestimonialInput } from "@/types";
 
 export const Route = createFileRoute("/admin/testimonials")({
   head: () => ({
@@ -43,7 +37,6 @@ export const Route = createFileRoute("/admin/testimonials")({
 });
 
 const emptyDraft = (): TestimonialInput => ({
-  category: "Corporates",
   clientName: "",
   company: "",
   role: "",
@@ -68,7 +61,6 @@ function AdminTestimonials() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft">("all");
-  const [categoryFilter, setCategoryFilter] = useState<"all" | TestimonialCategory>("all");
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
@@ -77,23 +69,11 @@ function AdminTestimonials() {
       items.filter(
         (t) =>
           (statusFilter === "all" || t.status === statusFilter) &&
-          (categoryFilter === "all" || t.category === categoryFilter) &&
           `${t.clientName} ${t.company} ${t.eventType} ${t.text}`
             .toLowerCase()
             .includes(search.toLowerCase()),
       ),
-    [items, search, statusFilter, categoryFilter],
-  );
-
-  /** Counts per heading, so it is obvious which category is still empty. */
-  const counts = useMemo(
-    () =>
-      TESTIMONIAL_CATEGORIES.map((category) => ({
-        category,
-        total: items.filter((t) => t.category === category).length,
-        published: items.filter((t) => t.category === category && t.status === "published").length,
-      })),
-    [items],
+    [items, search, statusFilter],
   );
 
   function openNew(kind: "text" | "video") {
@@ -138,7 +118,7 @@ function AdminTestimonials() {
     <>
       <AdminPageHeader
         title="Testimonials"
-        description="Written or video. The category you pick decides which heading the testimonial appears under on the public page."
+        description="Written or video — every field except the content itself is optional. Only published items render on the site."
         actions={
           <>
             <AdminButton onClick={() => openNew("text")}>
@@ -157,44 +137,13 @@ function AdminTestimonials() {
         </p>
       )}
 
-      <div className="mb-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {counts.map((c) => (
-          <button
-            key={c.category}
-            type="button"
-            onClick={() =>
-              setCategoryFilter((current) => (current === c.category ? "all" : c.category))
-            }
-            className={`card-mm p-4 text-left transition-colors ${
-              categoryFilter === c.category ? "border-primary" : "hover:border-primary/50"
-            }`}
-          >
-            <p className={adminLabel}>{c.category}</p>
-            <p className="mt-2 font-display text-2xl">{c.total}</p>
-            <p className="text-[11px] text-muted-foreground">{c.published} published</p>
-          </button>
-        ))}
-      </div>
-
-      <div className="mb-5 grid gap-3 sm:grid-cols-3">
+      <div className="mb-5 grid gap-3 sm:grid-cols-2">
         <input
           className={adminInput}
           placeholder="Search name, company, text…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select
-          className={adminInput}
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value as typeof categoryFilter)}
-        >
-          <option value="all">All categories</option>
-          {TESTIMONIAL_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
         <select
           className={adminInput}
           value={statusFilter}
@@ -218,8 +167,8 @@ function AdminTestimonials() {
                   {[t.role, t.company, t.eventType].filter(Boolean).join(" • ") || "—"}
                 </p>
               </div>
-              <span className="shrink-0 border border-primary/40 px-2 py-1 text-[10px] tracking-[0.12em] text-primary uppercase">
-                {t.category}
+              <span className="shrink-0 text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+                #{t.sortOrder}
               </span>
             </div>
 
@@ -277,21 +226,6 @@ function AdminTestimonials() {
         >
           <div className="grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="grid gap-4 sm:grid-cols-2">
-              <AdminField label="Category *" className="sm:col-span-2">
-                <select
-                  className={adminInput}
-                  value={draft.category}
-                  onChange={(e) =>
-                    setDraft({ ...draft, category: e.target.value as TestimonialCategory })
-                  }
-                >
-                  {TESTIMONIAL_CATEGORIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </AdminField>
               <AdminField label="Client name (optional)">
                 <input
                   className={adminInput}
