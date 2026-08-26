@@ -3,13 +3,12 @@ import type { GalleryItem } from "@/types";
 import { GalleryCard } from "./GalleryCard";
 import { GalleryLightbox } from "./GalleryLightbox";
 
-export function GalleryGrid({
-  items,
-  useLayout = true,
-}: {
-  items: GalleryItem[];
-  useLayout?: boolean;
-}) {
+/**
+ * Masonry columns rather than a fixed-height grid: every image and video keeps
+ * the shape it was uploaded with, so a portrait clip stays portrait and a wide
+ * one stays wide instead of being cropped into a uniform tile.
+ */
+export function GalleryGrid({ items }: { items: GalleryItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
 
   if (items.length === 0) {
@@ -22,9 +21,11 @@ export function GalleryGrid({
 
   return (
     <>
-      <div className="grid auto-rows-[220px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3">
         {items.map((item, i) => (
-          <GalleryCard key={item.id} item={item} useLayout={useLayout} onOpen={() => setOpen(i)} />
+          <div key={item.id} className="break-inside-avoid">
+            <GalleryCard item={item} onOpen={() => setOpen(i)} />
+          </div>
         ))}
       </div>
       {open !== null && (

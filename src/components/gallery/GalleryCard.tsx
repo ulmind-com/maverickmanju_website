@@ -1,51 +1,71 @@
 import { Play } from "lucide-react";
+import { useRef, useState } from "react";
 import type { GalleryItem } from "@/types";
 import { cn } from "@/lib/utils";
 
-const layoutClass: Record<GalleryItem["layout"], string> = {
-  small: "sm:col-span-1 row-span-1",
-  medium: "sm:col-span-1 row-span-1",
-  large: "sm:col-span-2 row-span-2",
-  tall: "sm:col-span-1 row-span-2",
-  wide: "sm:col-span-2 row-span-1",
-};
-
-export function GalleryCard({
-  item,
-  onOpen,
-  useLayout = true,
-}: {
-  item: GalleryItem;
-  onOpen: () => void;
-  useLayout?: boolean;
-}) {
-  const poster = item.type === "video" ? item.thumbnailUrl || item.mediaUrl : item.mediaUrl;
+/**
+ * One gallery tile. The media keeps the proportions it was uploaded with — the
+ * tile is as tall as the file is, never cropped to a fixed box — and a video
+ * previews itself silently while the pointer is over it. Clicking still opens
+ * the lightbox, where the video plays with sound and full controls.
+ */
+export function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Held until the browser reports the real dimensions, so the tile does not
+  // jump once metadata arrives.
+  const [ratio, setRatio] = useState<string | undefined>(undefined);
   const hasCaption = Boolean(item.title || item.description);
+  const isVideo = item.type === "video";
+
+  function previewOn() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    void video.play().catch(() => {
+      /* autoplay can be refused — the poster frame stays put */
+    });
+  }
+
+  function previewOff() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+    video.currentTime = 0;
+  }
 
   return (
     <button
       type="button"
       onClick={onOpen}
-      className={cn(
-        "group relative overflow-hidden border border-border bg-surface text-left focus:ring-2 focus:ring-primary focus:outline-none",
-        useLayout && layoutClass[item.layout],
-      )}
+      onMouseEnter={isVideo ? previewOn : undefined}
+      onMouseLeave={isVideo ? previewOff : undefined}
+      onFocus={isVideo ? previewOn : undefined}
+      onBlur={isVideo ? previewOff : undefined}
+      className="group relative block w-full overflow-hidden border border-border bg-surface text-left focus:ring-2 focus:ring-primary focus:outline-none"
       aria-label={item.title ? `Open ${item.title}` : `Open ${item.type}`}
     >
-      {item.type === "video" && !item.thumbnailUrl ? (
+      {isVideo ? (
         <video
+          ref={videoRef}
           src={item.mediaUrl}
+          {...(item.thumbnailUrl ? { poster: item.thumbnailUrl } : {})}
           muted
+          loop
           playsInline
           preload="metadata"
-          className="h-full min-h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          onLoadedMetadata={(e) => {
+            const { videoWidth, videoHeight } = e.currentTarget;
+            if (videoWidth && videoHeight) setRatio(`${videoWidth} / ${videoHeight}`);
+          }}
+          className="block h-auto w-full transition-transform duration-700 group-hover:scale-105"
+          style={{ aspectRatio: ratio ?? "16 / 9" }}
         />
       ) : (
         <img
-          src={poster}
+          src={item.mediaUrl}
           alt={item.title || ""}
           loading="lazy"
-          className="h-full min-h-[220px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="block h-auto w-full transition-transform duration-700 group-hover:scale-105"
         />
       )}
 
@@ -59,8 +79,8 @@ export function GalleryCard({
       />
       <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:inset-ring group-hover:inset-ring-primary" />
 
-      {item.type === "video" && (
-        <span className="absolute top-4 right-4 grid h-11 w-11 place-items-center rounded-full border border-primary bg-black/70 text-primary transition-transform group-hover:scale-110">
+      {isVideo && (
+        <span className="pointer-events-none absolute top-4 right-4 grid h-11 w-11 place-items-center rounded-full border border-primary bg-black/70 text-primary transition-opacity duration-300 group-hover:opacity-0">
           <Play size={16} fill="currentColor" />
         </span>
       )}

@@ -47,9 +47,13 @@ function GalleryPage() {
           />
 
           {loading ? (
-            <div className="grid auto-rows-[220px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="animate-pulse border border-border bg-card" />
+                <div
+                  key={i}
+                  className="animate-pulse break-inside-avoid border border-border bg-card"
+                  style={{ height: [220, 300, 260, 340, 240, 300][i] }}
+                />
               ))}
             </div>
           ) : error ? (

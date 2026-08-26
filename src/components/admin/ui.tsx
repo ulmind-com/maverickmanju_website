@@ -1,6 +1,7 @@
 import { Loader2, UploadCloud, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { uploadMedia, type UploadResult } from "@/lib/api";
+import { prepareImageForUpload } from "@/lib/image";
 import type { BookingStatus } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -149,7 +150,10 @@ export function FileUploader({
     setBusy(true);
     setError("");
     try {
-      onChange(await uploadMedia(file, folder));
+      // Photos are downscaled in the browser first: a 12MB phone shot uploaded
+      // raw can outlive the connection and report a failure for a file that
+      // actually reached Cloudinary.
+      onChange(await uploadMedia(await prepareImageForUpload(file), folder));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed.");
     } finally {
@@ -184,12 +188,12 @@ export function FileUploader({
       {value && (
         <div className="relative mt-1">
           {isVideo ? (
-            <video src={value} controls className="max-h-32 w-full border border-border" />
+            <video src={value} controls className="max-h-40 w-full border border-border" />
           ) : (
             <img
               src={value}
               alt="Preview"
-              className="h-24 w-full border border-border object-cover"
+              className="max-h-40 w-auto border border-border object-contain"
             />
           )}
           {onClear && (

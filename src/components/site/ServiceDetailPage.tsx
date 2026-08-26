@@ -135,7 +135,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
         <section className="border-t border-border bg-surface py-20 sm:py-24">
           <div className="container-mm">
             <SectionHeader eyebrow="Moments" title="From recent events" />
-            <GalleryGrid items={shown} useLayout={false} />
+            <GalleryGrid items={shown} />
             <div className="mt-8">
               <ButtonLink to="/gallery" variant="outline">
                 View full gallery
@@ -149,7 +149,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
         <section className="py-20 sm:py-24">
           <div className="container-mm">
             <SectionHeader eyebrow="Client words" title="Real reactions" />
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
               {testimonials.slice(0, 3).map((t) => (
                 <TestimonialCard key={t.id} testimonial={t} />
               ))}

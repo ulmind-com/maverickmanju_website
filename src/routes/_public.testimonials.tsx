@@ -101,11 +101,15 @@ function CategoryGroup({
           {items.length} {items.length === 1 ? "review" : "reviews"}
         </span>
       </div>
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {/* Masonry columns so a video review keeps its own height instead of being
+          stretched to match the tallest card in its row. */}
+      <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
         {items.map((t, i) => (
-          <Reveal key={t.id} delay={i * 0.05}>
-            <TestimonialCard testimonial={t} />
-          </Reveal>
+          <div key={t.id} className="break-inside-avoid">
+            <Reveal delay={i * 0.05}>
+              <TestimonialCard testimonial={t} />
+            </Reveal>
+          </div>
         ))}
       </div>
     </div>

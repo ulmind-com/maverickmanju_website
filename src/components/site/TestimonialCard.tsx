@@ -1,4 +1,5 @@
 import { Quote } from "lucide-react";
+import { useRef, useState } from "react";
 import type { Testimonial } from "@/types";
 import { Stars } from "./primitives";
 import { cn } from "@/lib/utils";
@@ -6,6 +7,9 @@ import { cn } from "@/lib/utils";
 /**
  * A testimonial is either written or a video — every field except the media is
  * optional, so the card only renders the parts the admin actually filled in.
+ *
+ * A video keeps the proportions it was uploaded with and previews itself
+ * silently on hover; the controls stay, so a click still plays it with sound.
  */
 export function TestimonialCard({
   testimonial: t,
@@ -14,13 +18,34 @@ export function TestimonialCard({
   testimonial: Testimonial;
   featured?: boolean;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // Held until the browser reports the real dimensions, so the card does not
+  // jump once metadata arrives.
+  const [ratio, setRatio] = useState<string | undefined>(undefined);
   const meta = [t.role, t.company, t.eventType].filter(Boolean).join(" • ");
   const hasIdentity = Boolean(t.clientName || meta);
+
+  function previewOn() {
+    const video = videoRef.current;
+    if (!video || !video.paused) return;
+    video.muted = true;
+    void video.play().catch(() => {
+      /* autoplay can be refused — the poster frame stays put */
+    });
+  }
+
+  function previewOff() {
+    const video = videoRef.current;
+    // Leave a video the visitor actually un-muted and started playing alone.
+    if (!video || !video.muted) return;
+    video.pause();
+    video.currentTime = 0;
+  }
 
   return (
     <article
       className={cn(
-        "card-mm relative flex h-full flex-col p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red",
+        "card-mm relative flex flex-col p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red",
         featured && "border-t-2 border-t-primary bg-gradient-to-b from-accent/40 to-card",
       )}
     >
@@ -30,18 +55,27 @@ export function TestimonialCard({
 
       {t.videoUrl && (
         <video
+          ref={videoRef}
           src={t.videoUrl}
           controls
-          preload="none"
-          {...(t.photoUrl ? { poster: t.photoUrl } : {})}
-          className={cn("w-full border border-border", t.rating > 0 && "mt-4")}
+          loop
+          playsInline
+          preload="metadata"
+          onMouseEnter={previewOn}
+          onMouseLeave={previewOff}
+          onLoadedMetadata={(e) => {
+            const { videoWidth, videoHeight } = e.currentTarget;
+            if (videoWidth && videoHeight) setRatio(`${videoWidth} / ${videoHeight}`);
+          }}
+          className={cn("block h-auto w-full border border-border", t.rating > 0 && "mt-4")}
+          style={{ aspectRatio: ratio ?? "16 / 9" }}
         />
       )}
 
       {t.text && (
         <p
           className={cn(
-            "mt-4 flex-1 text-foreground/90",
+            "mt-4 text-foreground/90",
             featured ? "font-script text-xl leading-relaxed italic" : "text-[15px]",
           )}
         >

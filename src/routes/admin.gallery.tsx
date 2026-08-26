@@ -19,7 +19,7 @@ import {
   getGalleryItems,
   updateGalleryItem,
 } from "@/services/galleryService";
-import { GALLERY_LAYOUTS, type GalleryInput, type GalleryItem, type MediaType } from "@/types";
+import type { GalleryInput, GalleryItem, MediaType } from "@/types";
 
 export const Route = createFileRoute("/admin/gallery")({
   head: () => ({
@@ -117,7 +117,7 @@ function AdminGallery() {
     <>
       <AdminPageHeader
         title="Gallery"
-        description="One feed of images and videos. Published items appear under Moments of Magic — add as many as you like."
+        description="One feed of images and videos. Published items appear under Moments of Magic at the size they were uploaded — add as many as you like."
         actions={
           <>
             <AdminButton onClick={() => openNew("image")}>
@@ -141,7 +141,7 @@ function AdminGallery() {
         <table className="w-full text-left text-sm">
           <thead className="bg-[#0b0b0d] text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
             <tr>
-              {["Thumb", "Type", "Title", "Layout", "Status", "Order", "Added", "Actions"].map(
+              {["Thumb", "Type", "Title", "Status", "Order", "Added", "Actions"].map(
                 (h) => (
                   <th key={h} className="px-3 py-3 font-bold">
                     {h}
@@ -165,7 +165,6 @@ function AdminGallery() {
                 <td className="max-w-[260px] truncate px-3 py-2">
                   {item.title || <span className="text-muted-foreground">— untitled —</span>}
                 </td>
-                <td className="px-3 py-2 text-xs text-muted-foreground">{item.layout}</td>
                 <td className="px-3 py-2">
                   <button
                     type="button"
@@ -217,7 +216,7 @@ function AdminGallery() {
               <div className="min-w-0">
                 <p className="truncate font-display">{item.title || "— untitled —"}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.type.toUpperCase()} • {item.layout} • #{item.sortOrder}
+                  {item.type.toUpperCase()} • #{item.sortOrder}
                 </p>
                 <p className="mt-1 text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
                   {item.status}
@@ -284,21 +283,6 @@ function AdminGallery() {
               >
                 <option value="image">Image</option>
                 <option value="video">Video</option>
-              </select>
-            </AdminField>
-            <AdminField label="Layout size">
-              <select
-                className={adminInput}
-                value={draft.layout}
-                onChange={(e) =>
-                  setDraft({ ...draft, layout: e.target.value as GalleryItem["layout"] })
-                }
-              >
-                {GALLERY_LAYOUTS.map((l) => (
-                  <option key={l} value={l}>
-                    {l}
-                  </option>
-                ))}
               </select>
             </AdminField>
 
@@ -377,13 +361,14 @@ function AdminGallery() {
                     src={draft.mediaUrl}
                     {...(draft.thumbnailUrl ? { poster: draft.thumbnailUrl } : {})}
                     controls
-                    className="max-h-64 w-full border border-border"
+                    preload="metadata"
+                    className="max-h-64 w-auto border border-border"
                   />
                 ) : (
                   <img
                     src={draft.mediaUrl}
                     alt="Preview"
-                    className="max-h-64 w-full border border-border object-cover"
+                    className="max-h-64 w-auto border border-border object-contain"
                   />
                 )}
               </div>
