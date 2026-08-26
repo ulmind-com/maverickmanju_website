@@ -13,6 +13,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { ButtonLink, SectionHeader } from "@/components/site/primitives";
 import { IMAGES } from "@/data/seed";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { telLink, whatsappLink } from "@/lib/utils";
 
 export const Route = createFileRoute("/_public/contact")({
   head: () => ({
@@ -59,13 +60,13 @@ function ContactPage() {
               icon={<Phone size={20} />}
               label="Phone"
               value={s.phone}
-              href={`tel:${s.phone.replace(/\s/g, "")}`}
+              href={telLink(s.phone)}
             />
             <ContactCard
               icon={<MessageCircle size={20} />}
               label="WhatsApp"
               value={`+${s.whatsapp}`}
-              href={`https://wa.me/${s.whatsapp}?text=${encodeURIComponent(s.defaultBookingMessage)}`}
+              href={whatsappLink(s.whatsapp, s.defaultBookingMessage)}
             />
             <ContactCard
               icon={<Mail size={20} />}

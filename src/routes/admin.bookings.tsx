@@ -12,6 +12,7 @@ import {
 } from "@/components/admin/ui";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { telLink, whatsappLink } from "@/lib/utils";
 import {
   BOOKINGS_KEY,
   deleteBooking,
@@ -265,15 +266,16 @@ function AdminBookings() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <a
-                    href={`tel:${active.mobile.replace(/\s/g, "")}`}
+                    href={telLink(active.mobile)}
                     className="inline-flex items-center gap-2 border border-border px-4 py-2.5 text-[11px] font-bold tracking-[0.12em] uppercase hover:border-primary hover:text-primary"
                   >
                     <Phone size={14} /> Call
                   </a>
                   <a
-                    href={`https://wa.me/${active.mobile.replace(/\D/g, "")}?text=${encodeURIComponent(
+                    href={whatsappLink(
+                      active.mobile,
                       `${settings.defaultBookingMessage} (Ref ${active.referenceNumber})`,
-                    )}`}
+                    )}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 border border-border px-4 py-2.5 text-[11px] font-bold tracking-[0.12em] uppercase hover:border-primary hover:text-primary"

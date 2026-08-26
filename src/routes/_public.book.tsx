@@ -5,6 +5,7 @@ import { BookingForm } from "@/components/site/BookingForm";
 import { PageHero } from "@/components/site/PageHero";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { telLink, whatsappLink } from "@/lib/utils";
 import { AVAILABILITY_KEY, getBlockedDates } from "@/services/availabilityService";
 import { IMAGES } from "@/data/seed";
 
@@ -58,7 +59,7 @@ function BookPage() {
               <ul className="mt-4 space-y-3 text-sm">
                 <li>
                   <a
-                    href={`tel:${settings.phone.replace(/\s/g, "")}`}
+                    href={telLink(settings.phone)}
                     className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
                   >
                     <Phone size={15} /> {settings.phone}
@@ -66,7 +67,7 @@ function BookPage() {
                 </li>
                 <li>
                   <a
-                    href={`https://wa.me/${settings.whatsapp}?text=${encodeURIComponent(settings.defaultBookingMessage)}`}
+                    href={whatsappLink(settings.whatsapp, settings.defaultBookingMessage)}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
