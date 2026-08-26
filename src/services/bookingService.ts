@@ -19,6 +19,9 @@ export async function updateBooking(
 ): Promise<BookingEnquiry> {
   const booking = await api.adminPatch<BookingEnquiry>(`/api/admin/bookings/${id}`, patch);
   emit(KEY);
+  // Confirming a booking blocks its date server-side, so any calendar on screen
+  // needs to re-read.
+  if (patch.status === "confirmed") emit(STORAGE_KEYS.availability);
   return booking;
 }
 

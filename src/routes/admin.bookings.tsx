@@ -1,5 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Eye, Mail, MessageCircle, Phone, Save, Trash2 } from "lucide-react";
+import {
+  CalendarX2,
+  CheckCircle2,
+  Eye,
+  Mail,
+  MessageCircle,
+  Phone,
+  Save,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin/AdminShell";
 import {
@@ -244,19 +253,28 @@ function AdminBookings() {
             </div>
 
             <div className="space-y-5">
-              <AdminField label="Status">
-                <select
-                  className={adminInput}
-                  value={active.status}
-                  onChange={(e) => updateBookingStatus(active.id, e.target.value as BookingStatus)}
-                >
-                  {BOOKING_STATUSES.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </AdminField>
+              <div>
+                <AdminField label="Status">
+                  <select
+                    className={adminInput}
+                    value={active.status}
+                    onChange={(e) =>
+                      updateBookingStatus(active.id, e.target.value as BookingStatus)
+                    }
+                  >
+                    {BOOKING_STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </AdminField>
+                <p className="mt-2 flex items-start gap-1.5 text-[11px] text-muted-foreground">
+                  <CalendarX2 size={13} className="mt-0.5 shrink-0" />
+                  Confirming blocks {active.date} on the public calendar. Freeing it up again is
+                  manual — do that from Availability.
+                </p>
+              </div>
 
               <InternalNote booking={active} />
 
