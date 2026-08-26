@@ -3,12 +3,12 @@ import { useMemo } from "react";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
 import {
-  TESTIMONIAL_CATEGORIES,
+  GALLERY_CATEGORIES,
   type EventPackage,
+  type GalleryCategory,
   type GalleryItem,
   type ServiceType,
   type Testimonial,
-  type TestimonialCategory,
 } from "@/types";
 import { useServiceData } from "@/hooks/useServiceData";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
@@ -188,12 +188,12 @@ const RUN_OF_SHOW = [
   {
     step: "01",
     title: "Pre-event briefing",
-    body: "We map the audience, the venue, the timings and the moments that matter to you — sponsors, cake cutting, awards, product reveal.",
+    body: "Pre-dialogue with the client to understand the detailing of the event, understand the client's expectations, and notify the client on pre-requirements.",
   },
   {
     step: "02",
     title: "Guest arrival",
-    body: "Walk-around magic works the room while guests settle in, so the energy is already up before the stage lights come on.",
+    body: "Maverick Manju ensures guests are engaged — emcee engagement and walk-around magic — while guests settle in, so the energy is already up before the stage lights come on.",
   },
   {
     step: "03",
@@ -203,7 +203,7 @@ const RUN_OF_SHOW = [
   {
     step: "04",
     title: "Hosting & wrap-up",
-    body: "Emcee segments, games and announcements keep the run-of-show tight from first cue to last.",
+    body: "Maverick Manju ensures the flow of the event is well controlled — from welcoming the guests to cake cutting, and opening the floor for dance and dinner.",
   },
 ];
 
@@ -241,6 +241,15 @@ export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: s
     error,
   } = useServiceData<GalleryItem[]>(GALLERY_KEY, getPublishedGalleryItems, []);
 
+  const groups = useMemo(
+    () =>
+      GALLERY_CATEGORIES.map((category) => ({
+        category,
+        items: items.filter((i) => (i.category ?? "Stage Magic") === category),
+      })).filter((group) => group.items.length > 0),
+    [items],
+  );
+
   return (
     <section className={`relative overflow-hidden ${className}`}>
       <div className="absolute inset-0 spotlight" />
@@ -265,8 +274,23 @@ export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: s
           <p className="border border-dashed border-destructive/50 p-10 text-center text-sm text-destructive">
             {error}
           </p>
+        ) : groups.length === 0 ? (
+          <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+            No gallery items published yet.
+          </p>
         ) : (
-          <GalleryGrid items={items} />
+          <div className="space-y-16">
+            {groups.map(({ category, items: groupItems }) => (
+              <CategoryGroup
+                key={category}
+                category={category}
+                count={groupItems.length}
+                noun="item"
+              >
+                <GalleryGrid items={groupItems} />
+              </CategoryGroup>
+            ))}
+          </div>
         )}
       </div>
     </section>
@@ -283,15 +307,6 @@ export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?
     loading,
     error,
   } = useServiceData<Testimonial[]>(TESTIMONIALS_KEY, getPublishedTestimonials, []);
-
-  const groups = useMemo(
-    () =>
-      TESTIMONIAL_CATEGORIES.map((category) => ({
-        category,
-        items: testimonials.filter((t) => (t.category ?? "Corporates") === category),
-      })).filter((group) => group.items.length > 0),
-    [testimonials],
-  );
 
   return (
     <section className={`relative overflow-hidden ${className}`}>
@@ -313,14 +328,18 @@ export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?
           <p className="border border-dashed border-destructive/50 p-10 text-center text-sm text-destructive">
             {error}
           </p>
-        ) : groups.length === 0 ? (
+        ) : testimonials.length === 0 ? (
           <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
             No published testimonials yet.
           </p>
         ) : (
-          <div className="space-y-16">
-            {groups.map(({ category, items }) => (
-              <CategoryGroup key={category} category={category} items={items} />
+          <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
+            {testimonials.map((t, i) => (
+              <div key={t.id} className="break-inside-avoid">
+                <Reveal delay={i * 0.05}>
+                  <TestimonialCard testimonial={t} />
+                </Reveal>
+              </div>
             ))}
           </div>
         )}
@@ -329,12 +348,17 @@ export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?
   );
 }
 
+/** Section heading for one category group, with a rule and a count on the right. */
 function CategoryGroup({
   category,
-  items,
+  count,
+  noun,
+  children,
 }: {
-  category: TestimonialCategory;
-  items: Testimonial[];
+  category: GalleryCategory;
+  count: number;
+  noun: string;
+  children: React.ReactNode;
 }) {
   return (
     <div>
@@ -342,20 +366,10 @@ function CategoryGroup({
         <h3 className="font-display text-2xl whitespace-nowrap sm:text-3xl">{category}</h3>
         <span className="h-px flex-1 bg-border" />
         <span className="text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
-          {items.length} {items.length === 1 ? "review" : "reviews"}
+          {count} {count === 1 ? noun : `${noun}s`}
         </span>
       </div>
-      {/* Masonry columns so a video review keeps its own height instead of being
-          stretched to match the tallest card in its row. */}
-      <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
-        {items.map((t, i) => (
-          <div key={t.id} className="break-inside-avoid">
-            <Reveal delay={i * 0.05}>
-              <TestimonialCard testimonial={t} />
-            </Reveal>
-          </div>
-        ))}
-      </div>
+      {children}
     </div>
   );
 }

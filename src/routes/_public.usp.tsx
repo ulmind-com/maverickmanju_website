@@ -38,7 +38,7 @@ function WhyMaverickPage() {
             <span className="text-primary">Complete entertainment.</span>
           </>
         }
-        subtitle="Magic creates wonder. Mentalism creates curiosity. Emceeing creates participation. You get all three — coordinated by one person."
+        subtitle="Magic creates wonder. Mentalism creates curiosity. Emceeing creates participation. You get all three — coordinated by one person, with 100% ROI to the customer."
         image={IMAGES.mentalism}
       >
         <ButtonLink to="/book">Book Maverick Manju</ButtonLink>
