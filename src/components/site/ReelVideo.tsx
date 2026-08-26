@@ -1,14 +1,18 @@
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { playPreview } from "@/lib/video";
 import { cn } from "@/lib/utils";
 
 /**
  * Reel-style player: no browser chrome, no scrub bar.
  *
  * It behaves the way a short vertical video does everywhere else — starts
- * silently on its own once it scrolls into view, loops, pauses when it leaves,
- * and hands the visitor two controls that only appear on hover or while
- * paused: tap the frame to pause or resume, tap the speaker to turn sound on.
+ * silently on its own once it scrolls into view, loops, and pauses when it
+ * leaves. Hovering turns the sound on and moving away turns it back off, so
+ * the page never has several voices talking at once.
+ *
+ * The speaker button stays for touch, where there is no hover: tapping it
+ * holds the sound on until it is tapped again. Tapping the frame pauses.
  *
  * Autoplay is skipped for visitors who ask for reduced motion; they get the
  * poster frame and the play button.
@@ -25,6 +29,11 @@ export function ReelVideo({
   label?: string | undefined;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
+  // True once the hover turned the sound on, so leaving only silences a video
+  // the hover itself unmuted.
+  const hoverHasSound = useRef(false);
+  // True once the visitor unmuted deliberately — that choice outlives the hover.
+  const soundHeldOn = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   // Held back until the browser reports real dimensions, so the card does not
@@ -50,6 +59,24 @@ export function ReelVideo({
     return () => observer.disconnect();
   }, []);
 
+  async function soundOnHover() {
+    const video = ref.current;
+    if (!video || soundHeldOn.current) return;
+    hoverHasSound.current = true;
+    // Browsers refuse unmuted playback until the page has user activation, so
+    // playPreview asks for sound and falls back to silence if it is refused.
+    await playPreview(video);
+    setMuted(video.muted);
+  }
+
+  function soundOffHover() {
+    const video = ref.current;
+    if (!video || !hoverHasSound.current || soundHeldOn.current) return;
+    hoverHasSound.current = false;
+    video.muted = true;
+    setMuted(true);
+  }
+
   function toggle() {
     const video = ref.current;
     if (!video) return;
@@ -63,7 +90,8 @@ export function ReelVideo({
     if (!video) return;
     video.muted = !video.muted;
     setMuted(video.muted);
-    // Unmuting is a clear signal the visitor wants to watch it.
+    // A deliberate unmute sticks; a deliberate mute hands control back to hover.
+    soundHeldOn.current = !video.muted;
     if (!video.muted && video.paused) void video.play().catch(() => {});
   }
 
@@ -71,6 +99,8 @@ export function ReelVideo({
     <div
       className={cn("group relative overflow-hidden bg-black", className)}
       style={{ aspectRatio: ratio ?? "9 / 16" }}
+      onMouseEnter={soundOnHover}
+      onMouseLeave={soundOffHover}
     >
       <video
         ref={ref}
