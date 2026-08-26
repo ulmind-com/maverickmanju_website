@@ -188,7 +188,7 @@ const RUN_OF_SHOW = [
   {
     step: "01",
     title: "Pre-event briefing",
-    body: "We map the audience, the venue, the timings and the moments that matter to you — sponsors, cake cutting, awards, product reveal.",
+    body: "Pre-dialogue with the client to understand the detailing of the event, understand the client's expectations, and notify the client on pre-requirements.",
   },
   {
     step: "02",
@@ -203,7 +203,7 @@ const RUN_OF_SHOW = [
   {
     step: "04",
     title: "Hosting & wrap-up",
-    body: "Emcee segments, games and announcements keep the run-of-show tight from first cue to last.",
+    body: "Maverick Manju ensures the flow of the event is well controlled — from welcoming the guests to cake cutting, and opening the floor for dance and dinner.",
   },
 ];
 
