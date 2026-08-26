@@ -4,7 +4,7 @@ import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
-import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
+import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import {
   EventPackages,
@@ -174,17 +174,10 @@ function Hero() {
 
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16 lg:pb-0">
-      {/* Backdrop: a red spotlight wash, a faint grid and drifting particles. */}
-      <div className="absolute inset-0 spotlight" />
+      {/* Backdrop: pure black. The photo is shot on black, so any red wash behind
+          it only muddied the cutout — the figure and the type carry the colour. */}
+      <div className="absolute inset-0 bg-black" />
       <div className="absolute inset-0 opacity-[0.06] hairline-grid" />
-      <div
-        className="absolute top-1/2 right-[-10%] hidden h-[78vh] w-[62vw] -translate-y-1/2 lg:block"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, color-mix(in oklab, var(--primary) 34%, transparent), transparent 68%)",
-        }}
-      />
-      <Particles />
 
       {/* The cutout is pinned to the bottom-right of the hero, and pushed a little
           past the section edge so the photo's cropped hem is clipped away instead
@@ -195,15 +188,6 @@ function Hero() {
           delay={0.18}
           className="relative w-full max-w-[560px] translate-y-[4%] lg:mr-[1vw] lg:w-[58vw] lg:max-w-[920px] lg:-translate-y-[11%]"
         >
-          {/* Glow disc sits behind the cutout so the figure lifts off the
-              background. Round and blurred, so it has no edge of its own. */}
-          <span
-            className="pointer-events-none absolute top-[52%] left-1/2 aspect-square w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle, color-mix(in oklab, var(--primary) 42%, transparent), transparent 65%)",
-            }}
-          />
           <img
             src={heroImage}
             alt="Maverick Manju performing magic"
@@ -218,8 +202,8 @@ function Hero() {
 
       {/* Scrim: keeps the copy readable where it passes over the figure — a
           bottom-up fade on mobile, a left-to-right one once they sit side by side. */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20 lg:bg-gradient-to-r lg:from-background lg:via-background/75 lg:to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black via-black/55 to-transparent lg:bg-gradient-to-r lg:from-black lg:via-black/75 lg:to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent" />
 
       <div className="container-mm relative z-10 grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div style={{ textShadow: "0 2px 18px rgba(0,0,0,0.75)" }}>

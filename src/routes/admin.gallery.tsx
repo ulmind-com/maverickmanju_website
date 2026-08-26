@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Eye, Film, ImagePlus, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { AdminShell } from "@/components/admin/AdminShell";
 import {
   AdminButton,
@@ -19,7 +19,13 @@ import {
   getGalleryItems,
   updateGalleryItem,
 } from "@/services/galleryService";
-import type { GalleryInput, GalleryItem, MediaType } from "@/types";
+import {
+  GALLERY_CATEGORIES,
+  type GalleryCategory,
+  type GalleryInput,
+  type GalleryItem,
+  type MediaType,
+} from "@/types";
 
 export const Route = createFileRoute("/admin/gallery")({
   head: () => ({
@@ -38,6 +44,7 @@ export const Route = createFileRoute("/admin/gallery")({
 
 const emptyDraft = (type: MediaType): GalleryInput => ({
   type,
+  category: "Stage Magic",
   title: "",
   description: "",
   mediaUrl: "",
@@ -56,11 +63,17 @@ function AdminGallery() {
     error,
   } = useServiceData<GalleryItem[]>(GALLERY_KEY, getGalleryItems, []);
   const [draft, setDraft] = useState<GalleryInput | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<"all" | GalleryCategory>("all");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
+
+  const visible = useMemo(
+    () => (categoryFilter === "all" ? items : items.filter((i) => i.category === categoryFilter)),
+    [items, categoryFilter],
+  );
 
   const openNew = (type: MediaType) => {
     setEditingId(null);
@@ -117,7 +130,7 @@ function AdminGallery() {
     <>
       <AdminPageHeader
         title="Gallery"
-        description="One feed of images and videos. Published items appear under Moments of Magic at the size they were uploaded — add as many as you like."
+        description="The category you pick decides which heading the item appears under in Moments of Magic. Items show at the size they were uploaded — add as many as you like."
         actions={
           <>
             <AdminButton onClick={() => openNew("image")}>
@@ -136,20 +149,51 @@ function AdminGallery() {
         </p>
       )}
 
+      <div className="mb-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {GALLERY_CATEGORIES.map((c) => {
+          const total = items.filter((i) => i.category === c).length;
+          return (
+            <button
+              key={c}
+              type="button"
+              onClick={() => setCategoryFilter((cur) => (cur === c ? "all" : c))}
+              className={`card-mm p-4 text-left transition-colors ${
+                categoryFilter === c ? "border-primary" : "hover:border-primary/50"
+              }`}
+            >
+              <p className="text-[10px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
+                {c}
+              </p>
+              <p className="mt-2 font-display text-2xl">{total}</p>
+              <p className="text-[11px] text-muted-foreground">
+                {items.filter((i) => i.category === c && i.status === "published").length} published
+              </p>
+            </button>
+          );
+        })}
+        {categoryFilter !== "all" && (
+          <AdminButton variant="outline" onClick={() => setCategoryFilter("all")}>
+            Show all categories
+          </AdminButton>
+        )}
+      </div>
+
       {/* Desktop table */}
       <div className="hidden overflow-hidden border border-border lg:block">
         <table className="w-full text-left text-sm">
           <thead className="bg-[#0b0b0d] text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
             <tr>
-              {["Thumb", "Type", "Title", "Status", "Order", "Added", "Actions"].map((h) => (
-                <th key={h} className="px-3 py-3 font-bold">
-                  {h}
-                </th>
-              ))}
+              {["Thumb", "Type", "Category", "Title", "Status", "Order", "Added", "Actions"].map(
+                (h) => (
+                  <th key={h} className="px-3 py-3 font-bold">
+                    {h}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
           <tbody>
-            {items.map((item, i) => (
+            {visible.map((item, i) => (
               <tr key={item.id} className="border-t border-border hover:bg-card/60">
                 <td className="px-3 py-2">
                   <img
@@ -160,6 +204,9 @@ function AdminGallery() {
                   />
                 </td>
                 <td className="px-3 py-2 text-xs uppercase">{item.type}</td>
+                <td className="px-3 py-2 text-xs whitespace-nowrap text-primary">
+                  {item.category}
+                </td>
                 <td className="max-w-[260px] truncate px-3 py-2">
                   {item.title || <span className="text-muted-foreground">— untitled —</span>}
                 </td>
@@ -202,7 +249,7 @@ function AdminGallery() {
 
       {/* Mobile cards */}
       <div className="grid gap-3 sm:grid-cols-2 lg:hidden">
-        {items.map((item, i) => (
+        {visible.map((item, i) => (
           <div key={item.id} className="card-mm p-4">
             <div className="flex gap-3">
               <img
@@ -214,7 +261,7 @@ function AdminGallery() {
               <div className="min-w-0">
                 <p className="truncate font-display">{item.title || "— untitled —"}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.type.toUpperCase()} • #{item.sortOrder}
+                  {item.type.toUpperCase()} • {item.category} • #{item.sortOrder}
                 </p>
                 <p className="mt-1 text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
                   {item.status}
@@ -236,15 +283,17 @@ function AdminGallery() {
         ))}
       </div>
 
-      {!loading && items.length === 0 && (
+      {!loading && visible.length === 0 && (
         <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
-          No gallery items yet — add your first image or video.
+          {items.length === 0
+            ? "No gallery items yet — add your first image or video."
+            : `Nothing in ${categoryFilter} yet.`}
         </p>
       )}
 
-      {preview !== null && items[preview] && (
+      {preview !== null && visible[preview] && (
         <GalleryLightbox
-          items={items}
+          items={visible}
           index={preview}
           onIndexChange={setPreview}
           onClose={() => setPreview(null)}
@@ -258,6 +307,21 @@ function AdminGallery() {
           wide
         >
           <div className="grid gap-4 sm:grid-cols-2">
+            <AdminField label="Category *" className="sm:col-span-2">
+              <select
+                className={adminInput}
+                value={draft.category}
+                onChange={(e) =>
+                  setDraft({ ...draft, category: e.target.value as GalleryCategory })
+                }
+              >
+                {GALLERY_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </AdminField>
             <AdminField label="Title (optional)" className="sm:col-span-2">
               <input
                 className={adminInput}

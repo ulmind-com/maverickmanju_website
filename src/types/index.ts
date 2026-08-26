@@ -9,10 +9,16 @@ export type GalleryLayout = "small" | "medium" | "large" | "tall" | "wide";
 
 export const GALLERY_LAYOUTS: GalleryLayout[] = ["small", "medium", "large", "tall", "wide"];
 
+/** The headings gallery items are grouped under on the public page, in display order. */
+export const GALLERY_CATEGORIES = ["Stage Magic", "Emcee", "Walk Around"] as const;
+
+export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number];
+
 /** One image or video in the "Moments of Magic" gallery. Title and description are optional. */
 export interface GalleryItem {
   id: string;
   type: MediaType;
+  category: GalleryCategory;
   title: string;
   description: string;
   mediaUrl: string;
@@ -27,23 +33,12 @@ export interface GalleryItem {
 
 export type GalleryInput = Omit<GalleryItem, "id" | "createdAt">;
 
-/** The four headings testimonials are grouped under on the public page. */
-export const TESTIMONIAL_CATEGORIES = [
-  "School",
-  "Corporates",
-  "Children",
-  "Birthday Parties",
-] as const;
-
-export type TestimonialCategory = (typeof TESTIMONIAL_CATEGORIES)[number];
-
 /**
  * A testimonial is either written (text + optional photo) or a video.
  * Every descriptive field is optional so a bare video can stand on its own.
  */
 export interface Testimonial {
   id: string;
-  category: TestimonialCategory;
   clientName: string;
   company: string;
   role: string;
