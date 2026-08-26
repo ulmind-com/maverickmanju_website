@@ -92,6 +92,9 @@ export function GalleryLightbox({ items, index, onClose, onIndexChange }: Props)
             src={item.mediaUrl}
             poster={item.thumbnailUrl}
             controls
+            controlsList="nodownload"
+            disablePictureInPicture
+            onContextMenu={(e) => e.preventDefault()}
             autoPlay
             playsInline
             className="max-h-[75vh] w-full max-w-5xl border border-border bg-black"

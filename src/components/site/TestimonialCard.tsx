@@ -59,6 +59,9 @@ export function TestimonialCard({
           ref={videoRef}
           src={t.videoUrl}
           controls
+          controlsList="nodownload"
+          disablePictureInPicture
+          onContextMenu={(e) => e.preventDefault()}
           loop
           playsInline
           preload="metadata"
