@@ -14,16 +14,16 @@ export const services: ServiceType[] = [
   {
     slug: "stage-magic",
     title: "Stage Magic",
-    shortDescription: "High-energy magic and mentalism designed for the whole audience.",
+    shortDescription: "A stage full of wonder. An audience full of reactions.",
     fullDescription:
-      "A professional stage experience combining magic, comedy, audience participation and mentalism. Built for corporate stages, annual days, award nights, conferences, clubhouses and weddings — scaled to your run-of-show.",
+      "A professional stage experience combining magic, comedy, audience participation and mentalism. Designed for corporate events, annual days, award nights, conferences, clubhouses, weddings and celebrations.",
     highlights: [
-      "Stage magic",
+      "Stage Magic",
       "Mentalism",
-      "Audience participation",
-      "Interactive comedy",
-      "Customized segments",
-      "Corporate friendly",
+      "Audience Participation",
+      "Interactive Comedy",
+      "Corporate Entertainment",
+      "Customized Segments",
     ],
     imageUrl: heroStage,
     page: "/stage-magic",
