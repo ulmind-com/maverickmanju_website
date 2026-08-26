@@ -47,8 +47,7 @@ export function Navbar() {
             <span className="hidden truncate text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase lg:inline">
               <span className="text-primary">|</span> Magician{" "}
               <span className="text-primary">|</span> Emcee <span className="text-primary">|</span>{" "}
-              Mentalist <span className="text-primary">|</span>{" "}
-              Creator Coach
+              Mentalist <span className="text-primary">|</span> Creator Coach
             </span>
           </div>
 
@@ -59,8 +58,10 @@ export function Navbar() {
                   to={link.to}
                   className="text-foreground/85 transition-colors hover:text-primary"
                   activeProps={{ className: "text-primary" }}
-                  activeOptions={link.to === "/" ? { exact: true } : undefined}
-                  onClick={link.to === "/" ? () => window.scrollTo({ top: 0, behavior: "smooth" }) : undefined}
+                  activeOptions={{ exact: link.to === "/" }}
+                  {...(link.to === "/"
+                    ? { onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }) }
+                    : {})}
                 >
                   {link.label}
                 </Link>

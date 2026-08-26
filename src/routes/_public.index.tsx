@@ -11,7 +11,6 @@ import {
   MaverickDifference,
   MomentsOfMagic,
   RunOfShow,
-  ServicePreview,
   TestimonialGroups,
 } from "@/components/site/sections";
 import { useServiceData } from "@/hooks/useServiceData";
@@ -78,12 +77,11 @@ function HomePage() {
       <Hero />
       <PageDirectory />
       <ServicesPreview />
-      <ServiceDetails />
-      <EventPackages />
       <SectionLink to="/services" label="See all services" />
       <MaverickDifference />
       <RunOfShow />
       <SectionLink to="/usp" label="Why Maverick" />
+      <EventPackages />
       <MomentsOfMagic />
       <SectionLink to="/gallery" label="View full gallery" />
       <TestimonialGroups />
@@ -153,18 +151,6 @@ function SectionLink({ to, label }: { to: string; label: string }) {
         </Reveal>
       </div>
     </section>
-  );
-}
-
-/** The same alternating image/copy sections the services page runs through. */
-function ServiceDetails() {
-  const services = useServices();
-  return (
-    <>
-      {services.map((service, i) => (
-        <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
-      ))}
-    </>
   );
 }
 
