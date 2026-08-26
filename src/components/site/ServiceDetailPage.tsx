@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
-import { TestimonialCard } from "@/components/site/TestimonialCard";
+import { TestimonialGrid } from "@/components/site/TestimonialGrid";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useService } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
@@ -170,11 +170,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
         <section className="py-20 sm:py-24">
           <div className="container-mm">
             <SectionHeader eyebrow="Client words" title="Real reactions" />
-            <div className="grid items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {testimonials.slice(0, 3).map((t) => (
-                <TestimonialCard key={t.id} testimonial={t} />
-              ))}
-            </div>
+            <TestimonialGrid items={testimonials.slice(0, 3)} />
           </div>
         </section>
       )}

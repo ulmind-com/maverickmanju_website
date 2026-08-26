@@ -1,6 +1,7 @@
-import { Quote } from "lucide-react";
+import { Play, Quote } from "lucide-react";
+import { useRef } from "react";
 import type { Testimonial } from "@/types";
-import { ReelVideo } from "./ReelVideo";
+import { playPreview, stopPreview } from "@/lib/video";
 import { Stars } from "./primitives";
 import { cn } from "@/lib/utils";
 
@@ -8,16 +9,29 @@ import { cn } from "@/lib/utils";
  * A testimonial is either written or a video — every field except the media is
  * optional, so the card only renders the parts the admin actually filled in.
  *
- * A video keeps the proportions it was uploaded with and plays reel-style —
- * see ReelVideo.
+ * A video behaves exactly like a gallery tile: it keeps the proportions it was
+ * uploaded with, plays with sound while the pointer is over it, and opens
+ * fullscreen with full controls when clicked.
  */
 export function TestimonialCard({
   testimonial: t,
   featured = false,
+  onOpenVideo,
 }: {
   testimonial: Testimonial;
   featured?: boolean;
+  onOpenVideo?: (() => void) | undefined;
 }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  function previewOn() {
+    if (videoRef.current) void playPreview(videoRef.current);
+  }
+
+  function previewOff() {
+    if (videoRef.current) stopPreview(videoRef.current);
+  }
+
   const meta = [t.role, t.company, t.eventType].filter(Boolean).join(" • ");
   const hasIdentity = Boolean(t.clientName || meta);
 
@@ -33,12 +47,38 @@ export function TestimonialCard({
       {t.rating > 0 && <Stars rating={t.rating} />}
 
       {t.videoUrl && (
-        <ReelVideo
-          src={t.videoUrl}
-          poster={t.photoUrl || undefined}
-          label={t.clientName ? `testimonial from ${t.clientName}` : "video testimonial"}
-          className={cn("border border-border", t.rating > 0 && "mt-4")}
-        />
+        <button
+          type="button"
+          onClick={onOpenVideo}
+          onMouseEnter={previewOn}
+          onMouseLeave={previewOff}
+          onFocus={previewOn}
+          onBlur={previewOff}
+          aria-label={
+            t.clientName ? `Open testimonial from ${t.clientName}` : "Open video testimonial"
+          }
+          className={cn(
+            "group relative block w-full overflow-hidden border border-border bg-surface focus:ring-2 focus:ring-primary focus:outline-none",
+            t.rating > 0 && "mt-4",
+          )}
+        >
+          <video
+            ref={videoRef}
+            src={t.videoUrl}
+            {...(t.photoUrl ? { poster: t.photoUrl } : {})}
+            loop
+            playsInline
+            preload="metadata"
+            controlsList="nodownload"
+            disablePictureInPicture
+            onContextMenu={(e) => e.preventDefault()}
+            className="block h-auto w-full"
+          />
+          <span className="pointer-events-none absolute inset-0 bg-black/20 opacity-0 transition-opacity group-hover:opacity-100" />
+          <span className="pointer-events-none absolute top-4 right-4 grid h-11 w-11 place-items-center rounded-full border border-primary bg-black/70 text-primary transition-opacity duration-300 group-hover:opacity-0">
+            <Play size={16} fill="currentColor" />
+          </span>
+        </button>
       )}
 
       {t.text && (

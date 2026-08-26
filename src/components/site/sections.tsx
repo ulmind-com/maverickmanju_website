@@ -1,7 +1,7 @@
 import { Mic2, Sparkles, Star, Wand2 } from "lucide-react";
 import { useMemo } from "react";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
-import { TestimonialCard } from "@/components/site/TestimonialCard";
+import { TestimonialGrid } from "@/components/site/TestimonialGrid";
 import {
   GALLERY_CATEGORIES,
   type EventPackage,
@@ -333,15 +333,7 @@ export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?
             No published testimonials yet.
           </p>
         ) : (
-          <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
-            {testimonials.map((t, i) => (
-              <div key={t.id} className="break-inside-avoid">
-                <Reveal delay={i * 0.05}>
-                  <TestimonialCard testimonial={t} />
-                </Reveal>
-              </div>
-            ))}
-          </div>
+          <TestimonialGrid items={testimonials} />
         )}
       </div>
     </section>
