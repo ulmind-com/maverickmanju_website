@@ -5,7 +5,7 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
 import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
-import { MaverickDifference } from "@/components/site/sections";
+import { EventPackages, MaverickDifference, ServicePreview } from "@/components/site/sections";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useServices } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
@@ -70,6 +70,9 @@ function HomePage() {
       <Hero />
       <PageDirectory />
       <ServicesPreview />
+      <ServiceDetails />
+      <EventPackages />
+      <ServicesLink />
       <MaverickDifference />
       <UspLink />
       <GalleryPreview />
@@ -124,9 +127,30 @@ function ServicesPreview() {
             </Reveal>
           ))}
         </div>
-        <div className="mt-10">
+      </div>
+    </section>
+  );
+}
+
+/** The same alternating image/copy sections the services page runs through. */
+function ServiceDetails() {
+  const services = useServices();
+  return (
+    <>
+      {services.map((service, i) => (
+        <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
+      ))}
+    </>
+  );
+}
+
+function ServicesLink() {
+  return (
+    <section className="border-t border-border py-14 text-center">
+      <div className="container-mm">
+        <Reveal>
           <ButtonLink to="/services">See all services</ButtonLink>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
