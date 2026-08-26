@@ -154,6 +154,16 @@
   }
 }
 
+/* The hero cutout drifts a few pixels so the figure never sits dead still. */
+@keyframes mm-hero-float {
+  from {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(10px);
+  }
+}
+
 @keyframes mm-slow-zoom {
   from {
     transform: scale(1.06);

@@ -224,67 +224,89 @@ function TestimonialsPreview() {
 
 function Hero() {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden">
-      <img
-        src="/images/hero-manju.png"
-        alt="Maverick Manju on stage in a red jacket, smiling at the audience"
-        width={1920}
-        height={1088}
-        className="absolute inset-0 h-full w-full object-cover object-[70%_center] opacity-95 md:object-[62%_center]"
-        style={{ animation: "mm-slow-zoom 26s ease-in-out infinite alternate" }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
-      <div className="absolute inset-y-0 left-0 w-[62%] bg-[radial-gradient(ellipse_at_28%_50%,rgba(0,0,0,0.62),transparent_70%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/85 to-transparent" />
-
-      <Particles />
-
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16">
+      {/* Backdrop: a red spotlight wash, a faint grid and drifting particles. */}
+      <div className="absolute inset-0 spotlight" />
+      <div className="absolute inset-0 opacity-[0.06] hairline-grid" />
       <div
-        className="container-mm relative z-10 pt-28 pb-16"
-        style={{ textShadow: "0 2px 18px rgba(0,0,0,0.75)" }}
-      >
-        <Reveal>
-          <p className="text-[12px] font-bold tracking-[0.34em] text-primary-glow uppercase">
-            Magician | Emcee | Mentalist | Creator Coach
-          </p>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <h1 className="mt-5 max-w-4xl text-[clamp(3rem,9vw,7rem)] leading-[0.86] font-bold tracking-tight">
-            Magic That
-            <br />
-            <span className="text-primary">Amazes.</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={0.16}>
-          <p className="mt-4 font-script text-[clamp(1.4rem,3vw,2.3rem)] italic">
-            One Event. Multiple Experiences.
-          </p>
-        </Reveal>
-        <Reveal delay={0.24}>
-          <p className="mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">
-            Stage magic, mentalism, walk-around magic and interactive Emcee experiences — brought
-            together by one professional.
-          </p>
-        </Reveal>
-        <Reveal delay={0.32}>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink to="/book">Book Maverick Manju</ButtonLink>
-            <ButtonLink to="/services" variant="outline">
-              Explore Performances
-            </ButtonLink>
-          </div>
-        </Reveal>
-        <Reveal delay={0.4}>
-          <ul className="mt-10 flex flex-wrap gap-2">
-            {["Stage Magic", "Walk-Around Magic", "Mentalism", "Emcee"].map((b) => (
-              <li
-                key={b}
-                className="rounded-full border border-border bg-black/50 px-4 py-2 text-[11px] tracking-[0.14em] uppercase backdrop-blur"
-              >
-                {b}
-              </li>
-            ))}
-          </ul>
+        className="absolute top-1/2 right-[-10%] hidden h-[78vh] w-[62vw] -translate-y-1/2 lg:block"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, color-mix(in oklab, var(--primary) 34%, transparent), transparent 68%)",
+        }}
+      />
+      <Particles />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+
+      <div className="container-mm relative z-10 grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+        <div style={{ textShadow: "0 2px 18px rgba(0,0,0,0.75)" }}>
+          <Reveal>
+            <p className="text-[12px] font-bold tracking-[0.34em] text-primary-glow uppercase">
+              Magician | Emcee | Mentalist | Creator Coach
+            </p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h1 className="mt-5 text-[clamp(2.8rem,7vw,5.2rem)] leading-[0.9] font-bold tracking-tight">
+              Magic That
+              <br />
+              <span className="text-primary">Amazes.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <p className="mt-4 font-script text-[clamp(1.4rem,3vw,2.1rem)] italic">
+              One Event. Multiple Experiences.
+            </p>
+          </Reveal>
+          <Reveal delay={0.24}>
+            <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
+              Stage magic, mentalism, walk-around magic and interactive Emcee experiences — brought
+              together by one professional.
+            </p>
+          </Reveal>
+          <Reveal delay={0.32}>
+            <div className="mt-9 flex flex-wrap gap-3">
+              <ButtonLink to="/book">Book Maverick Manju</ButtonLink>
+              <ButtonLink to="/services" variant="outline">
+                Explore Performances
+              </ButtonLink>
+            </div>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <ul className="mt-10 flex flex-wrap gap-2">
+              {["Stage Magic", "Walk-Around Magic", "Mentalism", "Emcee"].map((b) => (
+                <li
+                  key={b}
+                  className="rounded-full border border-border bg-black/50 px-4 py-2 text-[11px] tracking-[0.14em] uppercase backdrop-blur"
+                >
+                  {b}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.18} className="relative">
+          {/* Glow disc sits behind the cutout so the figure lifts off the
+              background. Round and blurred, so it has no edge of its own. */}
+          <span
+            className="pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+            style={{
+              background:
+                "radial-gradient(circle, color-mix(in oklab, var(--primary) 42%, transparent), transparent 65%)",
+            }}
+          />
+          <img
+            src="/images/hero-falcon.webp"
+            alt="Maverick Manju in a green blazer holding a jewelled golden falcon sceptre"
+            width={1280}
+            height={1460}
+            fetchPriority="high"
+            className="relative mx-auto w-full max-w-[300px] object-contain sm:max-w-[420px] lg:max-w-[560px]"
+            style={{
+              filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.65))",
+              animation: "mm-hero-float 7s ease-in-out infinite alternate",
+            }}
+          />
         </Reveal>
       </div>
     </section>
