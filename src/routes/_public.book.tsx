@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CalendarCheck, MessageCircle, Phone } from "lucide-react";
+import { AvailabilityCalendar } from "@/components/site/AvailabilityCalendar";
 import { BookingForm } from "@/components/site/BookingForm";
 import { PageHero } from "@/components/site/PageHero";
+import { useServiceData } from "@/hooks/useServiceData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { AVAILABILITY_KEY, getBlockedDates } from "@/services/availabilityService";
 import { IMAGES } from "@/data/seed";
 
 export const Route = createFileRoute("/_public/book")({
@@ -24,6 +27,7 @@ export const Route = createFileRoute("/_public/book")({
 
 function BookPage() {
   const settings = useSiteSettings();
+  const { data: blockedDates } = useServiceData<string[]>(AVAILABILITY_KEY, getBlockedDates, []);
 
   return (
     <>
@@ -74,6 +78,15 @@ function BookPage() {
                   <CalendarCheck size={15} /> Dates confirm on a first-come basis
                 </li>
               </ul>
+
+              {/* Live availability, so a guest can see the open dates before filling
+                  anything in. The form and the API both re-check on submit. */}
+              <div className="mt-6 border-t border-border pt-5">
+                <p className="mb-3 text-[10px] font-bold tracking-[0.16em] text-muted-foreground uppercase">
+                  Availability
+                </p>
+                <AvailabilityCalendar blocked={new Set(blockedDates)} />
+              </div>
             </div>
           </aside>
 
