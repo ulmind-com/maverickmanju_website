@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Mail, Phone, Youtube } from "lucide-react";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { telLink } from "@/lib/utils";
 
 export function Footer() {
   const settings = useSiteSettings();
@@ -66,7 +67,7 @@ export function Footer() {
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
               <a
-                href={`tel:${settings.phone.replace(/\s/g, "")}`}
+                href={telLink(settings.phone)}
                 className="inline-flex items-center gap-2 transition-colors hover:text-primary"
               >
                 <Phone size={14} /> {settings.phone}

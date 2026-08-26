@@ -1,5 +1,6 @@
 import { AlertCircle, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { ApiError } from "@/lib/api";
+import { whatsappLink } from "@/lib/utils";
 import { useState } from "react";
 import { DURATION_OPTIONS, SERVICE_OPTIONS, SOUND_OPTIONS, VENUE_OPTIONS } from "@/data/seed";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -106,7 +107,8 @@ export function BookingForm() {
   }
 
   if (saved) {
-    const waText = encodeURIComponent(
+    const waHref = whatsappLink(
+      settings.whatsapp,
       `${settings.defaultBookingMessage}\n\nReference: ${saved.referenceNumber}\nName: ${saved.name}\nDate: ${saved.date}\nServices: ${saved.services.join(", ")}\nLocation: ${saved.location}`,
     );
     return (
@@ -122,7 +124,7 @@ export function BookingForm() {
         <p className="font-display text-3xl text-primary">{saved.referenceNumber}</p>
         <div className="mt-7 flex flex-wrap justify-center gap-3">
           <a
-            href={`https://wa.me/${settings.whatsapp}?text=${waText}`}
+            href={waHref}
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 border border-primary bg-primary px-6 py-3.5 text-[12px] font-bold tracking-[0.12em] uppercase transition-all hover:-translate-y-0.5 hover:bg-foreground hover:text-background"
