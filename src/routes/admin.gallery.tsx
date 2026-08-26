@@ -141,13 +141,11 @@ function AdminGallery() {
         <table className="w-full text-left text-sm">
           <thead className="bg-[#0b0b0d] text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
             <tr>
-              {["Thumb", "Type", "Title", "Status", "Order", "Added", "Actions"].map(
-                (h) => (
-                  <th key={h} className="px-3 py-3 font-bold">
-                    {h}
-                  </th>
-                ),
-              )}
+              {["Thumb", "Type", "Title", "Status", "Order", "Added", "Actions"].map((h) => (
+                <th key={h} className="px-3 py-3 font-bold">
+                  {h}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>

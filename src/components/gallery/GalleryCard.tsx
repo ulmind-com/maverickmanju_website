@@ -1,13 +1,14 @@
 import { Play } from "lucide-react";
 import { useRef, useState } from "react";
 import type { GalleryItem } from "@/types";
+import { playPreview, stopPreview } from "@/lib/video";
 import { cn } from "@/lib/utils";
 
 /**
  * One gallery tile. The media keeps the proportions it was uploaded with — the
  * tile is as tall as the file is, never cropped to a fixed box — and a video
- * previews itself silently while the pointer is over it. Clicking still opens
- * the lightbox, where the video plays with sound and full controls.
+ * plays with sound while the pointer is over it. Clicking still opens the
+ * lightbox, where it plays with full controls.
  */
 export function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,19 +19,11 @@ export function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () =>
   const isVideo = item.type === "video";
 
   function previewOn() {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = true;
-    void video.play().catch(() => {
-      /* autoplay can be refused — the poster frame stays put */
-    });
+    if (videoRef.current) void playPreview(videoRef.current);
   }
 
   function previewOff() {
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    video.currentTime = 0;
+    if (videoRef.current) stopPreview(videoRef.current);
   }
 
   return (
@@ -49,7 +42,6 @@ export function GalleryCard({ item, onOpen }: { item: GalleryItem; onOpen: () =>
           ref={videoRef}
           src={item.mediaUrl}
           {...(item.thumbnailUrl ? { poster: item.thumbnailUrl } : {})}
-          muted
           loop
           playsInline
           preload="metadata"

@@ -1,6 +1,7 @@
 import { Quote } from "lucide-react";
 import { useRef, useState } from "react";
 import type { Testimonial } from "@/types";
+import { playPreview, stopPreview } from "@/lib/video";
 import { Stars } from "./primitives";
 import { cn } from "@/lib/utils";
 
@@ -8,8 +9,8 @@ import { cn } from "@/lib/utils";
  * A testimonial is either written or a video — every field except the media is
  * optional, so the card only renders the parts the admin actually filled in.
  *
- * A video keeps the proportions it was uploaded with and previews itself
- * silently on hover; the controls stay, so a click still plays it with sound.
+ * A video keeps the proportions it was uploaded with and plays with sound on
+ * hover; the controls stay, so it can also be played and scrubbed by hand.
  */
 export function TestimonialCard({
   testimonial: t,
@@ -19,6 +20,9 @@ export function TestimonialCard({
   featured?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  // True only while playback was started by the hover, so a video the visitor
+  // started themselves is not cut off when the pointer wanders away.
+  const previewing = useRef(false);
   // Held until the browser reports the real dimensions, so the card does not
   // jump once metadata arrives.
   const [ratio, setRatio] = useState<string | undefined>(undefined);
@@ -28,18 +32,15 @@ export function TestimonialCard({
   function previewOn() {
     const video = videoRef.current;
     if (!video || !video.paused) return;
-    video.muted = true;
-    void video.play().catch(() => {
-      /* autoplay can be refused — the poster frame stays put */
-    });
+    previewing.current = true;
+    void playPreview(video);
   }
 
   function previewOff() {
     const video = videoRef.current;
-    // Leave a video the visitor actually un-muted and started playing alone.
-    if (!video || !video.muted) return;
-    video.pause();
-    video.currentTime = 0;
+    if (!video || !previewing.current) return;
+    previewing.current = false;
+    stopPreview(video);
   }
 
   return (
@@ -63,6 +64,10 @@ export function TestimonialCard({
           preload="metadata"
           onMouseEnter={previewOn}
           onMouseLeave={previewOff}
+          onClick={() => {
+            // Touching the controls hands the video over to the visitor.
+            previewing.current = false;
+          }}
           onLoadedMetadata={(e) => {
             const { videoWidth, videoHeight } = e.currentTarget;
             if (videoWidth && videoHeight) setRatio(`${videoWidth} / ${videoHeight}`);
