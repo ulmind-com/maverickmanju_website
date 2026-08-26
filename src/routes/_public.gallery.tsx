@@ -1,10 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { GalleryGrid } from "@/components/gallery/GalleryGrid";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
-import { Particles, SectionHeader } from "@/components/site/primitives";
-import { useServiceData } from "@/hooks/useServiceData";
-import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
-import type { GalleryItem } from "@/types";
+import { MomentsOfMagic } from "@/components/site/sections";
 
 export const Route = createFileRoute("/_public/gallery")({
   head: () => ({
@@ -28,44 +24,9 @@ export const Route = createFileRoute("/_public/gallery")({
  * feed — there is no fixed limit on how many items can be published.
  */
 function GalleryPage() {
-  const {
-    data: items,
-    loading,
-    error,
-  } = useServiceData<GalleryItem[]>(GALLERY_KEY, getPublishedGalleryItems, []);
-
   return (
     <>
-      <section className="relative overflow-hidden pt-36 pb-20 sm:pb-24">
-        <div className="absolute inset-0 spotlight" />
-        <Particles count={10} />
-        <div className="container-mm relative">
-          <SectionHeader
-            eyebrow="Gallery"
-            title="Moments of Magic"
-            description="Don't just take my word for it. See the experience."
-          />
-
-          {loading ? (
-            <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="animate-pulse break-inside-avoid border border-border bg-card"
-                  style={{ height: [220, 300, 260, 340, 240, 300][i] }}
-                />
-              ))}
-            </div>
-          ) : error ? (
-            <p className="border border-dashed border-destructive/50 p-10 text-center text-sm text-destructive">
-              {error}
-            </p>
-          ) : (
-            <GalleryGrid items={items} />
-          )}
-        </div>
-      </section>
-
+      <MomentsOfMagic className="pt-36 pb-20 sm:pb-24" />
       <BookingCta />
     </>
   );

@@ -1,8 +1,20 @@
 import { Mic2, Sparkles, Star, Wand2 } from "lucide-react";
-import type { EventPackage, ServiceType } from "@/types";
+import { useMemo } from "react";
+import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import { TestimonialCard } from "@/components/site/TestimonialCard";
+import {
+  TESTIMONIAL_CATEGORIES,
+  type EventPackage,
+  type GalleryItem,
+  type ServiceType,
+  type Testimonial,
+  type TestimonialCategory,
+} from "@/types";
 import { useServiceData } from "@/hooks/useServiceData";
+import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
 import { PACKAGES_KEY, getPublishedPackages } from "@/services/packageService";
-import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
+import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
+import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
 
 export function MaverickDifference() {
   const cards = [
@@ -169,5 +181,181 @@ export function EventPackages() {
         )}
       </div>
     </section>
+  );
+}
+
+const RUN_OF_SHOW = [
+  {
+    step: "01",
+    title: "Pre-event briefing",
+    body: "We map the audience, the venue, the timings and the moments that matter to you — sponsors, cake cutting, awards, product reveal.",
+  },
+  {
+    step: "02",
+    title: "Guest arrival",
+    body: "Walk-around magic works the room while guests settle in, so the energy is already up before the stage lights come on.",
+  },
+  {
+    step: "03",
+    title: "Main performance",
+    body: "Stage magic and mentalism built for the whole room, with volunteers pulled from your own audience.",
+  },
+  {
+    step: "04",
+    title: "Hosting & wrap-up",
+    body: "Emcee segments, games and announcements keep the run-of-show tight from first cue to last.",
+  },
+];
+
+/** The four-step run-of-show, on the USP page and the home page. */
+export function RunOfShow() {
+  return (
+    <section className="py-20 sm:py-24">
+      <div className="container-mm">
+        <SectionHeader
+          eyebrow="How a show runs"
+          title="A run-of-show that stays on time."
+          description="From the first guest arriving to the last announcement, every segment is planned with your event team."
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {RUN_OF_SHOW.map((s, i) => (
+            <Reveal key={s.step} delay={i * 0.06}>
+              <div className="card-mm h-full p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red">
+                <p className="font-display text-3xl text-primary">{s.step}</p>
+                <h3 className="mt-3 font-display text-xl">{s.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** The published gallery feed, on the gallery page and the home page. */
+export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: string }) {
+  const {
+    data: items,
+    loading,
+    error,
+  } = useServiceData<GalleryItem[]>(GALLERY_KEY, getPublishedGalleryItems, []);
+
+  return (
+    <section className={`relative overflow-hidden ${className}`}>
+      <div className="absolute inset-0 spotlight" />
+      <Particles count={10} />
+      <div className="container-mm relative">
+        <SectionHeader
+          eyebrow="Gallery"
+          title="Moments of Magic"
+          description="Don't just take my word for it. See the experience."
+        />
+        {loading ? (
+          <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="animate-pulse break-inside-avoid border border-border bg-card"
+                style={{ height: [220, 300, 260, 340, 240, 300][i] }}
+              />
+            ))}
+          </div>
+        ) : error ? (
+          <p className="border border-dashed border-destructive/50 p-10 text-center text-sm text-destructive">
+            {error}
+          </p>
+        ) : (
+          <GalleryGrid items={items} />
+        )}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Published testimonials under the four categories the admin assigns. A
+ * category with nothing published in it is not rendered at all.
+ */
+export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?: string }) {
+  const {
+    data: testimonials,
+    loading,
+    error,
+  } = useServiceData<Testimonial[]>(TESTIMONIALS_KEY, getPublishedTestimonials, []);
+
+  const groups = useMemo(
+    () =>
+      TESTIMONIAL_CATEGORIES.map((category) => ({
+        category,
+        items: testimonials.filter((t) => (t.category ?? "Corporates") === category),
+      })).filter((group) => group.items.length > 0),
+    [testimonials],
+  );
+
+  return (
+    <section className={`relative overflow-hidden ${className}`}>
+      <div className="absolute inset-0 spotlight" />
+      <Particles count={10} />
+      <div className="container-mm relative">
+        <SectionHeader
+          eyebrow="Testimonials"
+          title="Client Testimonials"
+          description="Real reactions. Real memories."
+        />
+        {loading ? (
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-64 animate-pulse border border-border bg-card" />
+            ))}
+          </div>
+        ) : error ? (
+          <p className="border border-dashed border-destructive/50 p-10 text-center text-sm text-destructive">
+            {error}
+          </p>
+        ) : groups.length === 0 ? (
+          <p className="border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+            No published testimonials yet.
+          </p>
+        ) : (
+          <div className="space-y-16">
+            {groups.map(({ category, items }) => (
+              <CategoryGroup key={category} category={category} items={items} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function CategoryGroup({
+  category,
+  items,
+}: {
+  category: TestimonialCategory;
+  items: Testimonial[];
+}) {
+  return (
+    <div>
+      <div className="mb-7 flex items-center gap-4">
+        <h3 className="font-display text-2xl whitespace-nowrap sm:text-3xl">{category}</h3>
+        <span className="h-px flex-1 bg-border" />
+        <span className="text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
+          {items.length} {items.length === 1 ? "review" : "reviews"}
+        </span>
+      </div>
+      {/* Masonry columns so a video review keeps its own height instead of being
+          stretched to match the tallest card in its row. */}
+      <div className="columns-1 gap-5 md:columns-2 lg:columns-3 [&>*]:mb-5">
+        {items.map((t, i) => (
+          <div key={t.id} className="break-inside-avoid">
+            <Reveal delay={i * 0.05}>
+              <TestimonialCard testimonial={t} />
+            </Reveal>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

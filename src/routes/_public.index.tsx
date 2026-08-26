@@ -5,7 +5,14 @@ import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
 import { TestimonialCard } from "@/components/site/TestimonialCard";
 import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
-import { EventPackages, MaverickDifference, ServicePreview } from "@/components/site/sections";
+import {
+  EventPackages,
+  MaverickDifference,
+  MomentsOfMagic,
+  RunOfShow,
+  ServicePreview,
+  TestimonialGroups,
+} from "@/components/site/sections";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useServices } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
@@ -72,11 +79,14 @@ function HomePage() {
       <ServicesPreview />
       <ServiceDetails />
       <EventPackages />
-      <ServicesLink />
+      <SectionLink to="/services" label="See all services" />
       <MaverickDifference />
-      <UspLink />
-      <GalleryPreview />
-      <TestimonialsPreview />
+      <RunOfShow />
+      <SectionLink to="/usp" label="Why Maverick" />
+      <MomentsOfMagic />
+      <SectionLink to="/gallery" label="View full gallery" />
+      <TestimonialGroups />
+      <SectionLink to="/testimonials" label="Read all testimonials" />
       <BookingCta />
     </>
   );
@@ -132,6 +142,19 @@ function ServicesPreview() {
   );
 }
 
+/** Closes a previewed block with a link through to the page it came from. */
+function SectionLink({ to, label }: { to: string; label: string }) {
+  return (
+    <section className="border-t border-border py-14 text-center">
+      <div className="container-mm">
+        <Reveal>
+          <ButtonLink to={to}>{label}</ButtonLink>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 /** The same alternating image/copy sections the services page runs through. */
 function ServiceDetails() {
   const services = useServices();
@@ -141,108 +164,6 @@ function ServiceDetails() {
         <ServicePreview key={service.slug} service={service} index={i} reverse={i % 2 === 1} />
       ))}
     </>
-  );
-}
-
-function ServicesLink() {
-  return (
-    <section className="border-t border-border py-14 text-center">
-      <div className="container-mm">
-        <Reveal>
-          <ButtonLink to="/services">See all services</ButtonLink>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/** MaverickDifference sits above this — the link hands the visitor the full USP page. */
-function UspLink() {
-  return (
-    <section className="py-14 text-center">
-      <div className="container-mm">
-        <Reveal>
-          <p className="mx-auto max-w-2xl text-muted-foreground">
-            One artist, one point of coordination, a complete show — from the pre-event briefing to
-            the last announcement.
-          </p>
-          <div className="mt-7">
-            <ButtonLink to="/usp">Why Maverick</ButtonLink>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-function GalleryPreview() {
-  const { data: items, loading } = useServiceData<GalleryItem[]>(
-    GALLERY_KEY,
-    getPublishedGalleryItems,
-    [],
-  );
-  const shown = items.slice(0, 6);
-
-  return (
-    <section className="relative overflow-hidden py-20 sm:py-24">
-      <div className="absolute inset-0 spotlight" />
-      <Particles count={10} />
-      <div className="container-mm relative">
-        <SectionHeader
-          eyebrow="Gallery"
-          title="Moments of Magic"
-          description="Don't just take my word for it. See the experience."
-        />
-        {loading ? (
-          <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="animate-pulse break-inside-avoid border border-border bg-card"
-                style={{ height: [220, 300, 260, 340, 240, 300][i] }}
-              />
-            ))}
-          </div>
-        ) : shown.length === 0 ? null : (
-          <GalleryGrid items={shown} />
-        )}
-        <div className="mt-10">
-          <ButtonLink to="/gallery">View full gallery</ButtonLink>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TestimonialsPreview() {
-  const { data: testimonials } = useServiceData<Testimonial[]>(
-    TESTIMONIALS_KEY,
-    getPublishedTestimonials,
-    [],
-  );
-  const shown = testimonials.slice(0, 3);
-  if (shown.length === 0) return null;
-
-  return (
-    <section className="border-y border-border bg-surface py-20 sm:py-24">
-      <div className="container-mm">
-        <SectionHeader
-          eyebrow="Testimonials"
-          title="Client Testimonials"
-          description="Real reactions. Real memories."
-        />
-        <div className="grid items-start gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {shown.map((t, i) => (
-            <Reveal key={t.id} delay={i * 0.05}>
-              <TestimonialCard testimonial={t} />
-            </Reveal>
-          ))}
-        </div>
-        <div className="mt-10">
-          <ButtonLink to="/testimonials">Read all testimonials</ButtonLink>
-        </div>
-      </div>
-    </section>
   );
 }
 
