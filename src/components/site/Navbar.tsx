@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
+  { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
   { to: "/usp", label: "USP" },
   { to: "/gallery", label: "Gallery" },
@@ -11,7 +12,6 @@ const NAV_LINKS = [
 ] as const;
 
 const MOBILE_EXTRA_LINKS = [
-  { to: "/", label: "Home" },
   { to: "/stage-magic", label: "Stage Magic" },
   { to: "/walk-around-magic", label: "Walk-Around" },
   { to: "/mentalism", label: "Mentalism" },
@@ -59,6 +59,8 @@ export function Navbar() {
                   to={link.to}
                   className="text-foreground/85 transition-colors hover:text-primary"
                   activeProps={{ className: "text-primary" }}
+                  activeOptions={link.to === "/" ? { exact: true } : undefined}
+                  onClick={link.to === "/" ? () => window.scrollTo({ top: 0, behavior: "smooth" }) : undefined}
                 >
                   {link.label}
                 </Link>
