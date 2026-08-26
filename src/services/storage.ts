@@ -27,5 +27,6 @@ export const STORAGE_KEYS = {
   packages: "packages",
   serviceImages: "service-images",
   bookings: "bookings",
+  availability: "availability",
   settings: "settings",
 } as const;

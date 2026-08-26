@@ -1,8 +1,12 @@
 import { AlertCircle, CheckCircle2, Loader2, MessageCircle } from "lucide-react";
+import { ApiError } from "@/lib/api";
 import { useState } from "react";
 import { DURATION_OPTIONS, SERVICE_OPTIONS, SOUND_OPTIONS, VENUE_OPTIONS } from "@/data/seed";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
+import { useServiceData } from "@/hooks/useServiceData";
 import { createBooking } from "@/services/bookingService";
+import { AVAILABILITY_KEY, getBlockedDates } from "@/services/availabilityService";
+import { todayKey } from "./AvailabilityCalendar";
 import type { BookingEnquiry } from "@/types";
 import { ActionButton } from "./primitives";
 
@@ -29,6 +33,8 @@ const labelClass = "text-[11px] font-bold tracking-[0.12em] text-foreground/80 u
 
 export function BookingForm() {
   const settings = useSiteSettings();
+  const { data: blockedDates } = useServiceData<string[]>(AVAILABILITY_KEY, getBlockedDates, []);
+  const blocked = new Set(blockedDates);
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -52,6 +58,9 @@ export function BookingForm() {
     if (!/^[+\d][\d\s-]{7,}$/.test(form.mobile.trim())) e.mobile = "Enter a valid mobile number.";
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) e.email = "Enter a valid email.";
     if (!form.date) e.date = "Select your event date.";
+    else if (form.date < todayKey()) e.date = "That date has already passed.";
+    else if (blocked.has(form.date))
+      e.date = "That date is already booked. Please pick another date.";
     if (form.services.length === 0) e.services = "Select at least one experience.";
     if (!form.duration) e.duration = "Select a duration.";
     if (!form.guests || Number(form.guests) <= 0) e.guests = "Enter expected guests.";
@@ -84,11 +93,13 @@ export function BookingForm() {
       setSaved(booking);
       setForm(initialForm);
     } catch (err) {
-      setSubmitError(
+      const message =
         err instanceof Error
           ? err.message
-          : "Could not send your enquiry. Please try again or reach out on WhatsApp.",
-      );
+          : "Could not send your enquiry. Please try again or reach out on WhatsApp.";
+      // The server re-checks the date, so a stale calendar still fails safely.
+      if (err instanceof ApiError && err.status === 409) setErrors({ date: message });
+      else setSubmitError(message);
     } finally {
       setSubmitting(false);
     }
@@ -162,9 +173,18 @@ export function BookingForm() {
           <input
             id="date"
             type="date"
+            min={todayKey()}
             className={fieldClass}
             value={form.date}
-            onChange={(e) => set("date", e.target.value)}
+            onChange={(e) => {
+              const next = e.target.value;
+              set("date", next);
+              setErrors(({ date: _clearedDate, ...rest }) =>
+                blocked.has(next)
+                  ? { ...rest, date: "That date is already booked. Please pick another date." }
+                  : rest,
+              );
+            }}
           />
         </Field>
 

@@ -1,6 +1,7 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   CalendarCheck,
+  CalendarX2,
   Images,
   LayoutDashboard,
   LogOut,
@@ -20,6 +21,7 @@ const NAV = [
   { to: "/admin/testimonials", label: "Testimonials", Icon: MessageSquareQuote },
   { to: "/admin/services", label: "Services & Packages", Icon: Sparkles },
   { to: "/admin/bookings", label: "Bookings", Icon: CalendarCheck },
+  { to: "/admin/availability", label: "Availability", Icon: CalendarX2 },
   { to: "/admin/settings", label: "Settings", Icon: Settings },
 ] as const;
 

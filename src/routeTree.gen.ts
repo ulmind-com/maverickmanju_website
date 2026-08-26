@@ -24,6 +24,7 @@ import { Route as PublicTestimonialsRouteImport } from './routes/_public.testimo
 import { Route as PublicUspRouteImport } from './routes/_public.usp'
 import { Route as PublicWalkAroundMagicRouteImport } from './routes/_public.walk-around-magic'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAvailabilityRouteImport } from './routes/admin.availability'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
@@ -106,6 +107,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAvailabilityRoute = AdminAvailabilityRouteImport.update({
+  id: '/admin/availability',
+  path: '/admin/availability',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminBookingsRoute = AdminBookingsRouteImport.update({
   id: '/admin/bookings',
   path: '/admin/bookings',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/testimonials': typeof PublicTestimonialsRoute
   '/usp': typeof PublicUspRoute
   '/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/admin/availability': typeof AdminAvailabilityRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/testimonials': typeof PublicTestimonialsRoute
   '/usp': typeof PublicUspRoute
   '/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/admin/availability': typeof AdminAvailabilityRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/_public/testimonials': typeof PublicTestimonialsRoute
   '/_public/usp': typeof PublicUspRoute
   '/_public/walk-around-magic': typeof PublicWalkAroundMagicRoute
+  '/admin/availability': typeof AdminAvailabilityRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/testimonials'
     | '/usp'
     | '/walk-around-magic'
+    | '/admin/availability'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -251,6 +261,7 @@ export interface FileRouteTypes {
     | '/testimonials'
     | '/usp'
     | '/walk-around-magic'
+    | '/admin/availability'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/_public/testimonials'
     | '/_public/usp'
     | '/_public/walk-around-magic'
+    | '/admin/availability'
     | '/admin/bookings'
     | '/admin/dashboard'
     | '/admin/gallery'
@@ -288,6 +300,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   PublicRoute: typeof PublicRouteWithChildren
+  AdminAvailabilityRoute: typeof AdminAvailabilityRoute
   AdminBookingsRoute: typeof AdminBookingsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/availability': {
+      id: '/admin/availability'
+      path: '/admin/availability'
+      fullPath: '/admin/availability'
+      preLoaderRoute: typeof AdminAvailabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/bookings': {
       id: '/admin/bookings'
       path: '/admin/bookings'
@@ -494,6 +514,7 @@ const PublicRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   PublicRoute: PublicRouteWithChildren,
+  AdminAvailabilityRoute: AdminAvailabilityRoute,
   AdminBookingsRoute: AdminBookingsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminGalleryRoute: AdminGalleryRoute,
