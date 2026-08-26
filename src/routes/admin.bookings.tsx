@@ -290,10 +290,7 @@ function AdminBookings() {
                     <Phone size={14} /> Call
                   </a>
                   <a
-                    href={whatsappLink(
-                      active.mobile,
-                      `${settings.defaultBookingMessage} (Ref ${active.referenceNumber})`,
-                    )}
+                    href={whatsappLink(active.mobile, replyMessage(active, settings.artistName))}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 border border-border px-4 py-2.5 text-[11px] font-bold tracking-[0.12em] uppercase hover:border-primary hover:text-primary"
@@ -302,7 +299,11 @@ function AdminBookings() {
                   </a>
                   {active.email && (
                     <a
-                      href={`mailto:${active.email}?subject=${encodeURIComponent(`Your enquiry ${active.referenceNumber}`)}`}
+                      href={
+                        `mailto:${active.email}` +
+                        `?subject=${encodeURIComponent(`Your enquiry ${active.referenceNumber} — ${settings.artistName}`)}` +
+                        `&body=${encodeURIComponent(replyMessage(active, settings.artistName))}`
+                      }
                       className="inline-flex items-center gap-2 border border-border px-4 py-2.5 text-[11px] font-bold tracking-[0.12em] uppercase hover:border-primary hover:text-primary"
                     >
                       <Mail size={14} /> Email
@@ -368,6 +369,29 @@ function InternalNote({ booking }: { booking: BookingEnquiry }) {
         {saved && <span className="text-xs text-emerald-300">Note saved.</span>}
       </div>
     </div>
+  );
+}
+
+/** Friendly day/month/year, falling back to the raw value if the date is blank. */
+function readableDate(date: string): string {
+  if (!date) return "your event";
+  const parsed = new Date(`${date}T00:00:00`);
+  return Number.isNaN(parsed.getTime())
+    ? date
+    : parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+/**
+ * The opener the admin sends *to the client*. The quick actions used to reuse
+ * `defaultBookingMessage`, which is the message a guest sends to Manju — so
+ * Manju was messaging his own clients as though he were enquiring with them.
+ */
+function replyMessage(booking: BookingEnquiry, artistName: string): string {
+  const firstName = booking.name.trim().split(/\s+/)[0] || "there";
+  const services = booking.services.length ? ` (${booking.services.join(", ")})` : "";
+  return (
+    `Hi ${firstName}, this is ${artistName}. Thanks for your enquiry ${booking.referenceNumber} ` +
+    `for ${readableDate(booking.date)}${services}. I'd love to be part of it — when is a good time to talk?`
   );
 }
 
