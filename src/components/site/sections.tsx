@@ -193,7 +193,7 @@ const RUN_OF_SHOW = [
   {
     step: "02",
     title: "Guest arrival",
-    body: "Walk-around magic works the room while guests settle in, so the energy is already up before the stage lights come on.",
+    body: "Maverick Manju ensures guests are engaged — emcee engagement and walk-around magic — while guests settle in, so the energy is already up before the stage lights come on.",
   },
   {
     step: "03",
