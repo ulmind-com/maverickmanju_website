@@ -56,7 +56,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
               src={service.imageUrl}
               alt={service.title}
               loading="lazy"
-              className="h-[420px] w-full border border-border object-cover sm:h-[520px]"
+              className="w-full max-h-[520px] border border-border object-contain bg-black"
             />
           </Reveal>
           <Reveal delay={0.1}>

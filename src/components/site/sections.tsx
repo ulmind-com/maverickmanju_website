@@ -81,7 +81,7 @@ export function ServicePreview({
             src={service.imageUrl}
             alt={service.title}
             loading="lazy"
-            className="h-[380px] w-full border border-border object-cover shadow-[0_20px_70px_rgba(0,0,0,.5)] sm:h-[520px]"
+            className="w-full max-h-[520px] border border-border object-contain bg-black shadow-[0_20px_70px_rgba(0,0,0,.5)]"
           />
         </Reveal>
         <Reveal delay={0.1}>
@@ -145,7 +145,7 @@ export function EventPackages() {
                       src={p.imageUrl}
                       alt={p.title}
                       loading="lazy"
-                      className="h-52 w-full border border-border object-cover md:h-full"
+                      className="h-52 w-full border border-border object-contain bg-black md:h-full"
                     />
                   )}
                   <div>

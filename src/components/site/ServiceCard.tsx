@@ -5,12 +5,12 @@ import type { ServiceType } from "@/types";
 export function ServiceCard({ service }: { service: ServiceType }) {
   const body = (
     <>
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden bg-black">
         <img
           src={service.imageUrl}
           alt={service.title}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-110"
+          className="h-full w-full object-contain transition-transform duration-[900ms] group-hover:scale-110"
         />
         <span className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
       </div>
