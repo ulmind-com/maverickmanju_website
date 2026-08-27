@@ -67,7 +67,7 @@ export const services: ServiceType[] = [
   },
   {
     slug: "emcee",
-    title: "Emcee & Interactive Entertainment",
+    title: "Emcee [ Games ] & Interactive Entertainment",
     shortDescription: "Games, interaction and energy that get people involved.",
     fullDescription:
       "Don't just host the event — own the energy. Ice breakers, magic-based games, family activities and professional hosting, customized to the age group, venue and event format.",

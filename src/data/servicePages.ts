@@ -121,7 +121,7 @@ export const mentalismContent: ServicePageContent = {
 
 export const emceeContent: ServicePageContent = {
   slug: "emcee",
-  eyebrow: "04 • Emcee & Interactive Entertainment",
+  eyebrow: "04 • Emcee [ Games ] & Interactive Entertainment",
   headline: "Don't just host the event. Own the energy.",
   intro:
     "Professional hosting plus ice breakers, magic-based games and crowd interaction, customised to the age group and format.",
