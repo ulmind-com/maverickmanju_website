@@ -42,14 +42,13 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <MaverickDifference />
+      <MaverickDifference id="usp" />
       <RunOfShow />
       <ServicesPreview />
-      <SectionLink to="/services" label="See all services" />
       <EventPackages />
-      <MomentsOfMagic />
+      <MomentsOfMagic id="gallery" />
       <SectionLink to="/gallery" label="View full gallery" />
-      <TestimonialGroups />
+      <TestimonialGroups id="testimonials" />
       <SectionLink to="/testimonials" label="Read all testimonials" />
       <BookingCta />
     </>
@@ -60,7 +59,7 @@ function ServicesPreview() {
   const services = useServices();
 
   return (
-    <section className="py-20 sm:py-24">
+    <section id="services" className="scroll-mt-[72px] py-20 sm:py-24">
       <div className="container-mm">
         <SectionHeader
           eyebrow="Services"

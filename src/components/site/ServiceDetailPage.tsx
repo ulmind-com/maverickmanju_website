@@ -66,88 +66,6 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
         </ButtonLink>
       </PageHero>
 
-      <section className="py-20 sm:py-24">
-        <div className="container-mm grid items-center gap-12 lg:grid-cols-2">
-          <Reveal>
-            <img
-              src={service.imageUrl}
-              alt={service.title}
-              loading="lazy"
-              className="w-full max-h-[520px] border border-border object-contain bg-black"
-            />
-          </Reveal>
-          <Reveal delay={0.1}>
-            <SectionHeader
-              eyebrow="The Experience"
-              title={service.title}
-              description={service.fullDescription}
-              className="mb-8"
-            />
-            <ul className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
-              {service.highlights.map((h) => (
-                <li
-                  key={h}
-                  className="flex items-center gap-2 border-b border-border py-3 text-sm text-muted-foreground"
-                >
-                  <span className="text-primary">✦</span>
-                  {h}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="border-y border-border bg-surface py-20 sm:py-24">
-        <div className="container-mm">
-          <SectionHeader eyebrow="Why it works" title="Built around your audience" />
-          <div className="grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-            {content.why.map((w, i) => (
-              <Reveal key={w.title} delay={i * 0.05}>
-                <div className="h-full bg-[#0d0d0f] p-8">
-                  <p className="font-display text-xs tracking-[0.2em] text-primary">0{i + 1}</p>
-                  <h3 className="mt-3 font-display text-xl">{w.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{w.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 sm:py-24">
-        <div className="container-mm grid gap-12 lg:grid-cols-2">
-          <div>
-            <SectionHeader eyebrow="What's included" title="In the booking" className="mb-6" />
-            <ul className="space-y-3">
-              {content.included.map((i) => (
-                <li key={i} className="flex gap-3 text-sm text-muted-foreground">
-                  <Check size={16} className="mt-0.5 shrink-0 text-primary" />
-                  {i}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <SectionHeader eyebrow="Suitable events" title="Where it fits" className="mb-6" />
-            <div className="flex flex-wrap gap-2">
-              {content.suitableFor.map((s) => (
-                <span
-                  key={s}
-                  className="border border-border px-3.5 py-2 text-xs tracking-[0.1em] text-muted-foreground uppercase"
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-            <div className="card-mm mt-8 border-l-2 border-l-primary p-6">
-              <h3 className="font-display text-lg">Audience Interaction</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{content.interaction}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {shown.length > 0 && (
         <section className="border-t border-border bg-surface py-20 sm:py-24">
           <div className="container-mm">
@@ -166,7 +84,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
         <section className="py-20 sm:py-24">
           <div className="container-mm">
             <SectionHeader eyebrow="Client words" title="Real reactions" />
-            <TestimonialGrid items={testimonials.slice(0, 3)} />
+            <TestimonialGrid items={testimonials} />
           </div>
         </section>
       )}

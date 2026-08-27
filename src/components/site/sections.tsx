@@ -16,7 +16,7 @@ import { PACKAGES_KEY, getPublishedPackages } from "@/services/packageService";
 import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
 import { ButtonLink, Particles, Reveal, SectionHeader } from "@/components/site/primitives";
 
-export function MaverickDifference() {
+export function MaverickDifference({ id }: { id?: string } = {}) {
   const cards = [
     {
       Icon: Wand2,
@@ -41,7 +41,10 @@ export function MaverickDifference() {
   ];
 
   return (
-    <section className="border-y border-border bg-gradient-to-b from-[#090909] to-[#111] py-20 sm:py-24">
+    <section
+      {...(id ? { id } : {})}
+      className="scroll-mt-[72px] border-y border-border bg-gradient-to-b from-[#090909] to-[#111] py-20 sm:py-24"
+    >
       <div className="container-mm">
         <SectionHeader
           eyebrow="The Maverick Difference"
@@ -234,7 +237,13 @@ export function RunOfShow() {
 }
 
 /** The published gallery feed, on the gallery page and the home page. */
-export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: string }) {
+export function MomentsOfMagic({
+  className = "py-20 sm:py-24",
+  id,
+}: {
+  className?: string;
+  id?: string;
+}) {
   const {
     data: items,
     loading,
@@ -251,7 +260,10 @@ export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: s
   );
 
   return (
-    <section className={`relative overflow-hidden ${className}`}>
+    <section
+      {...(id ? { id } : {})}
+      className={`relative scroll-mt-[72px] overflow-hidden ${className}`}
+    >
       <div className="absolute inset-0 spotlight" />
       <Particles count={10} />
       <div className="container-mm relative">
@@ -301,7 +313,13 @@ export function MomentsOfMagic({ className = "py-20 sm:py-24" }: { className?: s
  * Published testimonials under the four categories the admin assigns. A
  * category with nothing published in it is not rendered at all.
  */
-export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?: string }) {
+export function TestimonialGroups({
+  className = "py-20 sm:py-24",
+  id,
+}: {
+  className?: string;
+  id?: string;
+}) {
   const {
     data: testimonials,
     loading,
@@ -309,7 +327,10 @@ export function TestimonialGroups({ className = "py-20 sm:py-24" }: { className?
   } = useServiceData<Testimonial[]>(TESTIMONIALS_KEY, getPublishedTestimonials, []);
 
   return (
-    <section className={`relative overflow-hidden ${className}`}>
+    <section
+      {...(id ? { id } : {})}
+      className={`relative scroll-mt-[72px] overflow-hidden ${className}`}
+    >
       <div className="absolute inset-0 spotlight" />
       <Particles count={10} />
       <div className="container-mm relative">
