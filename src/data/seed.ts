@@ -73,7 +73,7 @@ export const services: ServiceType[] = [
     highlights: [
       "Professional hosting",
       "Ice breakers",
-      "Magic-based games",
+      "Interactive games",
       "Birthday games",
       "Corporate engagement",
       "Crowd interaction",
