@@ -187,30 +187,25 @@ export function EventPackages() {
   );
 }
 
+/**
+ * Two halves rather than four steps — the briefing and the arrival are one
+ * stretch of work, and so are the performance and the wrap-up. The wording is
+ * the same as before, cut to what a client actually needs to read.
+ */
 const RUN_OF_SHOW = [
   {
     step: "01",
-    title: "Pre-event briefing",
-    body: "Pre-dialogue with the client to understand the detailing of the event, understand the client's expectations, and notify the client on pre-requirements.",
+    title: "Briefing & guest arrival",
+    body: "A pre-event dialogue sets the detail of the event, your expectations and everything needed in advance. On the day, emcee engagement and walk-around magic keep guests engaged as they settle in, so the energy is up before the stage lights come on.",
   },
   {
     step: "02",
-    title: "Guest arrival",
-    body: "Maverick Manju ensures guests are engaged — emcee engagement and walk-around magic — while guests settle in, so the energy is already up before the stage lights come on.",
-  },
-  {
-    step: "03",
-    title: "Main performance",
-    body: "Stage magic and mentalism built for the whole room, with volunteers pulled from your own audience.",
-  },
-  {
-    step: "04",
-    title: "Hosting & wrap-up",
-    body: "Maverick Manju ensures the flow of the event is well controlled — from welcoming the guests to cake cutting, and opening the floor for dance and dinner.",
+    title: "Performance & wrap-up",
+    body: "Stage magic and mentalism built for the whole room, with volunteers pulled from your own audience. Maverick Manju then keeps the flow controlled to the finish — cake cutting, and opening the floor for dance and dinner.",
   },
 ];
 
-/** The four-step run-of-show, on the USP page and the home page. */
+/** The run-of-show, on the USP page and the home page. */
 export function RunOfShow() {
   return (
     <section className="py-20 sm:py-24">
