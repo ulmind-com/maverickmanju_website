@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Maverick Manju — Best Magician in Bangalore | Top Emcee & Mentalist in Bengaluru" },
+      { title: "Maverick Manju | Magician, Emcee & Mentalist" },
       {
         name: "description",
         content:

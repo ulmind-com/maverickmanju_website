@@ -21,8 +21,7 @@ export const Route = createFileRoute("/_public/")(
     head: () => ({
       meta: [
         {
-          title:
-            "Maverick Manju — Best Magician in Bangalore | Top Emcee & Mentalist in Bengaluru",
+          title: "Maverick Manju | Magician, Emcee & Mentalist",
         },
         {
           name: "description",
