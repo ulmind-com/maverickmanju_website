@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://www.maverickmanju.in/</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.maverickmanju.in/images/hero-manju-magic.jpg</image:loc>
+      <image:title>Maverick Manju — Best Magician in Bangalore</image:title>
+      <image:caption>Maverick Manju performing stage magic at a corporate event in Bangalore</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/about</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/services</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/stage-magic</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.maverickmanju.in/images/hero-stage.jpg</image:loc>
+      <image:title>Stage Magic Show by Maverick Manju in Bangalore</image:title>
+      <image:caption>Professional stage magic performance with audience participation</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/walk-around-magic</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.maverickmanju.in/images/walk-around.jpg</image:loc>
+      <image:title>Walk-Around Close-Up Magic by Maverick Manju</image:title>
+      <image:caption>Close-up magic performance at a private event in Bangalore</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/mentalism</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.maverickmanju.in/images/mentalism.jpg</image:loc>
+      <image:title>Mentalism and Mind Reading Show by Maverick Manju</image:title>
+      <image:caption>Maverick Manju performing mentalism at a corporate event in Bangalore</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/emcee</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.maverickmanju.in/images/emcee.jpg</image:loc>
+      <image:title>Best Emcee in Bangalore — Maverick Manju</image:title>
+      <image:caption>Maverick Manju hosting a corporate event as professional emcee in Bangalore</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/events</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/gallery</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/testimonials</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/usp</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/book</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.maverickmanju.in/contact</loc>
+    <lastmod>2026-08-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>

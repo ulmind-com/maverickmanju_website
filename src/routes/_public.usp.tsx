@@ -8,19 +8,30 @@ import { IMAGES } from "@/data/seed";
 export const Route = createFileRoute("/_public/usp")({
   head: () => ({
     meta: [
-      { title: "Why Maverick Manju | One Artist, Complete Entertainment" },
+      { title: "Why Maverick Manju — Best Magician & Emcee in Bangalore | The Difference" },
       {
         name: "description",
         content:
-          "Magic, mentalism and emcee hosting from one professional — one point of coordination, one seamless run-of-show, and an audience that participates instead of watching.",
+          "Discover why Maverick Manju is the best choice for your event. One professional — magician, emcee and mentalist — delivering complete entertainment in Bangalore. Why hire two entertainers when one does both?",
       },
-      { property: "og:title", content: "Why Maverick Manju" },
+      {
+        name: "keywords",
+        content:
+          "best magician in bangalore, best magician in bengaluru, top magician in bangalore, top magician in bengaluru, magician in bangalore, professional magician in bangalore, best emcee in bangalore, best emcee in bengaluru, top emcee in bangalore, professional emcee in bangalore, event host in bangalore, best event host in bangalore, maverick manju, maverick manju magician, maverick manju emcee, maverick manju mentalist, maverick manju bangalore",
+      },
+      { property: "og:title", content: "Why Maverick Manju — Best Magician & Emcee in Bangalore" },
       {
         property: "og:description",
         content:
           "Why hire two entertainers when one professional does both? The Maverick difference, explained.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.maverickmanju.in/usp" },
+      { name: "twitter:title", content: "Why Maverick Manju — The Maverick Difference" },
+      { name: "twitter:description", content: "One professional — magician, emcee and mentalist — complete entertainment in Bangalore." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/usp" },
     ],
   }),
   component: WhyMaverickPage,

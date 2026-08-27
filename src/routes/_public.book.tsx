@@ -12,15 +12,29 @@ import { IMAGES } from "@/data/seed";
 export const Route = createFileRoute("/_public/book")({
   head: () => ({
     meta: [
-      { title: "Book Maverick Manju | Magician & Emcee Booking Enquiry" },
+      {
+        title:
+          "Book Maverick Manju — Best Magician & Emcee in Bangalore | Event Enquiry",
+      },
       {
         name: "description",
         content:
-          "Send your event date, format and audience details to book stage magic, walk-around magic, mentalism or emcee entertainment with Maverick Manju.",
+          "Book Maverick Manju for your next event. Fill in the enquiry form to hire the best magician, emcee and mentalist in Bangalore for corporate events, weddings, birthdays, hotel events and private parties.",
       },
-      { property: "og:title", content: "Book Maverick Manju" },
-      { property: "og:description", content: "Let's create some magic. Share your date." },
+      {
+        name: "keywords",
+        content:
+          "magician for hire in bangalore, magician for hire in bengaluru, best magician in bangalore, best magician in bengaluru, best magician near me, magician near me, professional magician in bangalore, best emcee in bangalore, best emcee in bengaluru, professional emcee in bangalore, best mentalist in bangalore, maverick manju, mevrick manju, maverick manju magician, maverick manju emcee, maverick manju mentalist, maverick manju bangalore, maverick manju bengaluru",
+      },
+      { property: "og:title", content: "Book Maverick Manju — Best Magician & Emcee in Bangalore" },
+      { property: "og:description", content: "Let's create some magic. Share your date and book the best magician in Bangalore." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.maverickmanju.in/book" },
+      { name: "twitter:title", content: "Book Maverick Manju — Best Magician in Bangalore" },
+      { name: "twitter:description", content: "Book the best magician and emcee in Bangalore for your next event." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/book" },
     ],
   }),
   component: BookPage,

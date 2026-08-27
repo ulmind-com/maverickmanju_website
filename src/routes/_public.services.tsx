@@ -9,19 +9,30 @@ import { useServices } from "@/hooks/useServices";
 export const Route = createFileRoute("/_public/services")({
   head: () => ({
     meta: [
-      { title: "Services | Magician, Emcee & Mentalist — Maverick Manju" },
+      { title: "Magic, Emcee & Mentalism Services in Bangalore — Maverick Manju" },
       {
         name: "description",
         content:
-          "Stage magic, walk-around magic, mentalism, emcee hosting and full-event entertainment packages for corporate events, weddings, birthdays, hotels and clubhouses.",
+          "Explore Maverick Manju's complete entertainment services — stage magic, close-up magic, mentalism and professional emcee hosting. The best magician and emcee in Bangalore for corporate events, weddings, birthdays and private parties.",
       },
-      { property: "og:title", content: "Services | Maverick Manju" },
+      {
+        name: "keywords",
+        content:
+          "magician for hire in bangalore, magician for hire in bengaluru, magic show in bangalore, magic show in bengaluru, best magic show in bangalore, magician show in bangalore, professional magician in bangalore, professional magician in bengaluru, best magician in bangalore, best magician in bengaluru, mentalism show in bangalore, best emcee in bangalore, professional emcee in bangalore, emcee for events in bangalore, corporate emcee in bangalore, event host in bangalore, maverick manju, maverick manju magician, maverick manju emcee",
+      },
+      { property: "og:title", content: "Magic, Emcee & Mentalism Services — Maverick Manju" },
       {
         property: "og:description",
         content:
-          "Ten entertainment formats, one professional. Choose the experience for your event.",
+          "Stage magic, walk-around magic, mentalism and professional emcee hosting — complete entertainment by the best magician in Bangalore.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.maverickmanju.in/services" },
+      { name: "twitter:title", content: "Magic, Emcee & Mentalism Services — Maverick Manju" },
+      { name: "twitter:description", content: "Complete entertainment services by the best magician and emcee in Bangalore." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/services" },
     ],
   }),
   component: ServicesPage,

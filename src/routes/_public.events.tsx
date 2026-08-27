@@ -9,15 +9,29 @@ import { IMAGES, eventTypes } from "@/data/seed";
 export const Route = createFileRoute("/_public/events")({
   head: () => ({
     meta: [
-      { title: "Magician for Corporate Events, Birthdays & Weddings | Maverick Manju" },
+      {
+        title:
+          "Events & Occasions — Hire Maverick Manju | Best Magician & Emcee in Bangalore",
+      },
       {
         name: "description",
         content:
-          "Entertainment for corporate annual days, birthdays, star hotel brunches, clubhouse festivals, weddings and private events across India.",
+          "Book Maverick Manju for any event — corporate gatherings, weddings, birthday parties, hotel brunches, brand launches, product reveals, award nights, annual days and private celebrations. The top magician and emcee in Bangalore.",
       },
-      { property: "og:title", content: "Events | Maverick Manju" },
-      { property: "og:description", content: "Magic for every occasion — one professional." },
+      {
+        name: "keywords",
+        content:
+          "magician for corporate events in bangalore, magician for birthday party in bangalore, magician for wedding in bangalore, magician for private party in bangalore, magician for college events in bangalore, magician for school events in bangalore, magician for annual function in bangalore, corporate magician in bangalore, corporate magician in bengaluru, birthday magician in bangalore, wedding magician in bangalore, party magician in bangalore, event magician in bangalore, best magician in bangalore, best magician in bengaluru, emcee for events in bangalore, corporate emcee in bangalore, event host in bangalore, maverick manju, maverick manju bangalore",
+      },
+      { property: "og:title", content: "Events — Maverick Manju | Best Magician in Bangalore" },
+      { property: "og:description", content: "Magic for every occasion — corporate events, weddings, birthdays and more." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.maverickmanju.in/events" },
+      { name: "twitter:title", content: "Events — Maverick Manju | Best Magician in Bangalore" },
+      { name: "twitter:description", content: "Book the best magician and emcee for your next event in Bangalore." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/events" },
     ],
   }),
   component: EventsPage,

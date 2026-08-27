@@ -18,15 +18,26 @@ import { telLink, whatsappLink } from "@/lib/utils";
 export const Route = createFileRoute("/_public/contact")({
   head: () => ({
     meta: [
-      { title: "Contact Maverick Manju | Magician, Emcee & Mentalist" },
+      { title: "Contact Maverick Manju — Best Magician & Emcee in Bangalore" },
       {
         name: "description",
         content:
-          "Call, WhatsApp or email Maverick Manju to check date availability for magic, mentalism and emcee entertainment at your event.",
+          "Get in touch with Maverick Manju — the best magician and emcee in Bangalore. Reach out for event enquiries, date availability, collaborations and bookings via phone, WhatsApp or email.",
       },
-      { property: "og:title", content: "Contact Maverick Manju" },
-      { property: "og:description", content: "Check date availability and plan your event." },
+      {
+        name: "keywords",
+        content:
+          "maverick manju, mevrick manju, mevrick, manju magician, maverick magician, maverick manju magician, maverick manju emcee, maverick manju mentalist, maverick manju bangalore, maverick manju bengaluru, best magician in bangalore, best magician in bengaluru, magician near me, magician in bangalore, best emcee in bangalore, best emcee in bengaluru, magician for hire in bangalore, professional magician in bangalore",
+      },
+      { property: "og:title", content: "Contact Maverick Manju — Best Magician in Bangalore" },
+      { property: "og:description", content: "Check date availability and plan your event with Maverick Manju." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://www.maverickmanju.in/contact" },
+      { name: "twitter:title", content: "Contact Maverick Manju — Magician & Emcee in Bangalore" },
+      { name: "twitter:description", content: "Get in touch to book the best magician and emcee in Bangalore." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/contact" },
     ],
   }),
   component: ContactPage,

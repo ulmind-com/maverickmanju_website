@@ -7,15 +7,26 @@ import { IMAGES } from "@/data/seed";
 export const Route = createFileRoute("/_public/about")({
   head: () => ({
     meta: [
-      { title: "About Maverick Manju | Magician, Emcee, Mentalist & Creator Coach" },
+      { title: "About Maverick Manju — Top Magician, Emcee & Mentalist in Bangalore, India" },
       {
         name: "description",
         content:
-          "Maverick Manju is a magician, emcee, mentalist and creator coach who builds entertainment around audience participation rather than performance alone.",
+          "Meet Maverick Manju — Bangalore's premier professional magician, emcee and mentalist. With years of experience performing at corporate events, weddings and private celebrations across India, Maverick Manju brings magic, mentalism and interactive entertainment together.",
       },
-      { property: "og:title", content: "About Maverick Manju" },
-      { property: "og:description", content: "More than a magician." },
+      {
+        name: "keywords",
+        content:
+          "maverick manju, mevrick manju, mevrick, manju magician, maverick magician, maverick manju magician, maverick manju emcee, maverick manju mentalist, maverick manju bangalore, maverick manju bengaluru, best magician in bangalore, best magician in bengaluru, top magician in bangalore, professional magician in bangalore, best emcee in bangalore, best mentalist in bangalore, magician in bangalore",
+      },
+      { property: "og:title", content: "About Maverick Manju — Top Magician & Emcee in Bangalore" },
+      { property: "og:description", content: "More than a magician. Magician, emcee, mentalist and creator coach — all in one professional." },
       { property: "og:type", content: "profile" },
+      { property: "og:url", content: "https://www.maverickmanju.in/about" },
+      { name: "twitter:title", content: "About Maverick Manju — Top Magician & Emcee in Bangalore" },
+      { name: "twitter:description", content: "More than a magician. Magician, emcee, mentalist and creator coach — all in one." },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.maverickmanju.in/about" },
     ],
   }),
   component: AboutPage,
