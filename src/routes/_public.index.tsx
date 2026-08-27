@@ -34,9 +34,9 @@ export const Route = createFileRoute("/_public/")({
 });
 
 /**
- * The home page previews each destination in the main nav — the USP, services,
- * packages, gallery, testimonials and booking — every one of them linking
- * through to the full page, which is left exactly as it was.
+ * The home page carries every nav destination in full — the USP, services,
+ * packages, gallery and testimonials — so the navbar scrolls to a section here
+ * rather than opening a page of its own.
  */
 function HomePage() {
   return (
@@ -47,9 +47,7 @@ function HomePage() {
       <ServicesPreview />
       <EventPackages />
       <MomentsOfMagic id="gallery" />
-      <SectionLink to="/gallery" label="View full gallery" />
       <TestimonialGroups id="testimonials" />
-      <SectionLink to="/testimonials" label="Read all testimonials" />
       <BookingCta />
     </>
   );
@@ -73,19 +71,6 @@ function ServicesPreview() {
             </Reveal>
           ))}
         </div>
-      </div>
-    </section>
-  );
-}
-
-/** Closes a previewed block with a link through to the page it came from. */
-function SectionLink({ to, label }: { to: string; label: string }) {
-  return (
-    <section className="border-t border-border py-14 text-center">
-      <div className="container-mm">
-        <Reveal>
-          <ButtonLink to={to}>{label}</ButtonLink>
-        </Reveal>
       </div>
     </section>
   );

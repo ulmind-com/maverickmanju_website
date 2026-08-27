@@ -9,12 +9,16 @@ export function SectionHeader({
   description,
   align = "left",
   className,
+  titleClassName,
 }: {
   eyebrow?: string;
   title: ReactNode;
   description?: string;
   align?: "left" | "center";
   className?: string;
+  /** Overrides the condensed uppercase display face for a heading that wants
+      the body font instead. */
+  titleClassName?: string;
 }) {
   return (
     <div className={cn("mb-12 max-w-3xl", align === "center" && "mx-auto text-center", className)}>
@@ -23,7 +27,14 @@ export function SectionHeader({
           {eyebrow}
         </p>
       )}
-      <h2 className="mt-3 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] font-bold">{title}</h2>
+      <h2
+        className={cn(
+          "mt-3 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] font-bold",
+          titleClassName,
+        )}
+      >
+        {title}
+      </h2>
       {description && (
         <p className="mt-4 text-base text-muted-foreground sm:text-lg">{description}</p>
       )}

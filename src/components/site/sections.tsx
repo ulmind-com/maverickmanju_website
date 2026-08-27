@@ -49,6 +49,7 @@ export function MaverickDifference({ id }: { id?: string } = {}) {
         <SectionHeader
           eyebrow="The Maverick Difference"
           title="Why hire two entertainers when one professional does both?"
+          titleClassName="font-sans leading-[1.15] normal-case tracking-tight"
           description="Magic creates wonder. Emcee activities create participation. Together they create a complete entertainment experience — with one point of coordination for the client."
         />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
