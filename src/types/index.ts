@@ -10,7 +10,7 @@ export type GalleryLayout = "small" | "medium" | "large" | "tall" | "wide";
 export const GALLERY_LAYOUTS: GalleryLayout[] = ["small", "medium", "large", "tall", "wide"];
 
 /** The headings gallery items are grouped under on the public page, in display order. */
-export const GALLERY_CATEGORIES = ["Stage Magic", "Emcee", "Walk Around"] as const;
+export const GALLERY_CATEGORIES = ["Stage Magic", "Emcee", "Walk Around", "Mentalism"] as const;
 
 export type GalleryCategory = (typeof GALLERY_CATEGORIES)[number];
 

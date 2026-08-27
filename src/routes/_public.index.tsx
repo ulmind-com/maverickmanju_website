@@ -44,7 +44,6 @@ function HomePage() {
       <Hero />
       <MaverickDifference />
       <RunOfShow />
-      <SectionLink to="/usp" label="Why Maverick" />
       <ServicesPreview />
       <SectionLink to="/services" label="See all services" />
       <EventPackages />
@@ -134,7 +133,7 @@ function Hero() {
         <div style={{ textShadow: "0 2px 18px rgba(0,0,0,0.75)" }}>
           <Reveal>
             <p className="text-[12px] font-bold tracking-[0.34em] text-primary-glow uppercase">
-              Magician | Emcee | Mentalist | Creator Coach
+              Magician | Emcee | Creator Coach
             </p>
           </Reveal>
           <Reveal delay={0.08}>
