@@ -2,7 +2,7 @@ import { api } from "@/lib/api";
 import { STORAGE_KEYS, emit } from "./storage";
 import type { EventPackage, EventPackageInput } from "@/types";
 
-/** Event packages — the "Formats by occasion" cards on /services. */
+/** Event packages — the "Bookings by occasion" cards. */
 const KEY = STORAGE_KEYS.packages;
 
 export const getPublishedPackages = () => api.get<EventPackage[]>("/api/packages");

@@ -67,7 +67,7 @@ export interface ServiceImage {
   sortOrder: number;
 }
 
-/** An "Event package" card under Formats by occasion — fully admin managed. */
+/** An "Event package" card under Bookings by occasion — fully admin managed. */
 export interface EventPackage {
   id: string;
   title: string;

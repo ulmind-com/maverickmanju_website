@@ -49,7 +49,7 @@ function AdminServices() {
     <>
       <AdminPageHeader
         title="Services & Packages"
-        description="Swap the four core performance images, and add or edit the event packages shown under Formats by occasion."
+        description="Swap the four core performance images, and add or edit the event packages shown under Bookings by occasion."
       />
       <CoreImages />
       <Packages />

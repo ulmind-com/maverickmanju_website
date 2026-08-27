@@ -125,7 +125,7 @@ export function EventPackages() {
       <div className="container-mm">
         <SectionHeader
           eyebrow="Event packages"
-          title="Formats by occasion"
+          title="Bookings by occasion"
           description="Content, timing and interaction adjusted for the audience and the venue."
         />
         {loading ? (
