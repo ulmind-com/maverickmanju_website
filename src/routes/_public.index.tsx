@@ -11,7 +11,6 @@ import {
   TestimonialGroups,
 } from "@/components/site/sections";
 import { useServices } from "@/hooks/useServices";
-import { FaqSection } from "@/components/site/FaqSection";
 import { FaqSchema, BreadcrumbSchema } from "@/components/site/SeoSchemas";
 import { FAQ_DATA } from "@/components/site/SeoSchemas";
 import type { GalleryItem, Testimonial } from "@/types";
@@ -98,7 +97,6 @@ function HomePage() {
       <EventPackages />
       <MomentsOfMagic id="gallery" />
       <TestimonialGroups id="testimonials" />
-      <FaqSection />
       <BookingCta />
     </>
   );
