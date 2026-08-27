@@ -1,9 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Camera, Quote, Sparkles, Wand2 } from "lucide-react";
-import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import { createFileRoute } from "@tanstack/react-router";
 import { ServiceCard } from "@/components/site/ServiceCard";
 import { BookingCta } from "@/components/site/ServiceDetailPage";
-import { TestimonialCard } from "@/components/site/TestimonialCard";
 import { ButtonLink, Reveal, SectionHeader } from "@/components/site/primitives";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import {
@@ -13,10 +10,7 @@ import {
   RunOfShow,
   TestimonialGroups,
 } from "@/components/site/sections";
-import { useServiceData } from "@/hooks/useServiceData";
 import { useServices } from "@/hooks/useServices";
-import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
-import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
 import type { GalleryItem, Testimonial } from "@/types";
 
 export const Route = createFileRoute("/_public/")({
@@ -39,48 +33,20 @@ export const Route = createFileRoute("/_public/")({
   component: HomePage,
 });
 
-const DESTINATIONS = [
-  {
-    to: "/services",
-    Icon: Wand2,
-    label: "Services",
-    body: "Stage magic, walk-around magic, mentalism and emcee formats.",
-  },
-  {
-    to: "/usp",
-    Icon: Sparkles,
-    label: "USP",
-    body: "One artist, one point of coordination, a complete show.",
-  },
-  {
-    to: "/gallery",
-    Icon: Camera,
-    label: "Gallery",
-    body: "Photos and video from recent stages and celebrations.",
-  },
-  {
-    to: "/testimonials",
-    Icon: Quote,
-    label: "Testimonials",
-    body: "What hosts, brides and event managers say afterwards.",
-  },
-] as const;
-
 /**
- * The home page carries a preview of each destination in the main nav —
- * services, the USP, gallery, testimonials and booking — every one of them
- * linking through to the full page, which is left exactly as it was.
+ * The home page previews each destination in the main nav — the USP, services,
+ * packages, gallery, testimonials and booking — every one of them linking
+ * through to the full page, which is left exactly as it was.
  */
 function HomePage() {
   return (
     <>
       <Hero />
-      <PageDirectory />
-      <ServicesPreview />
-      <SectionLink to="/services" label="See all services" />
       <MaverickDifference />
       <RunOfShow />
       <SectionLink to="/usp" label="Why Maverick" />
+      <ServicesPreview />
+      <SectionLink to="/services" label="See all services" />
       <EventPackages />
       <MomentsOfMagic />
       <SectionLink to="/gallery" label="View full gallery" />
@@ -88,33 +54,6 @@ function HomePage() {
       <SectionLink to="/testimonials" label="Read all testimonials" />
       <BookingCta />
     </>
-  );
-}
-
-/** One card per page, so every section of the site is reachable from the top. */
-function PageDirectory() {
-  return (
-    <section className="border-y border-border bg-surface py-20 sm:py-24">
-      <div className="container-mm">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {DESTINATIONS.map(({ to, Icon, label, body }, i) => (
-            <Reveal key={to} delay={i * 0.06}>
-              <Link
-                to={to}
-                className="card-mm block h-full border-t-2 border-t-primary p-7 transition-all hover:-translate-y-1 hover:border-primary/60 hover:glow-red"
-              >
-                <Icon size={28} className="text-primary" />
-                <h2 className="mt-4 font-display text-xl">{label}</h2>
-                <p className="mt-2 text-sm text-muted-foreground">{body}</p>
-                <span className="mt-5 inline-block text-[11px] font-bold tracking-[0.18em] text-primary uppercase">
-                  Open →
-                </span>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 
