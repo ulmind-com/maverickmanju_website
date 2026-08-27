@@ -1,4 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import logo from "@/assets/logo.png";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -46,8 +47,17 @@ export function Navbar() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
         <nav className="container-mm flex h-[72px] items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-4">
-            <Link to="/" className="font-display text-xl font-bold tracking-[0.18em] sm:text-2xl">
-              MAVERICK <span className="text-primary">MANJU</span>
+            <Link to="/" className="flex items-center gap-2.5 sm:gap-3">
+              <img
+                src={logo}
+                alt=""
+                width={500}
+                height={500}
+                className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10"
+              />
+              <span className="font-display text-xl font-bold tracking-[0.18em] sm:text-2xl">
+                MAVERICK <span className="text-primary">MANJU</span>
+              </span>
             </Link>
             <span className="hidden truncate text-[11px] font-semibold tracking-[0.16em] text-muted-foreground uppercase lg:inline">
               <span className="text-primary">|</span> Magician{" "}

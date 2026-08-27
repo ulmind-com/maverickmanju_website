@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import logo from "@/assets/logo.png";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AdminAuthProvider } from "@/hooks/useAdminAuth";
 import { GlobalSeoSchemas } from "@/components/site/SeoSchemas";
@@ -123,6 +124,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: logo },
+      { rel: "apple-touch-icon", href: logo },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
