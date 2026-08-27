@@ -19,7 +19,6 @@ export const services: ServiceType[] = [
       "A professional stage experience combining magic, comedy, audience participation and mentalism. Designed for corporate events, annual days, award nights, conferences, clubhouses, weddings and celebrations.",
     highlights: [
       "Stage Magic",
-      "Mentalism",
       "Audience Participation",
       "Interactive Comedy",
       "Corporate Entertainment",
