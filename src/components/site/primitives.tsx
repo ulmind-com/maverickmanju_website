@@ -16,8 +16,7 @@ export function SectionHeader({
   description?: string;
   align?: "left" | "center";
   className?: string;
-  /** Overrides the condensed uppercase display face for a heading that wants
-      the body font instead. */
+  /** Escape hatch for a heading that wants something other than the default. */
   titleClassName?: string;
 }) {
   return (
@@ -29,7 +28,9 @@ export function SectionHeader({
       )}
       <h2
         className={cn(
-          "mt-3 text-[clamp(2rem,5vw,3.5rem)] leading-[1.02] font-bold",
+          // Section headings set in the body face, sentence case — not the
+          // condensed uppercase display font the base layer gives every h2.
+          "mt-3 font-sans text-[clamp(2rem,5vw,3.5rem)] leading-[1.15] font-bold tracking-tight normal-case",
           titleClassName,
         )}
       >

@@ -73,7 +73,7 @@ export function BookingCta({ label = "Book Maverick Manju" }: { label?: string }
         <p className="text-[11px] font-bold tracking-[0.3em] text-primary-glow uppercase">
           Let's create some magic
         </p>
-        <h2 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] leading-tight font-bold">
+        <h2 className="mt-4 font-sans text-[clamp(2rem,5vw,3.5rem)] leading-[1.15] font-bold tracking-tight normal-case">
           Share your date. I'll handle the wonder.
         </h2>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
