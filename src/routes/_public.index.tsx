@@ -185,9 +185,8 @@ function Hero() {
           </Reveal>
           <Reveal delay={0.24}>
             <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-              Stage magic, mentalism, walk-around magic and interactive emcee entertainment —
-              brought together by Maverick Manju, the top magician and emcee in Bangalore, for
-              corporate events, weddings, birthdays and private celebrations.
+              Stage magic, mentalism, walk-around magic and interactive Emcee experiences — brought
+              together by one professional.
             </p>
           </Reveal>
           <Reveal delay={0.32}>
