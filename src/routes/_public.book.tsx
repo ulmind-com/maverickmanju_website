@@ -48,12 +48,6 @@ function BookPage() {
       <section className="py-16 sm:py-20">
         <div className="container-mm grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <aside className="space-y-6">
-            <div className="card-mm border-l-2 border-l-primary p-6">
-              <h2 className="font-display text-xl">Best-fit formats</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Stage Magic • Walk-Around Magic • Emcee • Mentalism • Magic + Emcee
-              </p>
-            </div>
             <div className="card-mm p-6">
               <h2 className="font-display text-xl">Prefer to talk?</h2>
               <ul className="mt-4 space-y-3 text-sm">
