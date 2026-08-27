@@ -188,21 +188,35 @@ export function EventPackages() {
 }
 
 /**
- * Two halves rather than four steps — the briefing and the arrival are one
- * stretch of work, and so are the performance and the wrap-up. The wording is
- * the same as before, cut to what a client actually needs to read.
+ * The four steps, paired into two boxes: the briefing runs into guest arrival,
+ * and the performance runs into the wrap-up. Each step keeps its own number,
+ * title and copy.
  */
 const RUN_OF_SHOW = [
-  {
-    step: "01",
-    title: "Briefing & guest arrival",
-    body: "A pre-event dialogue sets the detail of the event, your expectations and everything needed in advance. On the day, emcee engagement and walk-around magic keep guests engaged as they settle in, so the energy is up before the stage lights come on.",
-  },
-  {
-    step: "02",
-    title: "Performance & wrap-up",
-    body: "Stage magic and mentalism built for the whole room, with volunteers pulled from your own audience. Maverick Manju then keeps the flow controlled to the finish — cake cutting, and opening the floor for dance and dinner.",
-  },
+  [
+    {
+      step: "01",
+      title: "Pre-event briefing",
+      body: "Pre-dialogue with the client to understand the detailing of the event, understand the client's expectations, and notify the client on pre-requirements.",
+    },
+    {
+      step: "02",
+      title: "Guest arrival",
+      body: "Maverick Manju ensures guests are engaged — emcee engagement and walk-around magic — while guests settle in, so the energy is already up before the stage lights come on.",
+    },
+  ],
+  [
+    {
+      step: "03",
+      title: "Main performance",
+      body: "Stage magic and mentalism built for the whole room, with volunteers pulled from your own audience.",
+    },
+    {
+      step: "04",
+      title: "Hosting & wrap-up",
+      body: "Maverick Manju ensures the flow of the event is well controlled — from welcoming the guests to cake cutting, and opening the floor for dance and dinner.",
+    },
+  ],
 ];
 
 /** The run-of-show, on the USP page and the home page. */
@@ -216,12 +230,16 @@ export function RunOfShow() {
           description="From the first guest arriving to the last announcement, every segment is planned with your event team."
         />
         <div className="grid gap-4 sm:grid-cols-2">
-          {RUN_OF_SHOW.map((s, i) => (
-            <Reveal key={s.step} delay={i * 0.06}>
-              <div className="card-mm h-full p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red">
-                <p className="font-display text-3xl text-primary">{s.step}</p>
-                <h3 className="mt-3 font-display text-xl">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
+          {RUN_OF_SHOW.map((pair, i) => (
+            <Reveal key={pair[0]!.step} delay={i * 0.06}>
+              <div className="card-mm h-full divide-y divide-border p-7 hover:-translate-y-1 hover:border-primary/60 hover:glow-red">
+                {pair.map((s, j) => (
+                  <div key={s.step} className={j === 0 ? "pb-6" : "pt-6"}>
+                    <p className="font-display text-3xl text-primary">{s.step}</p>
+                    <h3 className="mt-3 font-display text-xl">{s.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{s.body}</p>
+                  </div>
+                ))}
               </div>
             </Reveal>
           ))}

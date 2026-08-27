@@ -6,7 +6,6 @@ import { useService } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
 import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
 import type { GalleryCategory, GalleryItem, Testimonial } from "@/types";
-import { PageHero } from "./PageHero";
 import { ButtonLink, Reveal, SectionHeader } from "./primitives";
 
 /**
@@ -54,20 +53,9 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
 
   return (
     <>
-      <PageHero
-        eyebrow={content.eyebrow}
-        title={content.headline}
-        subtitle={content.intro}
-        image={service.imageUrl}
-      >
-        <ButtonLink to="/book">{service.ctaLabel}</ButtonLink>
-        <ButtonLink to="/gallery" variant="outline">
-          See The Experience
-        </ButtonLink>
-      </PageHero>
-
+      {/* No hero: the page opens straight on the work. pt-36 clears the fixed bar. */}
       {shown.length > 0 && (
-        <section className="border-t border-border bg-surface py-20 sm:py-24">
+        <section className="border-t border-border bg-surface pt-36 pb-20 sm:pb-24">
           <div className="container-mm">
             <SectionHeader eyebrow="Moments" title="From recent events" />
             <GalleryGrid items={shown} />
@@ -81,7 +69,7 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
       )}
 
       {testimonials.length > 0 && (
-        <section className="py-20 sm:py-24">
+        <section className={shown.length > 0 ? "py-20 sm:py-24" : "pt-36 pb-20 sm:pb-24"}>
           <div className="container-mm">
             <SectionHeader eyebrow="Client words" title="Real reactions" />
             <TestimonialGrid items={testimonials} />
