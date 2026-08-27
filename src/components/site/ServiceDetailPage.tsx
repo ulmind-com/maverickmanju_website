@@ -1,11 +1,9 @@
 import { Check } from "lucide-react";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
-import { TestimonialGrid } from "@/components/site/TestimonialGrid";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useService } from "@/hooks/useServices";
 import { GALLERY_KEY, getPublishedGalleryItems } from "@/services/galleryService";
-import { TESTIMONIALS_KEY, getPublishedTestimonials } from "@/services/testimonialService";
-import type { GalleryCategory, GalleryItem, Testimonial } from "@/types";
+import type { GalleryCategory, GalleryItem } from "@/types";
 import { ButtonLink, Reveal, SectionHeader } from "./primitives";
 
 /**
@@ -37,12 +35,6 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
     getPublishedGalleryItems,
     [],
   );
-  const { data: testimonials } = useServiceData<Testimonial[]>(
-    TESTIMONIALS_KEY,
-    getPublishedTestimonials,
-    [],
-  );
-
   // Every page shows everything filed under its own category. An empty one
   // hides the section rather than filling it with another service's work.
   const category = GALLERY_CATEGORY_BY_SLUG[content.slug];
@@ -64,15 +56,6 @@ export function ServiceDetailPage({ content }: { content: ServicePageContent }) 
                 View full gallery
               </ButtonLink>
             </div>
-          </div>
-        </section>
-      )}
-
-      {testimonials.length > 0 && (
-        <section className={shown.length > 0 ? "py-20 sm:py-24" : "pt-36 pb-20 sm:pb-24"}>
-          <div className="container-mm">
-            <SectionHeader eyebrow="Client words" title="Real reactions" />
-            <TestimonialGrid items={testimonials} />
           </div>
         </section>
       )}
